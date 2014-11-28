@@ -45,6 +45,6 @@ AC_SUBST(OCAMLLIB, $ocamllib)
 AC_PROG_INSTALL
 AC_PROG_MKDIR_P
 
-AC_CONFIG_FILES([Makefile iprover_v0.7_patched/Makefile iprover_v0.7_patched/src/config.ml autotheo/Makefile autotheo/globals.ml launcher/Makefile launcher/iprover_modulo_launcher.sh])
+AC_CONFIG_FILES([Makefile iprover_v0.7_patched/Makefile iprover_v0.7_patched/src/config.ml autotheo/Makefile autotheo/globals.ml launcher/Makefile launcher/iprover_modulo_launcher.sh launcher/main.ml])
 AC_OUTPUT
 		

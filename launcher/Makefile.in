@@ -7,7 +7,7 @@ INSTALL=@INSTALL@
 TARGET=iprover_modulo_launcher
 
 $(TARGET): id_encoding.cmx main.cmx
-	$(OCAMLOPT) -o $@ $^ 
+	$(OCAMLOPT) -o $@ str.cmxa $^ 
 
 %.cmx: %.ml
 	$(OCAMLOPT) -c $<
