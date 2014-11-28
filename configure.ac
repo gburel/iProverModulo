@@ -4,10 +4,11 @@ AC_INIT(iProverModulo, 0.7+0.2, guillaume.burel@ensiie.fr)
 AC_PROG_CC
 
 DATADIR="${prefix}/share/iprovermodulo/"
+AC_SUBST(DATADIR, $DATADIR)
 echo "External programs installed in $DATADIR/bin"
 
 echo "Recursively configuring ocaml sources"
-OCAMLDIR=$PWD/ocaml-4.00.1
+OCAMLDIR=$PWD/ocaml-4.02.1
 cd $OCAMLDIR
 if ./configure -prefix $DATADIR
 then echo "ocaml sources configured."
@@ -44,6 +45,6 @@ AC_SUBST(OCAMLLIB, $ocamllib)
 AC_PROG_INSTALL
 AC_PROG_MKDIR_P
 
-AC_CONFIG_FILES([Makefile iprover_v0.7_patched/Makefile iprover_v0.7_patched/src/config.ml autotheo/Makefile launcher/Makefile launcher/iprover_modulo_launcher.sh])
+AC_CONFIG_FILES([Makefile iprover_v0.7_patched/Makefile iprover_v0.7_patched/src/config.ml autotheo/Makefile autotheo/globals.ml launcher/Makefile launcher/iprover_modulo_launcher.sh])
 AC_OUTPUT
 		

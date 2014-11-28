@@ -212,10 +212,11 @@ dep:
 PLUGIN_OBJS = symbol term lib parsed_input_to_db symbolDB plugin
 
 install:
+	$(MKDIR_P) $(bindir)
 	$(INSTALL) $(IPROVER_NAME) $(bindir)
-	$(MKDIR_P) $(prefix)/share/iprover_modulo
-	$(INSTALL_DATA) plugin_iprover.ml.model basic_resolution_options FOL.dk $(prefix)/share/iprover_modulo
-	$(INSTALL_DATA) $(PLUGIN_OBJS:%=obj/%.cmi) $(prefix)/share/iprover_modulo
+	$(MKDIR_P) $(prefix)/share/iprovermodulo
+	$(INSTALL_DATA) plugin_iprover.ml.model basic_resolution_options FOL.dk $(prefix)/share/iprovermodulo
+	$(INSTALL_DATA) $(PLUGIN_OBJS:%=obj/%.cmi) $(prefix)/share/iprovermodulo
 
 
 

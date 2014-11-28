@@ -1,4 +1,4 @@
-let eprover_path = ref ""
+let eprover_path = ref "@DATADIR@/bin/"
 let include_path = ref ""
 let saturate_timeout = ref 5
 let presat_nbprocessed = ref 100

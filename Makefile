@@ -1,4 +1,4 @@
-OCAMLDIR=/home/guillaume/projets/Bware_iprover_modulo/iProverModulo/ocaml-4.00.1
+OCAMLDIR=/home/guillaume/projets/iProverModulo/ocaml-4.02.1
 EDIR=E
 
 all:
