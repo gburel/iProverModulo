@@ -1,0 +1,27 @@
+prefix= @prefix@
+exec_prefix = @exec_prefix@
+bindir = @bindir@
+OCAMLOPT= @OCAMLOPT_LOCAL@
+MKDIR_P=@MKDIR_P@
+INSTALL=@INSTALL@
+TARGET=iprover_modulo_launcher
+
+$(TARGET): id_encoding.cmx main.cmx
+	$(OCAMLOPT) -o $@ $^ 
+
+%.cmx: %.ml
+	$(OCAMLOPT) -c $<
+
+%.cmi: %.mli
+	$(OCAMLOPT) -c $<
+
+main.cmx: id_encoding.cmi
+id_encoding.cmx: id_encoding.cmi
+
+install: 
+	$(MKDIR_P) $(bindir)
+	$(INSTALL) $(TARGET) $(bindir)
+	$(INSTALL) $(TARGET).sh $(bindir)
+
+clean: 
+	rm *.cmx $(TARGET)

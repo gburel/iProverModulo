@@ -1,0 +1,104 @@
+type 'a param = Def of 'a | Undef 
+
+type stype = 
+  |Fun_stype|Pred|Connective|Quantifier | Undef_stype
+	
+type sproperty = Theory|Split|Flat|FunPred|DomainConstant|DomainPred|DefPred
+
+type symbol = 
+    {
+     mutable fast_key: int param;
+     mutable bool_param : int;
+     name    : string; 
+     arity   : int param; 
+     stype   : stype;
+     mutable sproperty : sproperty param;
+     mutable group : int param;   
+     mutable is_input : bool param;
+     mutable is_skolem : bool param;
+     mutable num_input_occur : int;
+     mutable flattening : symbol param
+   }
+
+
+type args = term list
+and term =
+  | Fun of symbol * args * fun_info 
+  | Var of int * var_info	
+and fun_info     = 
+    {mutable fun_fast_key  : int param;
+     mutable num_of_symb : int param; 
+     mutable num_of_var   : int param;   
+     mutable fun_grounded : term param; 
+     mutable prop_key     : int param;
+     mutable prop_gr_key   : int param;
+     mutable fun_bool_param    : int;
+    }
+and var_info = 
+    {mutable var_fast_key : int param;
+     mutable var_grounded : term param}
+
+let empty_fun_info () = 
+  {fun_fast_key   = Undef; 
+   num_of_symb    = Undef; 
+   num_of_var     = Undef; 
+   fun_grounded   = Undef; 
+   prop_key       = Undef; 
+   prop_gr_key    = Undef;  
+   fun_bool_param     = 0}
+
+let rec rev_map2 ((r1,r2) as r) = function
+    [], [] -> r
+  | x1::q1,x2::q2 -> rev_map2 (x1::r1,x2::r2) (q1,q2)
+  | _ -> raise (Invalid_argument "rev_map2")
+
+let rec equal_list = function
+    [],[] -> true
+  | Fun(s1,a1,_)::q1,Fun(s2,a2,_)::q2 -> 
+      s1.name = s2.name && equal_list (rev_map2 (q1,q2) (a1,a2))
+  | Var(v1,_)::q1,Var(v2,_)::q2 -> 
+      v1 = v2 && equal_list (q1,q2)
+  | _ -> false
+  
+let equal s t = 
+  try equal_list ([s],[t])
+  with Invalid_argument "rev_map2" -> false
+
+exception No_match
+
+let match_term = function
+(* add rules here *)
+  | _ -> raise No_match
+
+let rec top_down t = 
+  try match_term t 
+  with No_match -> 
+    match t with 
+	Fun(s, l, fi) ->
+	  let rec aux = function
+	      [] -> raise No_match
+	    | x::q -> 
+		try top_down x :: q
+		with No_match -> x :: aux q
+	  in Fun(s, aux l, empty_fun_info ())
+      | _ -> raise No_match
+	  
+let rec normalize t = 
+  try 
+    let t' = top_down t in
+      normalize t'
+  with No_match -> t 
+
+ 
+let _ = 
+  try
+    while true do
+      let t = input_value stdin in
+      let t' = normalize t in
+	output_value stdout t';
+	flush stdout
+    done
+  with End_of_file -> ()
+	
+    
+

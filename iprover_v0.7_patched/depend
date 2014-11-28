@@ -1,0 +1,155 @@
+src/config.cmo: src/config.cmi
+src/config.cmx: src/config.cmi
+src/two_way_stacks.cmo: src/two_way_stacks.cmi
+src/two_way_stacks.cmx: src/two_way_stacks.cmi
+src/options.cmo: src/options.cmi
+src/options.cmx: src/options.cmi
+src/statistics.cmo: src/statistics.cmi
+src/statistics.cmx: src/statistics.cmi
+src/bit_vec.cmo: src/bit_vec.cmi
+src/bit_vec.cmx: src/bit_vec.cmi
+src/tableArray.cmo: src/tableArray.cmi
+src/tableArray.cmx: src/tableArray.cmi
+src/heap.cmo: src/heap.cmi
+src/heap.cmx: src/heap.cmi
+src/priority_queues.cmo: src/priority_queues.cmi
+src/priority_queues.cmx: src/priority_queues.cmi
+src/tree.cmo: src/tree.cmi
+src/tree.cmx: src/tree.cmi
+src/trie.cmo: src/trie.cmi
+src/trie.cmx: src/trie.cmi
+src/trie_func.cmo: src/trie_func.cmi
+src/trie_func.cmx: src/trie_func.cmi
+src/vectorIndex.cmo: src/vectorIndex.cmi
+src/vectorIndex.cmx: src/vectorIndex.cmi
+src/abstDB.cmo: src/abstDB.cmi
+src/abstDB.cmx: src/abstDB.cmi
+src/abstAssignDB.cmo: src/abstAssignDB.cmi
+src/abstAssignDB.cmx: src/abstAssignDB.cmi
+src/symbol.cmo: src/symbol.cmi
+src/symbol.cmx: src/symbol.cmi
+src/symbolDB.cmo: src/symbolDB.cmi
+src/symbolDB.cmx: src/symbolDB.cmi
+src/var.cmo: src/var.cmi
+src/var.cmx: src/var.cmi
+src/term.cmo: src/term.cmi
+src/term.cmx: src/term.cmi
+src/plugin.cmo: src/plugin.cmi
+src/plugin.cmx: src/plugin.cmi
+src/termDB.cmo: src/termDB.cmi
+src/termDB.cmx: src/termDB.cmi
+src/orderings.cmo: src/orderings.cmi
+src/orderings.cmx: src/orderings.cmi
+src/subst.cmo: src/subst.cmi
+src/subst.cmx: src/subst.cmi
+src/substBound.cmo: src/substBound.cmi
+src/substBound.cmx: src/substBound.cmi
+src/dismatching.cmo: src/dismatching.cmi
+src/dismatching.cmx: src/dismatching.cmi
+src/clause.cmo: src/clause.cmi
+src/clause.cmx: src/clause.cmi
+src/selection.cmo: src/selection.cmi
+src/selection.cmx: src/selection.cmi
+src/clauseAssignDB.cmo: src/clauseAssignDB.cmi
+src/clauseAssignDB.cmx: src/clauseAssignDB.cmi
+src/clauseDB.cmo: src/clauseDB.cmi
+src/clauseDB.cmx: src/clauseDB.cmi
+src/parsed_input_to_db.cmo: src/parsed_input_to_db.cmi
+src/parsed_input_to_db.cmx: src/parsed_input_to_db.cmi
+src/context.cmo: src/context.cmi
+src/context.cmx: src/context.cmi
+src/parseFiles.cmo: src/parseFiles.cmi
+src/parseFiles.cmx: src/parseFiles.cmi
+src/splitting.cmo: src/splitting.cmi
+src/splitting.cmx: src/splitting.cmi
+src/unif.cmo: src/unif.cmi
+src/unif.cmx: src/unif.cmi
+src/unifIndex.cmo: src/unifIndex.cmi
+src/unifIndex.cmx: src/unifIndex.cmi
+src/discrTree.cmo: src/discrTree.cmi
+src/discrTree.cmx: src/discrTree.cmi
+src/subsetSubsume.cmo: src/subsetSubsume.cmi
+src/subsetSubsume.cmx: src/subsetSubsume.cmi
+src/subsumptionIndex.cmo: src/subsumptionIndex.cmi
+src/subsumptionIndex.cmx: src/subsumptionIndex.cmi
+src/eq_axioms.cmo: src/eq_axioms.cmi
+src/eq_axioms.cmx: src/eq_axioms.cmi
+src/propSolver.cmo: src/propSolver.cmi
+src/propSolver.cmx: src/propSolver.cmi
+src/prop_solver_exchange.cmo: src/prop_solver_exchange.cmi
+src/prop_solver_exchange.cmx: src/prop_solver_exchange.cmi
+src/inference_rules.cmo: src/inference_rules.cmi
+src/inference_rules.cmx: src/inference_rules.cmi
+src/finite_models.cmo: src/finite_models.cmi
+src/finite_models.cmx: src/finite_models.cmi
+src/preprocess.cmo: src/preprocess.cmi
+src/preprocess.cmx: src/preprocess.cmi
+src/large_theories.cmo: src/large_theories.cmi
+src/large_theories.cmx: src/large_theories.cmi
+src/rewrite.cmo: src/rewrite.cmi
+src/rewrite.cmx: src/rewrite.cmi
+src/pp_control.cmo: src/pp_control.cmi
+src/pp_control.cmx: src/pp_control.cmi
+src/pp.cmo: src/pp.cmi
+src/pp.cmx: src/pp.cmi
+src/dkterm.cmo: src/dkterm.cmi
+src/dkterm.cmx: src/dkterm.cmi
+src/dk_output.cmo: src/dk_output.cmi
+src/dk_output.cmx: src/dk_output.cmi
+src/config.cmi:
+src/two_way_stacks.cmi:
+src/options.cmi:
+src/statistics.cmi:
+src/bit_vec.cmi:
+src/tableArray.cmi:
+src/heap.cmi:
+src/priority_queues.cmi:
+src/tree.cmi:
+src/trie.cmi:
+src/trie_func.cmi:
+src/vectorIndex.cmi:
+src/abstDB.cmi:
+src/abstAssignDB.cmi:
+src/symbol.cmi:
+src/symbolDB.cmi:
+src/var.cmi:
+src/term.cmi:
+src/plugin.cmi:
+src/termDB.cmi:
+src/orderings.cmi:
+src/subst.cmi:
+src/substBound.cmi:
+src/dismatching.cmi:
+src/clause.cmi:
+src/selection.cmi:
+src/clauseAssignDB.cmi:
+src/clauseDB.cmi:
+src/parsed_input_to_db.cmi:
+src/context.cmi:
+src/parseFiles.cmi:
+src/splitting.cmi:
+src/unif.cmi:
+src/unifIndex.cmi:
+src/discrTree.cmi:
+src/subsetSubsume.cmi:
+src/subsumptionIndex.cmi:
+src/eq_axioms.cmi:
+src/propSolver.cmi:
+src/prop_solver_exchange.cmi:
+src/inference_rules.cmi:
+src/finite_models.cmi:
+src/preprocess.cmi:
+src/large_theories.cmi:
+src/rewrite.cmi:
+src/pp_control.cmi:
+src/pp.cmi:
+src/dkterm.cmi:
+src/dk_output.cmi:
+src/discount.cmo: src/discount.cmi
+src/discount.cmx: src/discount.cmi
+src/instantiation.cmo: src/instantiation.cmi
+src/instantiation.cmx: src/instantiation.cmi
+src/discount.cmi:
+src/instantiation.cmi:
+src/iprover.cmo:
+src/iprover.cmx:

@@ -1,0 +1,6 @@
+#NAME FOL.
+o : Type.
+bot_ : o.
+proof : o -> Type.
+i : Type.
+const : i.

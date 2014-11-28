@@ -1,0 +1,4 @@
+let share_dir = "@prefix@/share/iprover_modulo"
+  
+let ocamlopt = "@OCAMLOPT@"
+

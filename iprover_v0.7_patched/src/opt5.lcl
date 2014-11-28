@@ -1,0 +1,9 @@
+--inst_lit_sel [+split;+sign;-num_var;-num_symb]
+--inst_pass_queue1 [-num_var;-num_symb]
+--inst_pass_queue1_mult 15
+--inst_pass_queue2 [+age;-num_symb]
+--inst_pass_queue2_mult 5
+--dismatching true
+--eager_unprocessed_to_passive false
+--include_path /home/korovin/TPTP-v3.1.1/
+

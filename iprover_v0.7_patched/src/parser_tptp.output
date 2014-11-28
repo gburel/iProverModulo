@@ -1,0 +1,3683 @@
+   0  $accept : %entry% $end
+
+   1  main : unit main
+   2       | EOF
+
+   3  unit : annotated_formula
+   4       | include_file
+   5       | comment
+   6       | annotation
+
+   7  annotated_formula : language LeftParen name Comma formula_type Comma fol_formula RightParen Dot
+   8                    | language LeftParen name Comma formula_type Comma fol_formula extra_annotations RightParen Dot
+
+   9  extra_annotations : Comma source
+  10                    | Comma source Comma useful_info
+
+  11  language : CNF
+  12           | FOF
+
+  13  formula_type : user_type Minus source_type
+  14               | user_type
+  15               | source_type
+
+  16  user_type : Axiom
+  17            | Hypothesis
+  18            | Conjecture
+  19            | Negated_conjecture
+  20            | Lemma
+  21            | Theorem
+  22            | Plain
+  23            | Unknown
+
+  24  source_type : Derived
+
+  25  fol_formula : literal_formula
+  26              | binary_formula
+
+  27  literal_formula : atomic_formula
+  28                  | unary_formula
+
+  29  atomic_formula : quantified_formula
+  30                 | bracketed_formula
+  31                 | atom
+
+  32  bracketed_formula : LeftParen fol_formula RightParen
+
+  33  quantified_formula : quantifier variables Semicolumn literal_formula
+
+  34  quantifier : Exists
+  35             | ForAll
+
+  36  variables : variable
+  37            | variable variables
+
+  38  binary_formula : fol_formula And fol_formula
+  39                 | fol_formula Or fol_formula
+  40                 | fol_formula ImplicationLR fol_formula
+
+  41  unary_formula : unary_connective literal_formula
+
+  42  binary_connective : And
+  43                    | NegAnd
+  44                    | Or
+  45                    | NegOr
+  46                    | Equivalence
+  47                    | NegEquivalence
+  48                    | ImplicationLR
+  49                    | ImplicationRL
+
+  50  unary_connective : Negation
+
+  51  atom : term
+
+  52  term : theory_term
+  53       | user_term
+  54       | variable
+
+  55  arguments : term
+  56            | term Comma arguments
+
+  57  theory_term : term Equality term
+  58              | term NegEquality term
+  59              | Equality LeftParen term Comma term RightParen
+  60              | True
+  61              | False
+  62              | number
+  63              | term Plus term
+  64              | term Minus term
+  65              | Minus term
+
+  66  user_term : constant
+  67            | name LeftParen arguments RightParen
+
+  68  constant : name
+  69           | quoted_string
+
+  70  variable : UpperWord
+
+  71  number : PositiveInteger
+  72         | PositiveInteger decimal_part
+
+  73  decimal_part : Dot PositiveInteger
+
+  74  name : lower_word
+
+  75  quoted_string : QuotedStr
+
+  76  lower_word : LowerWord
+  77             | key_word
+
+  78  key_word : CNF
+  79           | FOF
+  80           | Include
+  81           | Axiom
+  82           | Hypothesis
+  83           | Conjecture
+  84           | Negated_conjecture
+  85           | Lemma
+  86           | Theorem
+  87           | Plain
+  88           | Unknown
+  89           | Derived
+  90           | Equal
+  91           | Inference
+  92           | Theory
+  93           | AC
+  94           | File
+  95           | Creator
+  96           | Description
+  97           | Iquote
+  98           | Status
+  99           | Thm
+ 100           | Sat
+ 101           | Refutation
+ 102           | FormulaItem
+ 103           | InferenceItem
+ 104           | GeneralFunction
+ 105           | InferenceInfo
+ 106           | DagSource
+ 107           | ExternalSource
+
+ 108  include_file : Include LeftParen file_name RightParen Dot
+ 109               | Include LeftParen file_name formula_selection RightParen Dot
+
+ 110  formula_selection : name
+ 111                    | name formula_selection
+
+ 112  comment : CommentPercent
+ 113          | CommentStar
+
+ 114  annotation : AnnotationPercent
+ 115             | AnnotationStar
+
+ 116  source : DagSource LeftParen dag_source RightParen
+ 117         | ExternalSource LeftParen external_source RightParen
+ 118         | Unknown
+
+ 119  dag_source : name
+ 120             | inference_record
+
+ 121  inference_record : Inference LeftParen inference_rule Comma useful_info Comma LBrace parent_info RBrace RightParen
+
+ 122  inference_rule : name
+
+ 123  parent_info : parent_info_unit
+ 124              | parent_info_unit Comma parent_info
+
+ 125  parent_info_unit : source
+ 126                   | source parent_details
+
+ 127  parent_details : Minus quoted_string
+
+ 128  theory : Theory LeftParen theory_name RightParen
+
+ 129  theory_name : Equality
+ 130              | AC
+
+ 131  external_source : file_source
+ 132                  | creator_source
+ 133                  | theory
+
+ 134  file_source : File LeftParen file_name Comma file_node_name RightParen
+
+ 135  file_name : quoted_string
+
+ 136  file_node_name : name
+
+ 137  creator_source : Creator LeftParen creator_name Comma useful_info RightParen
+
+ 138  creator_name : quoted_string
+
+ 139  useful_info : LBrace RBrace
+ 140              | LBrace info_items RBrace
+
+ 141  info_items : info_item
+ 142             | info_item Comma info_item
+
+ 143  info_item : FormulaItem LeftParen formula_item RightParen
+ 144            | InferenceItem LeftParen inference_item RightParen
+ 145            | GeneralFunction LeftParen general_function RightParen
+
+ 146  formula_item : description_item
+ 147               | iquote_item
+
+ 148  description_item : Description LeftParen quoted_string RightParen
+
+ 149  iquote_item : Iquote LeftParen quoted_string RightParen
+
+ 150  inference_item : inference_status
+ 151                 | refutation
+
+ 152  inference_status : Status LeftParen status_value RightParen
+ 153                   | InferenceInfo LeftParen inference_info RightParen
+
+ 154  status_value : name
+
+ 155  inference_info : inference_rule LeftParen constant Comma general_list RightParen
+
+ 156  refutation : Refutation LeftParen file_source RightParen
+
+ 157  general_term : general_function
+ 158               | general_list
+
+ 159  general_list : LBrace RBrace
+ 160               | LBrace general_arguments RBrace
+
+ 161  general_function : constant
+ 162                   | functor_name LeftParen general_arguments RightParen
+
+ 163  general_arguments : general_term
+ 164                    | general_term general_arguments
+
+ 165  functor_name : name
+
+ 166  %entry% : '\001' main
+
+state 0
+	$accept : . %entry% $end  (0)
+
+	'\001'  shift 1
+	.  error
+
+	%entry%  goto 2
+
+
+state 1
+	%entry% : '\001' . main  (166)
+
+	CNF  shift 3
+	FOF  shift 4
+	Include  shift 5
+	CommentPercent  shift 6
+	CommentStar  shift 7
+	AnnotationPercent  shift 8
+	AnnotationStar  shift 9
+	EOF  shift 10
+	.  error
+
+	main  goto 11
+	unit  goto 12
+	annotated_formula  goto 13
+	include_file  goto 14
+	comment  goto 15
+	annotation  goto 16
+	language  goto 17
+
+
+state 2
+	$accept : %entry% . $end  (0)
+
+	$end  accept
+
+
+state 3
+	language : CNF .  (11)
+
+	.  reduce 11
+
+
+state 4
+	language : FOF .  (12)
+
+	.  reduce 12
+
+
+state 5
+	include_file : Include . LeftParen file_name RightParen Dot  (108)
+	include_file : Include . LeftParen file_name formula_selection RightParen Dot  (109)
+
+	LeftParen  shift 18
+	.  error
+
+
+state 6
+	comment : CommentPercent .  (112)
+
+	.  reduce 112
+
+
+state 7
+	comment : CommentStar .  (113)
+
+	.  reduce 113
+
+
+state 8
+	annotation : AnnotationPercent .  (114)
+
+	.  reduce 114
+
+
+state 9
+	annotation : AnnotationStar .  (115)
+
+	.  reduce 115
+
+
+state 10
+	main : EOF .  (2)
+
+	.  reduce 2
+
+
+state 11
+	%entry% : '\001' main .  (166)
+
+	.  reduce 166
+
+
+state 12
+	main : unit . main  (1)
+
+	CNF  shift 3
+	FOF  shift 4
+	Include  shift 5
+	CommentPercent  shift 6
+	CommentStar  shift 7
+	AnnotationPercent  shift 8
+	AnnotationStar  shift 9
+	EOF  shift 10
+	.  error
+
+	main  goto 19
+	unit  goto 12
+	annotated_formula  goto 13
+	include_file  goto 14
+	comment  goto 15
+	annotation  goto 16
+	language  goto 17
+
+
+state 13
+	unit : annotated_formula .  (3)
+
+	.  reduce 3
+
+
+state 14
+	unit : include_file .  (4)
+
+	.  reduce 4
+
+
+state 15
+	unit : comment .  (5)
+
+	.  reduce 5
+
+
+state 16
+	unit : annotation .  (6)
+
+	.  reduce 6
+
+
+state 17
+	annotated_formula : language . LeftParen name Comma formula_type Comma fol_formula RightParen Dot  (7)
+	annotated_formula : language . LeftParen name Comma formula_type Comma fol_formula extra_annotations RightParen Dot  (8)
+
+	LeftParen  shift 20
+	.  error
+
+
+state 18
+	include_file : Include LeftParen . file_name RightParen Dot  (108)
+	include_file : Include LeftParen . file_name formula_selection RightParen Dot  (109)
+
+	QuotedStr  shift 21
+	.  error
+
+	quoted_string  goto 22
+	file_name  goto 23
+
+
+state 19
+	main : unit main .  (1)
+
+	.  reduce 1
+
+
+state 20
+	annotated_formula : language LeftParen . name Comma formula_type Comma fol_formula RightParen Dot  (7)
+	annotated_formula : language LeftParen . name Comma formula_type Comma fol_formula extra_annotations RightParen Dot  (8)
+
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	LowerWord  shift 54
+	.  error
+
+	name  goto 55
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 21
+	quoted_string : QuotedStr .  (75)
+
+	.  reduce 75
+
+
+state 22
+	file_name : quoted_string .  (135)
+
+	.  reduce 135
+
+
+state 23
+	include_file : Include LeftParen file_name . RightParen Dot  (108)
+	include_file : Include LeftParen file_name . formula_selection RightParen Dot  (109)
+
+	RightParen  shift 58
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	LowerWord  shift 54
+	.  error
+
+	name  goto 59
+	lower_word  goto 56
+	key_word  goto 57
+	formula_selection  goto 60
+
+
+state 24
+	key_word : CNF .  (78)
+
+	.  reduce 78
+
+
+state 25
+	key_word : FOF .  (79)
+
+	.  reduce 79
+
+
+state 26
+	key_word : Include .  (80)
+
+	.  reduce 80
+
+
+state 27
+	key_word : Axiom .  (81)
+
+	.  reduce 81
+
+
+state 28
+	key_word : Hypothesis .  (82)
+
+	.  reduce 82
+
+
+state 29
+	key_word : Conjecture .  (83)
+
+	.  reduce 83
+
+
+state 30
+	key_word : Negated_conjecture .  (84)
+
+	.  reduce 84
+
+
+state 31
+	key_word : Lemma .  (85)
+
+	.  reduce 85
+
+
+state 32
+	key_word : Theorem .  (86)
+
+	.  reduce 86
+
+
+state 33
+	key_word : Plain .  (87)
+
+	.  reduce 87
+
+
+state 34
+	key_word : Unknown .  (88)
+
+	.  reduce 88
+
+
+state 35
+	key_word : Derived .  (89)
+
+	.  reduce 89
+
+
+state 36
+	key_word : Equal .  (90)
+
+	.  reduce 90
+
+
+state 37
+	key_word : Inference .  (91)
+
+	.  reduce 91
+
+
+state 38
+	key_word : Theory .  (92)
+
+	.  reduce 92
+
+
+state 39
+	key_word : AC .  (93)
+
+	.  reduce 93
+
+
+state 40
+	key_word : File .  (94)
+
+	.  reduce 94
+
+
+state 41
+	key_word : Creator .  (95)
+
+	.  reduce 95
+
+
+state 42
+	key_word : Description .  (96)
+
+	.  reduce 96
+
+
+state 43
+	key_word : Iquote .  (97)
+
+	.  reduce 97
+
+
+state 44
+	key_word : Status .  (98)
+
+	.  reduce 98
+
+
+state 45
+	key_word : Thm .  (99)
+
+	.  reduce 99
+
+
+state 46
+	key_word : Sat .  (100)
+
+	.  reduce 100
+
+
+state 47
+	key_word : Refutation .  (101)
+
+	.  reduce 101
+
+
+state 48
+	key_word : FormulaItem .  (102)
+
+	.  reduce 102
+
+
+state 49
+	key_word : InferenceItem .  (103)
+
+	.  reduce 103
+
+
+state 50
+	key_word : GeneralFunction .  (104)
+
+	.  reduce 104
+
+
+state 51
+	key_word : InferenceInfo .  (105)
+
+	.  reduce 105
+
+
+state 52
+	key_word : DagSource .  (106)
+
+	.  reduce 106
+
+
+state 53
+	key_word : ExternalSource .  (107)
+
+	.  reduce 107
+
+
+state 54
+	lower_word : LowerWord .  (76)
+
+	.  reduce 76
+
+
+state 55
+	annotated_formula : language LeftParen name . Comma formula_type Comma fol_formula RightParen Dot  (7)
+	annotated_formula : language LeftParen name . Comma formula_type Comma fol_formula extra_annotations RightParen Dot  (8)
+
+	Comma  shift 61
+	.  error
+
+
+state 56
+	name : lower_word .  (74)
+
+	.  reduce 74
+
+
+state 57
+	lower_word : key_word .  (77)
+
+	.  reduce 77
+
+
+state 58
+	include_file : Include LeftParen file_name RightParen . Dot  (108)
+
+	Dot  shift 62
+	.  error
+
+
+state 59
+	formula_selection : name .  (110)
+	formula_selection : name . formula_selection  (111)
+
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	LowerWord  shift 54
+	RightParen  reduce 110
+
+	name  goto 59
+	lower_word  goto 56
+	key_word  goto 57
+	formula_selection  goto 63
+
+
+state 60
+	include_file : Include LeftParen file_name formula_selection . RightParen Dot  (109)
+
+	RightParen  shift 64
+	.  error
+
+
+state 61
+	annotated_formula : language LeftParen name Comma . formula_type Comma fol_formula RightParen Dot  (7)
+	annotated_formula : language LeftParen name Comma . formula_type Comma fol_formula extra_annotations RightParen Dot  (8)
+
+	Axiom  shift 65
+	Hypothesis  shift 66
+	Conjecture  shift 67
+	Negated_conjecture  shift 68
+	Lemma  shift 69
+	Theorem  shift 70
+	Plain  shift 71
+	Unknown  shift 72
+	Derived  shift 73
+	.  error
+
+	formula_type  goto 74
+	user_type  goto 75
+	source_type  goto 76
+
+
+state 62
+	include_file : Include LeftParen file_name RightParen Dot .  (108)
+
+	.  reduce 108
+
+
+state 63
+	formula_selection : name formula_selection .  (111)
+
+	.  reduce 111
+
+
+state 64
+	include_file : Include LeftParen file_name formula_selection RightParen . Dot  (109)
+
+	Dot  shift 77
+	.  error
+
+
+state 65
+	user_type : Axiom .  (16)
+
+	.  reduce 16
+
+
+state 66
+	user_type : Hypothesis .  (17)
+
+	.  reduce 17
+
+
+state 67
+	user_type : Conjecture .  (18)
+
+	.  reduce 18
+
+
+state 68
+	user_type : Negated_conjecture .  (19)
+
+	.  reduce 19
+
+
+state 69
+	user_type : Lemma .  (20)
+
+	.  reduce 20
+
+
+state 70
+	user_type : Theorem .  (21)
+
+	.  reduce 21
+
+
+state 71
+	user_type : Plain .  (22)
+
+	.  reduce 22
+
+
+state 72
+	user_type : Unknown .  (23)
+
+	.  reduce 23
+
+
+state 73
+	source_type : Derived .  (24)
+
+	.  reduce 24
+
+
+state 74
+	annotated_formula : language LeftParen name Comma formula_type . Comma fol_formula RightParen Dot  (7)
+	annotated_formula : language LeftParen name Comma formula_type . Comma fol_formula extra_annotations RightParen Dot  (8)
+
+	Comma  shift 78
+	.  error
+
+
+state 75
+	formula_type : user_type . Minus source_type  (13)
+	formula_type : user_type .  (14)
+
+	Minus  shift 79
+	Comma  reduce 14
+
+
+state 76
+	formula_type : source_type .  (15)
+
+	.  reduce 15
+
+
+state 77
+	include_file : Include LeftParen file_name formula_selection RightParen Dot .  (109)
+
+	.  reduce 109
+
+
+state 78
+	annotated_formula : language LeftParen name Comma formula_type Comma . fol_formula RightParen Dot  (7)
+	annotated_formula : language LeftParen name Comma formula_type Comma . fol_formula extra_annotations RightParen Dot  (8)
+
+	LeftParen  shift 80
+	True  shift 81
+	False  shift 82
+	ForAll  shift 83
+	Exists  shift 84
+	Equality  shift 85
+	Negation  shift 86
+	Minus  shift 87
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	PositiveInteger  shift 88
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	UpperWord  shift 89
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 90
+	fol_formula  goto 91
+	literal_formula  goto 92
+	binary_formula  goto 93
+	atomic_formula  goto 94
+	unary_formula  goto 95
+	quantified_formula  goto 96
+	bracketed_formula  goto 97
+	atom  goto 98
+	quantifier  goto 99
+	variable  goto 100
+	unary_connective  goto 101
+	term  goto 102
+	theory_term  goto 103
+	user_term  goto 104
+	number  goto 105
+	constant  goto 106
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 79
+	formula_type : user_type Minus . source_type  (13)
+
+	Derived  shift 73
+	.  error
+
+	source_type  goto 108
+
+
+state 80
+	bracketed_formula : LeftParen . fol_formula RightParen  (32)
+
+	LeftParen  shift 80
+	True  shift 81
+	False  shift 82
+	ForAll  shift 83
+	Exists  shift 84
+	Equality  shift 85
+	Negation  shift 86
+	Minus  shift 87
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	PositiveInteger  shift 88
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	UpperWord  shift 89
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 90
+	fol_formula  goto 109
+	literal_formula  goto 92
+	binary_formula  goto 93
+	atomic_formula  goto 94
+	unary_formula  goto 95
+	quantified_formula  goto 96
+	bracketed_formula  goto 97
+	atom  goto 98
+	quantifier  goto 99
+	variable  goto 100
+	unary_connective  goto 101
+	term  goto 102
+	theory_term  goto 103
+	user_term  goto 104
+	number  goto 105
+	constant  goto 106
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 81
+	theory_term : True .  (60)
+
+	.  reduce 60
+
+
+state 82
+	theory_term : False .  (61)
+
+	.  reduce 61
+
+
+state 83
+	quantifier : ForAll .  (35)
+
+	.  reduce 35
+
+
+state 84
+	quantifier : Exists .  (34)
+
+	.  reduce 34
+
+
+state 85
+	theory_term : Equality . LeftParen term Comma term RightParen  (59)
+
+	LeftParen  shift 110
+	.  error
+
+
+state 86
+	unary_connective : Negation .  (50)
+
+	.  reduce 50
+
+
+state 87
+	theory_term : Minus . term  (65)
+
+	True  shift 81
+	False  shift 82
+	Equality  shift 85
+	Minus  shift 87
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	PositiveInteger  shift 88
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	UpperWord  shift 89
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 90
+	variable  goto 100
+	term  goto 111
+	theory_term  goto 103
+	user_term  goto 104
+	number  goto 105
+	constant  goto 106
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 88
+	number : PositiveInteger .  (71)
+	number : PositiveInteger . decimal_part  (72)
+
+	Dot  shift 112
+	Comma  reduce 71
+	RightParen  reduce 71
+	And  reduce 71
+	Or  reduce 71
+	Equality  reduce 71
+	NegEquality  reduce 71
+	ImplicationLR  reduce 71
+	Plus  reduce 71
+	Minus  reduce 71
+
+	decimal_part  goto 113
+
+
+state 89
+	variable : UpperWord .  (70)
+
+	.  reduce 70
+
+
+state 90
+	user_term : name . LeftParen arguments RightParen  (67)
+	constant : name .  (68)
+
+	LeftParen  shift 114
+	Comma  reduce 68
+	RightParen  reduce 68
+	And  reduce 68
+	Or  reduce 68
+	Equality  reduce 68
+	NegEquality  reduce 68
+	ImplicationLR  reduce 68
+	Plus  reduce 68
+	Minus  reduce 68
+
+
+state 91
+	annotated_formula : language LeftParen name Comma formula_type Comma fol_formula . RightParen Dot  (7)
+	annotated_formula : language LeftParen name Comma formula_type Comma fol_formula . extra_annotations RightParen Dot  (8)
+	binary_formula : fol_formula . And fol_formula  (38)
+	binary_formula : fol_formula . Or fol_formula  (39)
+	binary_formula : fol_formula . ImplicationLR fol_formula  (40)
+
+	Comma  shift 115
+	RightParen  shift 116
+	And  shift 117
+	Or  shift 118
+	ImplicationLR  shift 119
+	.  error
+
+	extra_annotations  goto 120
+
+
+state 92
+	fol_formula : literal_formula .  (25)
+
+	.  reduce 25
+
+
+state 93
+	fol_formula : binary_formula .  (26)
+
+	.  reduce 26
+
+
+state 94
+	literal_formula : atomic_formula .  (27)
+
+	.  reduce 27
+
+
+state 95
+	literal_formula : unary_formula .  (28)
+
+	.  reduce 28
+
+
+state 96
+	atomic_formula : quantified_formula .  (29)
+
+	.  reduce 29
+
+
+state 97
+	atomic_formula : bracketed_formula .  (30)
+
+	.  reduce 30
+
+
+state 98
+	atomic_formula : atom .  (31)
+
+	.  reduce 31
+
+
+state 99
+	quantified_formula : quantifier . variables Semicolumn literal_formula  (33)
+
+	UpperWord  shift 89
+	.  error
+
+	variables  goto 121
+	variable  goto 122
+
+
+state 100
+	term : variable .  (54)
+
+	.  reduce 54
+
+
+state 101
+	unary_formula : unary_connective . literal_formula  (41)
+
+	LeftParen  shift 80
+	True  shift 81
+	False  shift 82
+	ForAll  shift 83
+	Exists  shift 84
+	Equality  shift 85
+	Negation  shift 86
+	Minus  shift 87
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	PositiveInteger  shift 88
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	UpperWord  shift 89
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 90
+	literal_formula  goto 123
+	atomic_formula  goto 94
+	unary_formula  goto 95
+	quantified_formula  goto 96
+	bracketed_formula  goto 97
+	atom  goto 98
+	quantifier  goto 99
+	variable  goto 100
+	unary_connective  goto 101
+	term  goto 102
+	theory_term  goto 103
+	user_term  goto 104
+	number  goto 105
+	constant  goto 106
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 102
+	atom : term .  (51)
+	theory_term : term . Equality term  (57)
+	theory_term : term . NegEquality term  (58)
+	theory_term : term . Plus term  (63)
+	theory_term : term . Minus term  (64)
+
+	Equality  shift 124
+	NegEquality  shift 125
+	Plus  shift 126
+	Minus  shift 127
+	Comma  reduce 51
+	RightParen  reduce 51
+	And  reduce 51
+	Or  reduce 51
+	ImplicationLR  reduce 51
+
+
+state 103
+	term : theory_term .  (52)
+
+	.  reduce 52
+
+
+state 104
+	term : user_term .  (53)
+
+	.  reduce 53
+
+
+state 105
+	theory_term : number .  (62)
+
+	.  reduce 62
+
+
+state 106
+	user_term : constant .  (66)
+
+	.  reduce 66
+
+
+state 107
+	constant : quoted_string .  (69)
+
+	.  reduce 69
+
+
+state 108
+	formula_type : user_type Minus source_type .  (13)
+
+	.  reduce 13
+
+
+state 109
+	bracketed_formula : LeftParen fol_formula . RightParen  (32)
+	binary_formula : fol_formula . And fol_formula  (38)
+	binary_formula : fol_formula . Or fol_formula  (39)
+	binary_formula : fol_formula . ImplicationLR fol_formula  (40)
+
+	RightParen  shift 128
+	And  shift 117
+	Or  shift 118
+	ImplicationLR  shift 119
+	.  error
+
+
+state 110
+	theory_term : Equality LeftParen . term Comma term RightParen  (59)
+
+	True  shift 81
+	False  shift 82
+	Equality  shift 85
+	Minus  shift 87
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	PositiveInteger  shift 88
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	UpperWord  shift 89
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 90
+	variable  goto 100
+	term  goto 129
+	theory_term  goto 103
+	user_term  goto 104
+	number  goto 105
+	constant  goto 106
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 111
+	theory_term : term . Equality term  (57)
+	theory_term : term . NegEquality term  (58)
+	theory_term : term . Plus term  (63)
+	theory_term : term . Minus term  (64)
+	theory_term : Minus term .  (65)
+
+	.  reduce 65
+
+
+state 112
+	decimal_part : Dot . PositiveInteger  (73)
+
+	PositiveInteger  shift 130
+	.  error
+
+
+state 113
+	number : PositiveInteger decimal_part .  (72)
+
+	.  reduce 72
+
+
+state 114
+	user_term : name LeftParen . arguments RightParen  (67)
+
+	True  shift 81
+	False  shift 82
+	Equality  shift 85
+	Minus  shift 87
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	PositiveInteger  shift 88
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	UpperWord  shift 89
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 90
+	variable  goto 100
+	term  goto 131
+	theory_term  goto 103
+	user_term  goto 104
+	arguments  goto 132
+	number  goto 105
+	constant  goto 106
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 115
+	extra_annotations : Comma . source  (9)
+	extra_annotations : Comma . source Comma useful_info  (10)
+
+	Unknown  shift 133
+	DagSource  shift 134
+	ExternalSource  shift 135
+	.  error
+
+	source  goto 136
+
+
+state 116
+	annotated_formula : language LeftParen name Comma formula_type Comma fol_formula RightParen . Dot  (7)
+
+	Dot  shift 137
+	.  error
+
+
+state 117
+	binary_formula : fol_formula And . fol_formula  (38)
+
+	LeftParen  shift 80
+	True  shift 81
+	False  shift 82
+	ForAll  shift 83
+	Exists  shift 84
+	Equality  shift 85
+	Negation  shift 86
+	Minus  shift 87
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	PositiveInteger  shift 88
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	UpperWord  shift 89
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 90
+	fol_formula  goto 138
+	literal_formula  goto 92
+	binary_formula  goto 93
+	atomic_formula  goto 94
+	unary_formula  goto 95
+	quantified_formula  goto 96
+	bracketed_formula  goto 97
+	atom  goto 98
+	quantifier  goto 99
+	variable  goto 100
+	unary_connective  goto 101
+	term  goto 102
+	theory_term  goto 103
+	user_term  goto 104
+	number  goto 105
+	constant  goto 106
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 118
+	binary_formula : fol_formula Or . fol_formula  (39)
+
+	LeftParen  shift 80
+	True  shift 81
+	False  shift 82
+	ForAll  shift 83
+	Exists  shift 84
+	Equality  shift 85
+	Negation  shift 86
+	Minus  shift 87
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	PositiveInteger  shift 88
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	UpperWord  shift 89
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 90
+	fol_formula  goto 139
+	literal_formula  goto 92
+	binary_formula  goto 93
+	atomic_formula  goto 94
+	unary_formula  goto 95
+	quantified_formula  goto 96
+	bracketed_formula  goto 97
+	atom  goto 98
+	quantifier  goto 99
+	variable  goto 100
+	unary_connective  goto 101
+	term  goto 102
+	theory_term  goto 103
+	user_term  goto 104
+	number  goto 105
+	constant  goto 106
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 119
+	binary_formula : fol_formula ImplicationLR . fol_formula  (40)
+
+	LeftParen  shift 80
+	True  shift 81
+	False  shift 82
+	ForAll  shift 83
+	Exists  shift 84
+	Equality  shift 85
+	Negation  shift 86
+	Minus  shift 87
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	PositiveInteger  shift 88
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	UpperWord  shift 89
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 90
+	fol_formula  goto 140
+	literal_formula  goto 92
+	binary_formula  goto 93
+	atomic_formula  goto 94
+	unary_formula  goto 95
+	quantified_formula  goto 96
+	bracketed_formula  goto 97
+	atom  goto 98
+	quantifier  goto 99
+	variable  goto 100
+	unary_connective  goto 101
+	term  goto 102
+	theory_term  goto 103
+	user_term  goto 104
+	number  goto 105
+	constant  goto 106
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 120
+	annotated_formula : language LeftParen name Comma formula_type Comma fol_formula extra_annotations . RightParen Dot  (8)
+
+	RightParen  shift 141
+	.  error
+
+
+state 121
+	quantified_formula : quantifier variables . Semicolumn literal_formula  (33)
+
+	Semicolumn  shift 142
+	.  error
+
+
+state 122
+	variables : variable .  (36)
+	variables : variable . variables  (37)
+
+	UpperWord  shift 89
+	Semicolumn  reduce 36
+
+	variables  goto 143
+	variable  goto 122
+
+
+state 123
+	unary_formula : unary_connective literal_formula .  (41)
+
+	.  reduce 41
+
+
+state 124
+	theory_term : term Equality . term  (57)
+
+	True  shift 81
+	False  shift 82
+	Equality  shift 85
+	Minus  shift 87
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	PositiveInteger  shift 88
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	UpperWord  shift 89
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 90
+	variable  goto 100
+	term  goto 144
+	theory_term  goto 103
+	user_term  goto 104
+	number  goto 105
+	constant  goto 106
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 125
+	theory_term : term NegEquality . term  (58)
+
+	True  shift 81
+	False  shift 82
+	Equality  shift 85
+	Minus  shift 87
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	PositiveInteger  shift 88
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	UpperWord  shift 89
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 90
+	variable  goto 100
+	term  goto 145
+	theory_term  goto 103
+	user_term  goto 104
+	number  goto 105
+	constant  goto 106
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 126
+	theory_term : term Plus . term  (63)
+
+	True  shift 81
+	False  shift 82
+	Equality  shift 85
+	Minus  shift 87
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	PositiveInteger  shift 88
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	UpperWord  shift 89
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 90
+	variable  goto 100
+	term  goto 146
+	theory_term  goto 103
+	user_term  goto 104
+	number  goto 105
+	constant  goto 106
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 127
+	theory_term : term Minus . term  (64)
+
+	True  shift 81
+	False  shift 82
+	Equality  shift 85
+	Minus  shift 87
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	PositiveInteger  shift 88
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	UpperWord  shift 89
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 90
+	variable  goto 100
+	term  goto 147
+	theory_term  goto 103
+	user_term  goto 104
+	number  goto 105
+	constant  goto 106
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 128
+	bracketed_formula : LeftParen fol_formula RightParen .  (32)
+
+	.  reduce 32
+
+
+state 129
+	theory_term : term . Equality term  (57)
+	theory_term : term . NegEquality term  (58)
+	theory_term : Equality LeftParen term . Comma term RightParen  (59)
+	theory_term : term . Plus term  (63)
+	theory_term : term . Minus term  (64)
+
+	Comma  shift 148
+	Equality  shift 124
+	NegEquality  shift 125
+	Plus  shift 126
+	Minus  shift 127
+	.  error
+
+
+state 130
+	decimal_part : Dot PositiveInteger .  (73)
+
+	.  reduce 73
+
+
+state 131
+	arguments : term .  (55)
+	arguments : term . Comma arguments  (56)
+	theory_term : term . Equality term  (57)
+	theory_term : term . NegEquality term  (58)
+	theory_term : term . Plus term  (63)
+	theory_term : term . Minus term  (64)
+
+	Comma  shift 149
+	Equality  shift 124
+	NegEquality  shift 125
+	Plus  shift 126
+	Minus  shift 127
+	RightParen  reduce 55
+
+
+state 132
+	user_term : name LeftParen arguments . RightParen  (67)
+
+	RightParen  shift 150
+	.  error
+
+
+state 133
+	source : Unknown .  (118)
+
+	.  reduce 118
+
+
+state 134
+	source : DagSource . LeftParen dag_source RightParen  (116)
+
+	LeftParen  shift 151
+	.  error
+
+
+state 135
+	source : ExternalSource . LeftParen external_source RightParen  (117)
+
+	LeftParen  shift 152
+	.  error
+
+
+state 136
+	extra_annotations : Comma source .  (9)
+	extra_annotations : Comma source . Comma useful_info  (10)
+
+	Comma  shift 153
+	RightParen  reduce 9
+
+
+state 137
+	annotated_formula : language LeftParen name Comma formula_type Comma fol_formula RightParen Dot .  (7)
+
+	.  reduce 7
+
+
+state 138
+	binary_formula : fol_formula . And fol_formula  (38)
+	binary_formula : fol_formula And fol_formula .  (38)
+	binary_formula : fol_formula . Or fol_formula  (39)
+	binary_formula : fol_formula . ImplicationLR fol_formula  (40)
+
+	And  shift 117
+	Comma  reduce 38
+	RightParen  reduce 38
+	Or  reduce 38
+	ImplicationLR  reduce 38
+
+
+state 139
+	binary_formula : fol_formula . And fol_formula  (38)
+	binary_formula : fol_formula . Or fol_formula  (39)
+	binary_formula : fol_formula Or fol_formula .  (39)
+	binary_formula : fol_formula . ImplicationLR fol_formula  (40)
+
+	And  shift 117
+	Or  shift 118
+	Comma  reduce 39
+	RightParen  reduce 39
+	ImplicationLR  reduce 39
+
+
+state 140
+	binary_formula : fol_formula . And fol_formula  (38)
+	binary_formula : fol_formula . Or fol_formula  (39)
+	binary_formula : fol_formula . ImplicationLR fol_formula  (40)
+	binary_formula : fol_formula ImplicationLR fol_formula .  (40)
+
+	And  shift 117
+	Or  shift 118
+	ImplicationLR  shift 119
+	Comma  reduce 40
+	RightParen  reduce 40
+
+
+state 141
+	annotated_formula : language LeftParen name Comma formula_type Comma fol_formula extra_annotations RightParen . Dot  (8)
+
+	Dot  shift 154
+	.  error
+
+
+state 142
+	quantified_formula : quantifier variables Semicolumn . literal_formula  (33)
+
+	LeftParen  shift 80
+	True  shift 81
+	False  shift 82
+	ForAll  shift 83
+	Exists  shift 84
+	Equality  shift 85
+	Negation  shift 86
+	Minus  shift 87
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	PositiveInteger  shift 88
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	UpperWord  shift 89
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 90
+	literal_formula  goto 155
+	atomic_formula  goto 94
+	unary_formula  goto 95
+	quantified_formula  goto 96
+	bracketed_formula  goto 97
+	atom  goto 98
+	quantifier  goto 99
+	variable  goto 100
+	unary_connective  goto 101
+	term  goto 102
+	theory_term  goto 103
+	user_term  goto 104
+	number  goto 105
+	constant  goto 106
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 143
+	variables : variable variables .  (37)
+
+	.  reduce 37
+
+
+state 144
+	theory_term : term . Equality term  (57)
+	theory_term : term Equality term .  (57)
+	theory_term : term . NegEquality term  (58)
+	theory_term : term . Plus term  (63)
+	theory_term : term . Minus term  (64)
+
+	Plus  shift 126
+	Minus  shift 127
+	Comma  reduce 57
+	RightParen  reduce 57
+	And  reduce 57
+	Or  reduce 57
+	ImplicationLR  reduce 57
+
+
+state 145
+	theory_term : term . Equality term  (57)
+	theory_term : term . NegEquality term  (58)
+	theory_term : term NegEquality term .  (58)
+	theory_term : term . Plus term  (63)
+	theory_term : term . Minus term  (64)
+
+	Plus  shift 126
+	Minus  shift 127
+	Comma  reduce 58
+	RightParen  reduce 58
+	And  reduce 58
+	Or  reduce 58
+	ImplicationLR  reduce 58
+
+
+state 146
+	theory_term : term . Equality term  (57)
+	theory_term : term . NegEquality term  (58)
+	theory_term : term . Plus term  (63)
+	theory_term : term Plus term .  (63)
+	theory_term : term . Minus term  (64)
+
+	Plus  shift 126
+	Minus  shift 127
+	Comma  reduce 63
+	RightParen  reduce 63
+	And  reduce 63
+	Or  reduce 63
+	Equality  reduce 63
+	NegEquality  reduce 63
+	ImplicationLR  reduce 63
+
+
+state 147
+	theory_term : term . Equality term  (57)
+	theory_term : term . NegEquality term  (58)
+	theory_term : term . Plus term  (63)
+	theory_term : term . Minus term  (64)
+	theory_term : term Minus term .  (64)
+
+	Plus  shift 126
+	Minus  shift 127
+	Comma  reduce 64
+	RightParen  reduce 64
+	And  reduce 64
+	Or  reduce 64
+	Equality  reduce 64
+	NegEquality  reduce 64
+	ImplicationLR  reduce 64
+
+
+state 148
+	theory_term : Equality LeftParen term Comma . term RightParen  (59)
+
+	True  shift 81
+	False  shift 82
+	Equality  shift 85
+	Minus  shift 87
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	PositiveInteger  shift 88
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	UpperWord  shift 89
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 90
+	variable  goto 100
+	term  goto 156
+	theory_term  goto 103
+	user_term  goto 104
+	number  goto 105
+	constant  goto 106
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 149
+	arguments : term Comma . arguments  (56)
+
+	True  shift 81
+	False  shift 82
+	Equality  shift 85
+	Minus  shift 87
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	PositiveInteger  shift 88
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	UpperWord  shift 89
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 90
+	variable  goto 100
+	term  goto 131
+	theory_term  goto 103
+	user_term  goto 104
+	arguments  goto 157
+	number  goto 105
+	constant  goto 106
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 150
+	user_term : name LeftParen arguments RightParen .  (67)
+
+	.  reduce 67
+
+
+state 151
+	source : DagSource LeftParen . dag_source RightParen  (116)
+
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 158
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	LowerWord  shift 54
+	.  error
+
+	name  goto 159
+	lower_word  goto 56
+	key_word  goto 57
+	dag_source  goto 160
+	inference_record  goto 161
+
+
+state 152
+	source : ExternalSource LeftParen . external_source RightParen  (117)
+
+	Theory  shift 162
+	File  shift 163
+	Creator  shift 164
+	.  error
+
+	external_source  goto 165
+	theory  goto 166
+	file_source  goto 167
+	creator_source  goto 168
+
+
+state 153
+	extra_annotations : Comma source Comma . useful_info  (10)
+
+	LBrace  shift 169
+	.  error
+
+	useful_info  goto 170
+
+
+state 154
+	annotated_formula : language LeftParen name Comma formula_type Comma fol_formula extra_annotations RightParen Dot .  (8)
+
+	.  reduce 8
+
+
+state 155
+	quantified_formula : quantifier variables Semicolumn literal_formula .  (33)
+
+	.  reduce 33
+
+
+state 156
+	theory_term : term . Equality term  (57)
+	theory_term : term . NegEquality term  (58)
+	theory_term : Equality LeftParen term Comma term . RightParen  (59)
+	theory_term : term . Plus term  (63)
+	theory_term : term . Minus term  (64)
+
+	RightParen  shift 171
+	Equality  shift 124
+	NegEquality  shift 125
+	Plus  shift 126
+	Minus  shift 127
+	.  error
+
+
+state 157
+	arguments : term Comma arguments .  (56)
+
+	.  reduce 56
+
+
+state 158
+	key_word : Inference .  (91)
+	inference_record : Inference . LeftParen inference_rule Comma useful_info Comma LBrace parent_info RBrace RightParen  (121)
+
+	LeftParen  shift 172
+	RightParen  reduce 91
+
+
+state 159
+	dag_source : name .  (119)
+
+	.  reduce 119
+
+
+state 160
+	source : DagSource LeftParen dag_source . RightParen  (116)
+
+	RightParen  shift 173
+	.  error
+
+
+state 161
+	dag_source : inference_record .  (120)
+
+	.  reduce 120
+
+
+state 162
+	theory : Theory . LeftParen theory_name RightParen  (128)
+
+	LeftParen  shift 174
+	.  error
+
+
+state 163
+	file_source : File . LeftParen file_name Comma file_node_name RightParen  (134)
+
+	LeftParen  shift 175
+	.  error
+
+
+state 164
+	creator_source : Creator . LeftParen creator_name Comma useful_info RightParen  (137)
+
+	LeftParen  shift 176
+	.  error
+
+
+state 165
+	source : ExternalSource LeftParen external_source . RightParen  (117)
+
+	RightParen  shift 177
+	.  error
+
+
+state 166
+	external_source : theory .  (133)
+
+	.  reduce 133
+
+
+state 167
+	external_source : file_source .  (131)
+
+	.  reduce 131
+
+
+state 168
+	external_source : creator_source .  (132)
+
+	.  reduce 132
+
+
+state 169
+	useful_info : LBrace . RBrace  (139)
+	useful_info : LBrace . info_items RBrace  (140)
+
+	RBrace  shift 178
+	FormulaItem  shift 179
+	InferenceItem  shift 180
+	GeneralFunction  shift 181
+	.  error
+
+	info_items  goto 182
+	info_item  goto 183
+
+
+state 170
+	extra_annotations : Comma source Comma useful_info .  (10)
+
+	.  reduce 10
+
+
+state 171
+	theory_term : Equality LeftParen term Comma term RightParen .  (59)
+
+	.  reduce 59
+
+
+state 172
+	inference_record : Inference LeftParen . inference_rule Comma useful_info Comma LBrace parent_info RBrace RightParen  (121)
+
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	LowerWord  shift 54
+	.  error
+
+	name  goto 184
+	lower_word  goto 56
+	key_word  goto 57
+	inference_rule  goto 185
+
+
+state 173
+	source : DagSource LeftParen dag_source RightParen .  (116)
+
+	.  reduce 116
+
+
+state 174
+	theory : Theory LeftParen . theory_name RightParen  (128)
+
+	Equality  shift 186
+	AC  shift 187
+	.  error
+
+	theory_name  goto 188
+
+
+state 175
+	file_source : File LeftParen . file_name Comma file_node_name RightParen  (134)
+
+	QuotedStr  shift 21
+	.  error
+
+	quoted_string  goto 22
+	file_name  goto 189
+
+
+state 176
+	creator_source : Creator LeftParen . creator_name Comma useful_info RightParen  (137)
+
+	QuotedStr  shift 21
+	.  error
+
+	quoted_string  goto 190
+	creator_name  goto 191
+
+
+state 177
+	source : ExternalSource LeftParen external_source RightParen .  (117)
+
+	.  reduce 117
+
+
+state 178
+	useful_info : LBrace RBrace .  (139)
+
+	.  reduce 139
+
+
+state 179
+	info_item : FormulaItem . LeftParen formula_item RightParen  (143)
+
+	LeftParen  shift 192
+	.  error
+
+
+state 180
+	info_item : InferenceItem . LeftParen inference_item RightParen  (144)
+
+	LeftParen  shift 193
+	.  error
+
+
+state 181
+	info_item : GeneralFunction . LeftParen general_function RightParen  (145)
+
+	LeftParen  shift 194
+	.  error
+
+
+state 182
+	useful_info : LBrace info_items . RBrace  (140)
+
+	RBrace  shift 195
+	.  error
+
+
+state 183
+	info_items : info_item .  (141)
+	info_items : info_item . Comma info_item  (142)
+
+	Comma  shift 196
+	RBrace  reduce 141
+
+
+state 184
+	inference_rule : name .  (122)
+
+	.  reduce 122
+
+
+state 185
+	inference_record : Inference LeftParen inference_rule . Comma useful_info Comma LBrace parent_info RBrace RightParen  (121)
+
+	Comma  shift 197
+	.  error
+
+
+state 186
+	theory_name : Equality .  (129)
+
+	.  reduce 129
+
+
+state 187
+	theory_name : AC .  (130)
+
+	.  reduce 130
+
+
+state 188
+	theory : Theory LeftParen theory_name . RightParen  (128)
+
+	RightParen  shift 198
+	.  error
+
+
+state 189
+	file_source : File LeftParen file_name . Comma file_node_name RightParen  (134)
+
+	Comma  shift 199
+	.  error
+
+
+state 190
+	creator_name : quoted_string .  (138)
+
+	.  reduce 138
+
+
+state 191
+	creator_source : Creator LeftParen creator_name . Comma useful_info RightParen  (137)
+
+	Comma  shift 200
+	.  error
+
+
+state 192
+	info_item : FormulaItem LeftParen . formula_item RightParen  (143)
+
+	Description  shift 201
+	Iquote  shift 202
+	.  error
+
+	formula_item  goto 203
+	description_item  goto 204
+	iquote_item  goto 205
+
+
+state 193
+	info_item : InferenceItem LeftParen . inference_item RightParen  (144)
+
+	Status  shift 206
+	Refutation  shift 207
+	InferenceInfo  shift 208
+	.  error
+
+	inference_item  goto 209
+	inference_status  goto 210
+	refutation  goto 211
+
+
+state 194
+	info_item : GeneralFunction LeftParen . general_function RightParen  (145)
+
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 212
+	constant  goto 213
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+	general_function  goto 214
+	functor_name  goto 215
+
+
+state 195
+	useful_info : LBrace info_items RBrace .  (140)
+
+	.  reduce 140
+
+
+state 196
+	info_items : info_item Comma . info_item  (142)
+
+	FormulaItem  shift 179
+	InferenceItem  shift 180
+	GeneralFunction  shift 181
+	.  error
+
+	info_item  goto 216
+
+
+state 197
+	inference_record : Inference LeftParen inference_rule Comma . useful_info Comma LBrace parent_info RBrace RightParen  (121)
+
+	LBrace  shift 169
+	.  error
+
+	useful_info  goto 217
+
+
+state 198
+	theory : Theory LeftParen theory_name RightParen .  (128)
+
+	.  reduce 128
+
+
+state 199
+	file_source : File LeftParen file_name Comma . file_node_name RightParen  (134)
+
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	LowerWord  shift 54
+	.  error
+
+	name  goto 218
+	lower_word  goto 56
+	key_word  goto 57
+	file_node_name  goto 219
+
+
+state 200
+	creator_source : Creator LeftParen creator_name Comma . useful_info RightParen  (137)
+
+	LBrace  shift 169
+	.  error
+
+	useful_info  goto 220
+
+
+state 201
+	description_item : Description . LeftParen quoted_string RightParen  (148)
+
+	LeftParen  shift 221
+	.  error
+
+
+state 202
+	iquote_item : Iquote . LeftParen quoted_string RightParen  (149)
+
+	LeftParen  shift 222
+	.  error
+
+
+state 203
+	info_item : FormulaItem LeftParen formula_item . RightParen  (143)
+
+	RightParen  shift 223
+	.  error
+
+
+state 204
+	formula_item : description_item .  (146)
+
+	.  reduce 146
+
+
+state 205
+	formula_item : iquote_item .  (147)
+
+	.  reduce 147
+
+
+state 206
+	inference_status : Status . LeftParen status_value RightParen  (152)
+
+	LeftParen  shift 224
+	.  error
+
+
+state 207
+	refutation : Refutation . LeftParen file_source RightParen  (156)
+
+	LeftParen  shift 225
+	.  error
+
+
+state 208
+	inference_status : InferenceInfo . LeftParen inference_info RightParen  (153)
+
+	LeftParen  shift 226
+	.  error
+
+
+state 209
+	info_item : InferenceItem LeftParen inference_item . RightParen  (144)
+
+	RightParen  shift 227
+	.  error
+
+
+state 210
+	inference_item : inference_status .  (150)
+
+	.  reduce 150
+
+
+state 211
+	inference_item : refutation .  (151)
+
+	.  reduce 151
+
+
+state 212
+	constant : name .  (68)
+	functor_name : name .  (165)
+
+	LeftParen  reduce 165
+	RightParen  reduce 68
+	LBrace  reduce 68
+	RBrace  reduce 68
+	CNF  reduce 68
+	FOF  reduce 68
+	Include  reduce 68
+	Axiom  reduce 68
+	Hypothesis  reduce 68
+	Conjecture  reduce 68
+	Negated_conjecture  reduce 68
+	Lemma  reduce 68
+	Theorem  reduce 68
+	Plain  reduce 68
+	Unknown  reduce 68
+	Derived  reduce 68
+	Equal  reduce 68
+	Inference  reduce 68
+	Theory  reduce 68
+	AC  reduce 68
+	File  reduce 68
+	Creator  reduce 68
+	Description  reduce 68
+	Iquote  reduce 68
+	Status  reduce 68
+	Thm  reduce 68
+	Sat  reduce 68
+	Refutation  reduce 68
+	FormulaItem  reduce 68
+	InferenceItem  reduce 68
+	GeneralFunction  reduce 68
+	InferenceInfo  reduce 68
+	DagSource  reduce 68
+	ExternalSource  reduce 68
+	LowerWord  reduce 68
+	QuotedStr  reduce 68
+
+
+state 213
+	general_function : constant .  (161)
+
+	.  reduce 161
+
+
+state 214
+	info_item : GeneralFunction LeftParen general_function . RightParen  (145)
+
+	RightParen  shift 228
+	.  error
+
+
+state 215
+	general_function : functor_name . LeftParen general_arguments RightParen  (162)
+
+	LeftParen  shift 229
+	.  error
+
+
+state 216
+	info_items : info_item Comma info_item .  (142)
+
+	.  reduce 142
+
+
+state 217
+	inference_record : Inference LeftParen inference_rule Comma useful_info . Comma LBrace parent_info RBrace RightParen  (121)
+
+	Comma  shift 230
+	.  error
+
+
+state 218
+	file_node_name : name .  (136)
+
+	.  reduce 136
+
+
+state 219
+	file_source : File LeftParen file_name Comma file_node_name . RightParen  (134)
+
+	RightParen  shift 231
+	.  error
+
+
+state 220
+	creator_source : Creator LeftParen creator_name Comma useful_info . RightParen  (137)
+
+	RightParen  shift 232
+	.  error
+
+
+state 221
+	description_item : Description LeftParen . quoted_string RightParen  (148)
+
+	QuotedStr  shift 21
+	.  error
+
+	quoted_string  goto 233
+
+
+state 222
+	iquote_item : Iquote LeftParen . quoted_string RightParen  (149)
+
+	QuotedStr  shift 21
+	.  error
+
+	quoted_string  goto 234
+
+
+state 223
+	info_item : FormulaItem LeftParen formula_item RightParen .  (143)
+
+	.  reduce 143
+
+
+state 224
+	inference_status : Status LeftParen . status_value RightParen  (152)
+
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	LowerWord  shift 54
+	.  error
+
+	name  goto 235
+	lower_word  goto 56
+	key_word  goto 57
+	status_value  goto 236
+
+
+state 225
+	refutation : Refutation LeftParen . file_source RightParen  (156)
+
+	File  shift 163
+	.  error
+
+	file_source  goto 237
+
+
+state 226
+	inference_status : InferenceInfo LeftParen . inference_info RightParen  (153)
+
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	LowerWord  shift 54
+	.  error
+
+	name  goto 184
+	lower_word  goto 56
+	key_word  goto 57
+	inference_rule  goto 238
+	inference_info  goto 239
+
+
+state 227
+	info_item : InferenceItem LeftParen inference_item RightParen .  (144)
+
+	.  reduce 144
+
+
+state 228
+	info_item : GeneralFunction LeftParen general_function RightParen .  (145)
+
+	.  reduce 145
+
+
+state 229
+	general_function : functor_name LeftParen . general_arguments RightParen  (162)
+
+	LBrace  shift 240
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 212
+	constant  goto 213
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+	general_function  goto 241
+	general_list  goto 242
+	general_term  goto 243
+	general_arguments  goto 244
+	functor_name  goto 215
+
+
+state 230
+	inference_record : Inference LeftParen inference_rule Comma useful_info Comma . LBrace parent_info RBrace RightParen  (121)
+
+	LBrace  shift 245
+	.  error
+
+
+state 231
+	file_source : File LeftParen file_name Comma file_node_name RightParen .  (134)
+
+	.  reduce 134
+
+
+state 232
+	creator_source : Creator LeftParen creator_name Comma useful_info RightParen .  (137)
+
+	.  reduce 137
+
+
+state 233
+	description_item : Description LeftParen quoted_string . RightParen  (148)
+
+	RightParen  shift 246
+	.  error
+
+
+state 234
+	iquote_item : Iquote LeftParen quoted_string . RightParen  (149)
+
+	RightParen  shift 247
+	.  error
+
+
+state 235
+	status_value : name .  (154)
+
+	.  reduce 154
+
+
+state 236
+	inference_status : Status LeftParen status_value . RightParen  (152)
+
+	RightParen  shift 248
+	.  error
+
+
+state 237
+	refutation : Refutation LeftParen file_source . RightParen  (156)
+
+	RightParen  shift 249
+	.  error
+
+
+state 238
+	inference_info : inference_rule . LeftParen constant Comma general_list RightParen  (155)
+
+	LeftParen  shift 250
+	.  error
+
+
+state 239
+	inference_status : InferenceInfo LeftParen inference_info . RightParen  (153)
+
+	RightParen  shift 251
+	.  error
+
+
+state 240
+	general_list : LBrace . RBrace  (159)
+	general_list : LBrace . general_arguments RBrace  (160)
+
+	LBrace  shift 240
+	RBrace  shift 252
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 212
+	constant  goto 213
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+	general_function  goto 241
+	general_list  goto 242
+	general_term  goto 243
+	general_arguments  goto 253
+	functor_name  goto 215
+
+
+state 241
+	general_term : general_function .  (157)
+
+	.  reduce 157
+
+
+state 242
+	general_term : general_list .  (158)
+
+	.  reduce 158
+
+
+state 243
+	general_arguments : general_term .  (163)
+	general_arguments : general_term . general_arguments  (164)
+
+	LBrace  shift 240
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	RightParen  reduce 163
+	RBrace  reduce 163
+
+	name  goto 212
+	constant  goto 213
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+	general_function  goto 241
+	general_list  goto 242
+	general_term  goto 243
+	general_arguments  goto 254
+	functor_name  goto 215
+
+
+state 244
+	general_function : functor_name LeftParen general_arguments . RightParen  (162)
+
+	RightParen  shift 255
+	.  error
+
+
+state 245
+	inference_record : Inference LeftParen inference_rule Comma useful_info Comma LBrace . parent_info RBrace RightParen  (121)
+
+	Unknown  shift 133
+	DagSource  shift 134
+	ExternalSource  shift 135
+	.  error
+
+	source  goto 256
+	parent_info  goto 257
+	parent_info_unit  goto 258
+
+
+state 246
+	description_item : Description LeftParen quoted_string RightParen .  (148)
+
+	.  reduce 148
+
+
+state 247
+	iquote_item : Iquote LeftParen quoted_string RightParen .  (149)
+
+	.  reduce 149
+
+
+state 248
+	inference_status : Status LeftParen status_value RightParen .  (152)
+
+	.  reduce 152
+
+
+state 249
+	refutation : Refutation LeftParen file_source RightParen .  (156)
+
+	.  reduce 156
+
+
+state 250
+	inference_info : inference_rule LeftParen . constant Comma general_list RightParen  (155)
+
+	CNF  shift 24
+	FOF  shift 25
+	Include  shift 26
+	Axiom  shift 27
+	Hypothesis  shift 28
+	Conjecture  shift 29
+	Negated_conjecture  shift 30
+	Lemma  shift 31
+	Theorem  shift 32
+	Plain  shift 33
+	Unknown  shift 34
+	Derived  shift 35
+	Equal  shift 36
+	Inference  shift 37
+	Theory  shift 38
+	AC  shift 39
+	File  shift 40
+	Creator  shift 41
+	Description  shift 42
+	Iquote  shift 43
+	Status  shift 44
+	Thm  shift 45
+	Sat  shift 46
+	Refutation  shift 47
+	FormulaItem  shift 48
+	InferenceItem  shift 49
+	GeneralFunction  shift 50
+	InferenceInfo  shift 51
+	DagSource  shift 52
+	ExternalSource  shift 53
+	LowerWord  shift 54
+	QuotedStr  shift 21
+	.  error
+
+	name  goto 259
+	constant  goto 260
+	quoted_string  goto 107
+	lower_word  goto 56
+	key_word  goto 57
+
+
+state 251
+	inference_status : InferenceInfo LeftParen inference_info RightParen .  (153)
+
+	.  reduce 153
+
+
+state 252
+	general_list : LBrace RBrace .  (159)
+
+	.  reduce 159
+
+
+state 253
+	general_list : LBrace general_arguments . RBrace  (160)
+
+	RBrace  shift 261
+	.  error
+
+
+state 254
+	general_arguments : general_term general_arguments .  (164)
+
+	.  reduce 164
+
+
+state 255
+	general_function : functor_name LeftParen general_arguments RightParen .  (162)
+
+	.  reduce 162
+
+
+state 256
+	parent_info_unit : source .  (125)
+	parent_info_unit : source . parent_details  (126)
+
+	Minus  shift 262
+	Comma  reduce 125
+	RBrace  reduce 125
+
+	parent_details  goto 263
+
+
+state 257
+	inference_record : Inference LeftParen inference_rule Comma useful_info Comma LBrace parent_info . RBrace RightParen  (121)
+
+	RBrace  shift 264
+	.  error
+
+
+state 258
+	parent_info : parent_info_unit .  (123)
+	parent_info : parent_info_unit . Comma parent_info  (124)
+
+	Comma  shift 265
+	RBrace  reduce 123
+
+
+state 259
+	constant : name .  (68)
+
+	.  reduce 68
+
+
+state 260
+	inference_info : inference_rule LeftParen constant . Comma general_list RightParen  (155)
+
+	Comma  shift 266
+	.  error
+
+
+state 261
+	general_list : LBrace general_arguments RBrace .  (160)
+
+	.  reduce 160
+
+
+state 262
+	parent_details : Minus . quoted_string  (127)
+
+	QuotedStr  shift 21
+	.  error
+
+	quoted_string  goto 267
+
+
+state 263
+	parent_info_unit : source parent_details .  (126)
+
+	.  reduce 126
+
+
+state 264
+	inference_record : Inference LeftParen inference_rule Comma useful_info Comma LBrace parent_info RBrace . RightParen  (121)
+
+	RightParen  shift 268
+	.  error
+
+
+state 265
+	parent_info : parent_info_unit Comma . parent_info  (124)
+
+	Unknown  shift 133
+	DagSource  shift 134
+	ExternalSource  shift 135
+	.  error
+
+	source  goto 256
+	parent_info  goto 269
+	parent_info_unit  goto 258
+
+
+state 266
+	inference_info : inference_rule LeftParen constant Comma . general_list RightParen  (155)
+
+	LBrace  shift 240
+	.  error
+
+	general_list  goto 270
+
+
+state 267
+	parent_details : Minus quoted_string .  (127)
+
+	.  reduce 127
+
+
+state 268
+	inference_record : Inference LeftParen inference_rule Comma useful_info Comma LBrace parent_info RBrace RightParen .  (121)
+
+	.  reduce 121
+
+
+state 269
+	parent_info : parent_info_unit Comma parent_info .  (124)
+
+	.  reduce 124
+
+
+state 270
+	inference_info : inference_rule LeftParen constant Comma general_list . RightParen  (155)
+
+	RightParen  shift 271
+	.  error
+
+
+state 271
+	inference_info : inference_rule LeftParen constant Comma general_list RightParen .  (155)
+
+	.  reduce 155
+
+
+Rules never reduced:
+	binary_connective : And  (42)
+	binary_connective : NegAnd  (43)
+	binary_connective : Or  (44)
+	binary_connective : NegOr  (45)
+	binary_connective : Equivalence  (46)
+	binary_connective : NegEquivalence  (47)
+	binary_connective : ImplicationLR  (48)
+	binary_connective : ImplicationRL  (49)
+
+
+68 terminals, 69 nonterminals
+167 grammar rules, 272 states

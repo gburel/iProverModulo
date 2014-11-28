@@ -1,0 +1,487 @@
+cio_basicparser.o: cio_basicparser.c /usr/include/stdlib.h \
+ /usr/include/Availability.h /usr/include/AvailabilityInternal.h \
+ /usr/include/_types.h /usr/include/sys/_types.h /usr/include/sys/cdefs.h \
+ /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h /usr/include/machine/_types.h \
+ /usr/include/i386/_types.h /usr/include/sys/wait.h \
+ /usr/include/sys/signal.h /usr/include/sys/appleapiopts.h \
+ /usr/include/machine/signal.h /usr/include/i386/signal.h \
+ /usr/include/i386/_structs.h /usr/include/sys/_structs.h \
+ /usr/include/machine/_structs.h /usr/include/mach/i386/_structs.h \
+ /usr/include/sys/resource.h /usr/include/machine/endian.h \
+ /usr/include/i386/endian.h /usr/include/sys/_endian.h \
+ /usr/include/libkern/_OSByteOrder.h \
+ /usr/include/libkern/i386/_OSByteOrder.h /usr/include/alloca.h \
+ /usr/include/machine/types.h /usr/include/i386/types.h cio_basicparser.h \
+ ../include/clb_ddarrays.h ../include/clb_memory.h \
+ ../include/clb_verbose.h ../include/clb_error.h ../include/clb_defines.h \
+ /usr/include/assert.h /usr/include/stdio.h /usr/include/secure/_stdio.h \
+ /usr/include/secure/_common.h /usr/include/string.h \
+ /usr/include/strings.h /usr/include/secure/_string.h \
+ /usr/include/errno.h /usr/include/sys/errno.h /usr/include/sys/param.h \
+ /usr/include/sys/types.h /usr/include/sys/syslimits.h \
+ /usr/include/machine/param.h /usr/include/i386/param.h \
+ /usr/include/i386/_param.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/limits.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/machine/limits.h \
+ /usr/include/i386/limits.h /usr/include/i386/_limits.h \
+ /usr/include/unistd.h /usr/include/sys/unistd.h \
+ /usr/include/sys/select.h /usr/include/sys/_select.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stddef.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/math.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stdarg.h \
+ /usr/include/sys/time.h /usr/include/time.h /usr/include/_structs.h \
+ ../include/clb_os_wrapper.h ../include/clb_pstacks.h \
+ ../include/cio_scanner.h ../include/cio_streams.h \
+ ../include/cio_initio.h ../include/cio_output.h \
+ ../include/clb_dstrings.h ../include/clb_memory.h \
+ ../include/cio_fileops.h ../include/clb_stringtrees.h \
+ ../include/clb_avlgeneric.h /usr/include/ctype.h /usr/include/runetype.h
+cio_commandline.o: cio_commandline.c cio_commandline.h \
+ ../include/clb_dstrings.h ../include/clb_memory.h \
+ ../include/clb_verbose.h ../include/clb_error.h ../include/clb_defines.h \
+ /usr/include/assert.h /usr/include/sys/cdefs.h \
+ /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h /usr/include/stdio.h \
+ /usr/include/Availability.h /usr/include/AvailabilityInternal.h \
+ /usr/include/_types.h /usr/include/sys/_types.h \
+ /usr/include/machine/_types.h /usr/include/i386/_types.h \
+ /usr/include/secure/_stdio.h /usr/include/secure/_common.h \
+ /usr/include/string.h /usr/include/strings.h \
+ /usr/include/secure/_string.h /usr/include/errno.h \
+ /usr/include/sys/errno.h /usr/include/sys/param.h \
+ /usr/include/sys/types.h /usr/include/sys/appleapiopts.h \
+ /usr/include/machine/types.h /usr/include/i386/types.h \
+ /usr/include/machine/endian.h /usr/include/i386/endian.h \
+ /usr/include/sys/_endian.h /usr/include/libkern/_OSByteOrder.h \
+ /usr/include/libkern/i386/_OSByteOrder.h /usr/include/sys/_structs.h \
+ /usr/include/sys/syslimits.h /usr/include/machine/param.h \
+ /usr/include/i386/param.h /usr/include/i386/_param.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/limits.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/machine/limits.h \
+ /usr/include/i386/limits.h /usr/include/i386/_limits.h \
+ /usr/include/sys/signal.h /usr/include/machine/signal.h \
+ /usr/include/i386/signal.h /usr/include/i386/_structs.h \
+ /usr/include/machine/_structs.h /usr/include/mach/i386/_structs.h \
+ /usr/include/unistd.h /usr/include/sys/unistd.h \
+ /usr/include/sys/select.h /usr/include/sys/_select.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stddef.h \
+ /usr/include/stdlib.h /usr/include/sys/wait.h \
+ /usr/include/sys/resource.h /usr/include/alloca.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/math.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stdarg.h \
+ /usr/include/sys/time.h /usr/include/time.h /usr/include/_structs.h \
+ ../include/clb_os_wrapper.h
+cio_fileops.o: cio_fileops.c cio_fileops.h ../include/cio_output.h \
+ /usr/include/stdio.h /usr/include/sys/cdefs.h \
+ /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h /usr/include/Availability.h \
+ /usr/include/AvailabilityInternal.h /usr/include/_types.h \
+ /usr/include/sys/_types.h /usr/include/machine/_types.h \
+ /usr/include/i386/_types.h /usr/include/secure/_stdio.h \
+ /usr/include/secure/_common.h ../include/clb_dstrings.h \
+ ../include/clb_memory.h ../include/clb_verbose.h ../include/clb_error.h \
+ ../include/clb_defines.h /usr/include/assert.h /usr/include/string.h \
+ /usr/include/strings.h /usr/include/secure/_string.h \
+ /usr/include/errno.h /usr/include/sys/errno.h /usr/include/sys/param.h \
+ /usr/include/sys/types.h /usr/include/sys/appleapiopts.h \
+ /usr/include/machine/types.h /usr/include/i386/types.h \
+ /usr/include/machine/endian.h /usr/include/i386/endian.h \
+ /usr/include/sys/_endian.h /usr/include/libkern/_OSByteOrder.h \
+ /usr/include/libkern/i386/_OSByteOrder.h /usr/include/sys/_structs.h \
+ /usr/include/sys/syslimits.h /usr/include/machine/param.h \
+ /usr/include/i386/param.h /usr/include/i386/_param.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/limits.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/machine/limits.h \
+ /usr/include/i386/limits.h /usr/include/i386/_limits.h \
+ /usr/include/sys/signal.h /usr/include/machine/signal.h \
+ /usr/include/i386/signal.h /usr/include/i386/_structs.h \
+ /usr/include/machine/_structs.h /usr/include/mach/i386/_structs.h \
+ /usr/include/unistd.h /usr/include/sys/unistd.h \
+ /usr/include/sys/select.h /usr/include/sys/_select.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stddef.h \
+ /usr/include/stdlib.h /usr/include/sys/wait.h \
+ /usr/include/sys/resource.h /usr/include/alloca.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/math.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stdarg.h \
+ /usr/include/sys/time.h /usr/include/time.h /usr/include/_structs.h \
+ ../include/clb_os_wrapper.h
+cio_filevars.o: cio_filevars.c cio_filevars.h \
+ ../include/clb_stringtrees.h ../include/clb_dstrings.h \
+ ../include/clb_memory.h ../include/clb_verbose.h ../include/clb_error.h \
+ ../include/clb_defines.h /usr/include/assert.h /usr/include/sys/cdefs.h \
+ /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h /usr/include/stdio.h \
+ /usr/include/Availability.h /usr/include/AvailabilityInternal.h \
+ /usr/include/_types.h /usr/include/sys/_types.h \
+ /usr/include/machine/_types.h /usr/include/i386/_types.h \
+ /usr/include/secure/_stdio.h /usr/include/secure/_common.h \
+ /usr/include/string.h /usr/include/strings.h \
+ /usr/include/secure/_string.h /usr/include/errno.h \
+ /usr/include/sys/errno.h /usr/include/sys/param.h \
+ /usr/include/sys/types.h /usr/include/sys/appleapiopts.h \
+ /usr/include/machine/types.h /usr/include/i386/types.h \
+ /usr/include/machine/endian.h /usr/include/i386/endian.h \
+ /usr/include/sys/_endian.h /usr/include/libkern/_OSByteOrder.h \
+ /usr/include/libkern/i386/_OSByteOrder.h /usr/include/sys/_structs.h \
+ /usr/include/sys/syslimits.h /usr/include/machine/param.h \
+ /usr/include/i386/param.h /usr/include/i386/_param.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/limits.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/machine/limits.h \
+ /usr/include/i386/limits.h /usr/include/i386/_limits.h \
+ /usr/include/sys/signal.h /usr/include/machine/signal.h \
+ /usr/include/i386/signal.h /usr/include/i386/_structs.h \
+ /usr/include/machine/_structs.h /usr/include/mach/i386/_structs.h \
+ /usr/include/unistd.h /usr/include/sys/unistd.h \
+ /usr/include/sys/select.h /usr/include/sys/_select.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stddef.h \
+ /usr/include/stdlib.h /usr/include/sys/wait.h \
+ /usr/include/sys/resource.h /usr/include/alloca.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/math.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stdarg.h \
+ /usr/include/sys/time.h /usr/include/time.h /usr/include/_structs.h \
+ ../include/clb_os_wrapper.h ../include/clb_avlgeneric.h \
+ ../include/clb_pstacks.h ../include/clb_memory.h \
+ ../include/cio_basicparser.h ../include/clb_ddarrays.h \
+ ../include/cio_scanner.h ../include/cio_streams.h \
+ ../include/cio_initio.h ../include/cio_output.h ../include/cio_fileops.h \
+ /usr/include/ctype.h /usr/include/runetype.h
+cio_initio.o: cio_initio.c cio_initio.h ../include/cio_output.h \
+ /usr/include/stdio.h /usr/include/sys/cdefs.h \
+ /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h /usr/include/Availability.h \
+ /usr/include/AvailabilityInternal.h /usr/include/_types.h \
+ /usr/include/sys/_types.h /usr/include/machine/_types.h \
+ /usr/include/i386/_types.h /usr/include/secure/_stdio.h \
+ /usr/include/secure/_common.h ../include/clb_dstrings.h \
+ ../include/clb_memory.h ../include/clb_verbose.h ../include/clb_error.h \
+ ../include/clb_defines.h /usr/include/assert.h /usr/include/string.h \
+ /usr/include/strings.h /usr/include/secure/_string.h \
+ /usr/include/errno.h /usr/include/sys/errno.h /usr/include/sys/param.h \
+ /usr/include/sys/types.h /usr/include/sys/appleapiopts.h \
+ /usr/include/machine/types.h /usr/include/i386/types.h \
+ /usr/include/machine/endian.h /usr/include/i386/endian.h \
+ /usr/include/sys/_endian.h /usr/include/libkern/_OSByteOrder.h \
+ /usr/include/libkern/i386/_OSByteOrder.h /usr/include/sys/_structs.h \
+ /usr/include/sys/syslimits.h /usr/include/machine/param.h \
+ /usr/include/i386/param.h /usr/include/i386/_param.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/limits.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/machine/limits.h \
+ /usr/include/i386/limits.h /usr/include/i386/_limits.h \
+ /usr/include/sys/signal.h /usr/include/machine/signal.h \
+ /usr/include/i386/signal.h /usr/include/i386/_structs.h \
+ /usr/include/machine/_structs.h /usr/include/mach/i386/_structs.h \
+ /usr/include/unistd.h /usr/include/sys/unistd.h \
+ /usr/include/sys/select.h /usr/include/sys/_select.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stddef.h \
+ /usr/include/stdlib.h /usr/include/sys/wait.h \
+ /usr/include/sys/resource.h /usr/include/alloca.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/math.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stdarg.h \
+ /usr/include/sys/time.h /usr/include/time.h /usr/include/_structs.h \
+ ../include/clb_os_wrapper.h
+cio_multiplexer.o: cio_multiplexer.c cio_multiplexer.h \
+ ../include/cio_network.h /usr/include/sys/socket.h \
+ /usr/include/sys/types.h /usr/include/sys/appleapiopts.h \
+ /usr/include/sys/cdefs.h /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h /usr/include/machine/types.h \
+ /usr/include/i386/types.h /usr/include/i386/_types.h \
+ /usr/include/sys/_types.h /usr/include/machine/_types.h \
+ /usr/include/machine/endian.h /usr/include/i386/endian.h \
+ /usr/include/sys/_endian.h /usr/include/libkern/_OSByteOrder.h \
+ /usr/include/libkern/i386/_OSByteOrder.h /usr/include/sys/_structs.h \
+ /usr/include/machine/_param.h /usr/include/i386/_param.h \
+ /usr/include/Availability.h /usr/include/AvailabilityInternal.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stdint.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/stdint.h \
+ ../include/clb_dstrings.h ../include/clb_memory.h \
+ ../include/clb_verbose.h ../include/clb_error.h ../include/clb_defines.h \
+ /usr/include/assert.h /usr/include/stdio.h /usr/include/_types.h \
+ /usr/include/secure/_stdio.h /usr/include/secure/_common.h \
+ /usr/include/string.h /usr/include/strings.h \
+ /usr/include/secure/_string.h /usr/include/errno.h \
+ /usr/include/sys/errno.h /usr/include/sys/param.h \
+ /usr/include/sys/syslimits.h /usr/include/machine/param.h \
+ /usr/include/i386/param.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/limits.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/machine/limits.h \
+ /usr/include/i386/limits.h /usr/include/i386/_limits.h \
+ /usr/include/sys/signal.h /usr/include/machine/signal.h \
+ /usr/include/i386/signal.h /usr/include/i386/_structs.h \
+ /usr/include/machine/_structs.h /usr/include/mach/i386/_structs.h \
+ /usr/include/unistd.h /usr/include/sys/unistd.h \
+ /usr/include/sys/select.h /usr/include/sys/_select.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stddef.h \
+ /usr/include/stdlib.h /usr/include/sys/wait.h \
+ /usr/include/sys/resource.h /usr/include/alloca.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/math.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stdarg.h \
+ /usr/include/sys/time.h /usr/include/time.h /usr/include/_structs.h \
+ ../include/clb_os_wrapper.h ../include/clb_pqueue.h \
+ ../include/clb_memory.h
+cio_network.o: cio_network.c /usr/include/netinet/in.h \
+ /usr/include/sys/appleapiopts.h /usr/include/sys/_types.h \
+ /usr/include/sys/cdefs.h /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h /usr/include/machine/_types.h \
+ /usr/include/i386/_types.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stdint.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/stdint.h \
+ /usr/include/Availability.h /usr/include/AvailabilityInternal.h \
+ /usr/include/sys/socket.h /usr/include/sys/types.h \
+ /usr/include/machine/types.h /usr/include/i386/types.h \
+ /usr/include/machine/endian.h /usr/include/i386/endian.h \
+ /usr/include/sys/_endian.h /usr/include/libkern/_OSByteOrder.h \
+ /usr/include/libkern/i386/_OSByteOrder.h /usr/include/sys/_structs.h \
+ /usr/include/machine/_param.h /usr/include/i386/_param.h \
+ /usr/include/netinet6/in6.h /usr/include/netdb.h /usr/include/_types.h \
+ cio_network.h ../include/clb_dstrings.h ../include/clb_memory.h \
+ ../include/clb_verbose.h ../include/clb_error.h ../include/clb_defines.h \
+ /usr/include/assert.h /usr/include/stdio.h /usr/include/secure/_stdio.h \
+ /usr/include/secure/_common.h /usr/include/string.h \
+ /usr/include/strings.h /usr/include/secure/_string.h \
+ /usr/include/errno.h /usr/include/sys/errno.h /usr/include/sys/param.h \
+ /usr/include/sys/syslimits.h /usr/include/machine/param.h \
+ /usr/include/i386/param.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/limits.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/machine/limits.h \
+ /usr/include/i386/limits.h /usr/include/i386/_limits.h \
+ /usr/include/sys/signal.h /usr/include/machine/signal.h \
+ /usr/include/i386/signal.h /usr/include/i386/_structs.h \
+ /usr/include/machine/_structs.h /usr/include/mach/i386/_structs.h \
+ /usr/include/unistd.h /usr/include/sys/unistd.h \
+ /usr/include/sys/select.h /usr/include/sys/_select.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stddef.h \
+ /usr/include/stdlib.h /usr/include/sys/wait.h \
+ /usr/include/sys/resource.h /usr/include/alloca.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/math.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stdarg.h \
+ /usr/include/sys/time.h /usr/include/time.h /usr/include/_structs.h \
+ ../include/clb_os_wrapper.h ../include/clb_pqueue.h \
+ ../include/clb_memory.h
+cio_output.o: cio_output.c ../include/cio_output.h /usr/include/stdio.h \
+ /usr/include/sys/cdefs.h /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h /usr/include/Availability.h \
+ /usr/include/AvailabilityInternal.h /usr/include/_types.h \
+ /usr/include/sys/_types.h /usr/include/machine/_types.h \
+ /usr/include/i386/_types.h /usr/include/secure/_stdio.h \
+ /usr/include/secure/_common.h ../include/clb_dstrings.h \
+ ../include/clb_memory.h ../include/clb_verbose.h ../include/clb_error.h \
+ ../include/clb_defines.h /usr/include/assert.h /usr/include/string.h \
+ /usr/include/strings.h /usr/include/secure/_string.h \
+ /usr/include/errno.h /usr/include/sys/errno.h /usr/include/sys/param.h \
+ /usr/include/sys/types.h /usr/include/sys/appleapiopts.h \
+ /usr/include/machine/types.h /usr/include/i386/types.h \
+ /usr/include/machine/endian.h /usr/include/i386/endian.h \
+ /usr/include/sys/_endian.h /usr/include/libkern/_OSByteOrder.h \
+ /usr/include/libkern/i386/_OSByteOrder.h /usr/include/sys/_structs.h \
+ /usr/include/sys/syslimits.h /usr/include/machine/param.h \
+ /usr/include/i386/param.h /usr/include/i386/_param.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/limits.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/machine/limits.h \
+ /usr/include/i386/limits.h /usr/include/i386/_limits.h \
+ /usr/include/sys/signal.h /usr/include/machine/signal.h \
+ /usr/include/i386/signal.h /usr/include/i386/_structs.h \
+ /usr/include/machine/_structs.h /usr/include/mach/i386/_structs.h \
+ /usr/include/unistd.h /usr/include/sys/unistd.h \
+ /usr/include/sys/select.h /usr/include/sys/_select.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stddef.h \
+ /usr/include/stdlib.h /usr/include/sys/wait.h \
+ /usr/include/sys/resource.h /usr/include/alloca.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/math.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stdarg.h \
+ /usr/include/sys/time.h /usr/include/time.h /usr/include/_structs.h \
+ ../include/clb_os_wrapper.h
+cio_scanner.o: cio_scanner.c cio_scanner.h ../include/cio_streams.h \
+ ../include/cio_initio.h ../include/cio_output.h /usr/include/stdio.h \
+ /usr/include/sys/cdefs.h /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h /usr/include/Availability.h \
+ /usr/include/AvailabilityInternal.h /usr/include/_types.h \
+ /usr/include/sys/_types.h /usr/include/machine/_types.h \
+ /usr/include/i386/_types.h /usr/include/secure/_stdio.h \
+ /usr/include/secure/_common.h ../include/clb_dstrings.h \
+ ../include/clb_memory.h ../include/clb_verbose.h ../include/clb_error.h \
+ ../include/clb_defines.h /usr/include/assert.h /usr/include/string.h \
+ /usr/include/strings.h /usr/include/secure/_string.h \
+ /usr/include/errno.h /usr/include/sys/errno.h /usr/include/sys/param.h \
+ /usr/include/sys/types.h /usr/include/sys/appleapiopts.h \
+ /usr/include/machine/types.h /usr/include/i386/types.h \
+ /usr/include/machine/endian.h /usr/include/i386/endian.h \
+ /usr/include/sys/_endian.h /usr/include/libkern/_OSByteOrder.h \
+ /usr/include/libkern/i386/_OSByteOrder.h /usr/include/sys/_structs.h \
+ /usr/include/sys/syslimits.h /usr/include/machine/param.h \
+ /usr/include/i386/param.h /usr/include/i386/_param.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/limits.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/machine/limits.h \
+ /usr/include/i386/limits.h /usr/include/i386/_limits.h \
+ /usr/include/sys/signal.h /usr/include/machine/signal.h \
+ /usr/include/i386/signal.h /usr/include/i386/_structs.h \
+ /usr/include/machine/_structs.h /usr/include/mach/i386/_structs.h \
+ /usr/include/unistd.h /usr/include/sys/unistd.h \
+ /usr/include/sys/select.h /usr/include/sys/_select.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stddef.h \
+ /usr/include/stdlib.h /usr/include/sys/wait.h \
+ /usr/include/sys/resource.h /usr/include/alloca.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/math.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stdarg.h \
+ /usr/include/sys/time.h /usr/include/time.h /usr/include/_structs.h \
+ ../include/clb_os_wrapper.h ../include/cio_fileops.h \
+ ../include/clb_stringtrees.h ../include/clb_avlgeneric.h \
+ ../include/clb_pstacks.h ../include/clb_memory.h /usr/include/ctype.h \
+ /usr/include/runetype.h
+cio_signals.o: cio_signals.c cio_signals.h /usr/include/signal.h \
+ /usr/include/sys/cdefs.h /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h /usr/include/_types.h \
+ /usr/include/sys/_types.h /usr/include/machine/_types.h \
+ /usr/include/i386/_types.h /usr/include/sys/signal.h \
+ /usr/include/sys/appleapiopts.h /usr/include/machine/signal.h \
+ /usr/include/i386/signal.h /usr/include/i386/_structs.h \
+ /usr/include/sys/_structs.h /usr/include/machine/_structs.h \
+ /usr/include/mach/i386/_structs.h /usr/include/sys/types.h \
+ /usr/include/machine/types.h /usr/include/i386/types.h \
+ /usr/include/machine/endian.h /usr/include/i386/endian.h \
+ /usr/include/sys/_endian.h /usr/include/libkern/_OSByteOrder.h \
+ /usr/include/libkern/i386/_OSByteOrder.h /usr/include/sys/time.h \
+ /usr/include/Availability.h /usr/include/AvailabilityInternal.h \
+ /usr/include/time.h /usr/include/_structs.h /usr/include/sys/_select.h \
+ /usr/include/sys/resource.h ../include/cio_tempfile.h \
+ /usr/include/stdlib.h /usr/include/sys/wait.h /usr/include/alloca.h \
+ ../include/clb_memory.h ../include/clb_verbose.h ../include/clb_error.h \
+ ../include/clb_defines.h /usr/include/assert.h /usr/include/stdio.h \
+ /usr/include/secure/_stdio.h /usr/include/secure/_common.h \
+ /usr/include/string.h /usr/include/strings.h \
+ /usr/include/secure/_string.h /usr/include/errno.h \
+ /usr/include/sys/errno.h /usr/include/sys/param.h \
+ /usr/include/sys/syslimits.h /usr/include/machine/param.h \
+ /usr/include/i386/param.h /usr/include/i386/_param.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/limits.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/machine/limits.h \
+ /usr/include/i386/limits.h /usr/include/i386/_limits.h \
+ /usr/include/unistd.h /usr/include/sys/unistd.h \
+ /usr/include/sys/select.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stddef.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/math.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stdarg.h \
+ ../include/clb_os_wrapper.h ../include/cio_fileops.h \
+ ../include/cio_output.h ../include/clb_dstrings.h \
+ ../include/clb_memory.h ../include/cio_commandline.h \
+ ../include/clb_stringtrees.h ../include/clb_avlgeneric.h \
+ ../include/clb_pstacks.h
+cio_simplestuff.o: cio_simplestuff.c cio_simplestuff.h \
+ ../include/cio_output.h /usr/include/stdio.h /usr/include/sys/cdefs.h \
+ /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h /usr/include/Availability.h \
+ /usr/include/AvailabilityInternal.h /usr/include/_types.h \
+ /usr/include/sys/_types.h /usr/include/machine/_types.h \
+ /usr/include/i386/_types.h /usr/include/secure/_stdio.h \
+ /usr/include/secure/_common.h ../include/clb_dstrings.h \
+ ../include/clb_memory.h ../include/clb_verbose.h ../include/clb_error.h \
+ ../include/clb_defines.h /usr/include/assert.h /usr/include/string.h \
+ /usr/include/strings.h /usr/include/secure/_string.h \
+ /usr/include/errno.h /usr/include/sys/errno.h /usr/include/sys/param.h \
+ /usr/include/sys/types.h /usr/include/sys/appleapiopts.h \
+ /usr/include/machine/types.h /usr/include/i386/types.h \
+ /usr/include/machine/endian.h /usr/include/i386/endian.h \
+ /usr/include/sys/_endian.h /usr/include/libkern/_OSByteOrder.h \
+ /usr/include/libkern/i386/_OSByteOrder.h /usr/include/sys/_structs.h \
+ /usr/include/sys/syslimits.h /usr/include/machine/param.h \
+ /usr/include/i386/param.h /usr/include/i386/_param.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/limits.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/machine/limits.h \
+ /usr/include/i386/limits.h /usr/include/i386/_limits.h \
+ /usr/include/sys/signal.h /usr/include/machine/signal.h \
+ /usr/include/i386/signal.h /usr/include/i386/_structs.h \
+ /usr/include/machine/_structs.h /usr/include/mach/i386/_structs.h \
+ /usr/include/unistd.h /usr/include/sys/unistd.h \
+ /usr/include/sys/select.h /usr/include/sys/_select.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stddef.h \
+ /usr/include/stdlib.h /usr/include/sys/wait.h \
+ /usr/include/sys/resource.h /usr/include/alloca.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/math.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stdarg.h \
+ /usr/include/sys/time.h /usr/include/time.h /usr/include/_structs.h \
+ ../include/clb_os_wrapper.h
+cio_streams.o: cio_streams.c cio_streams.h ../include/cio_initio.h \
+ ../include/cio_output.h /usr/include/stdio.h /usr/include/sys/cdefs.h \
+ /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h /usr/include/Availability.h \
+ /usr/include/AvailabilityInternal.h /usr/include/_types.h \
+ /usr/include/sys/_types.h /usr/include/machine/_types.h \
+ /usr/include/i386/_types.h /usr/include/secure/_stdio.h \
+ /usr/include/secure/_common.h ../include/clb_dstrings.h \
+ ../include/clb_memory.h ../include/clb_verbose.h ../include/clb_error.h \
+ ../include/clb_defines.h /usr/include/assert.h /usr/include/string.h \
+ /usr/include/strings.h /usr/include/secure/_string.h \
+ /usr/include/errno.h /usr/include/sys/errno.h /usr/include/sys/param.h \
+ /usr/include/sys/types.h /usr/include/sys/appleapiopts.h \
+ /usr/include/machine/types.h /usr/include/i386/types.h \
+ /usr/include/machine/endian.h /usr/include/i386/endian.h \
+ /usr/include/sys/_endian.h /usr/include/libkern/_OSByteOrder.h \
+ /usr/include/libkern/i386/_OSByteOrder.h /usr/include/sys/_structs.h \
+ /usr/include/sys/syslimits.h /usr/include/machine/param.h \
+ /usr/include/i386/param.h /usr/include/i386/_param.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/limits.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/machine/limits.h \
+ /usr/include/i386/limits.h /usr/include/i386/_limits.h \
+ /usr/include/sys/signal.h /usr/include/machine/signal.h \
+ /usr/include/i386/signal.h /usr/include/i386/_structs.h \
+ /usr/include/machine/_structs.h /usr/include/mach/i386/_structs.h \
+ /usr/include/unistd.h /usr/include/sys/unistd.h \
+ /usr/include/sys/select.h /usr/include/sys/_select.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stddef.h \
+ /usr/include/stdlib.h /usr/include/sys/wait.h \
+ /usr/include/sys/resource.h /usr/include/alloca.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/math.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stdarg.h \
+ /usr/include/sys/time.h /usr/include/time.h /usr/include/_structs.h \
+ ../include/clb_os_wrapper.h ../include/cio_fileops.h
+cio_tempfile.o: cio_tempfile.c cio_tempfile.h /usr/include/stdlib.h \
+ /usr/include/Availability.h /usr/include/AvailabilityInternal.h \
+ /usr/include/_types.h /usr/include/sys/_types.h /usr/include/sys/cdefs.h \
+ /usr/include/sys/_symbol_aliasing.h \
+ /usr/include/sys/_posix_availability.h /usr/include/machine/_types.h \
+ /usr/include/i386/_types.h /usr/include/sys/wait.h \
+ /usr/include/sys/signal.h /usr/include/sys/appleapiopts.h \
+ /usr/include/machine/signal.h /usr/include/i386/signal.h \
+ /usr/include/i386/_structs.h /usr/include/sys/_structs.h \
+ /usr/include/machine/_structs.h /usr/include/mach/i386/_structs.h \
+ /usr/include/sys/resource.h /usr/include/machine/endian.h \
+ /usr/include/i386/endian.h /usr/include/sys/_endian.h \
+ /usr/include/libkern/_OSByteOrder.h \
+ /usr/include/libkern/i386/_OSByteOrder.h /usr/include/alloca.h \
+ /usr/include/machine/types.h /usr/include/i386/types.h \
+ ../include/clb_memory.h ../include/clb_verbose.h ../include/clb_error.h \
+ ../include/clb_defines.h /usr/include/assert.h /usr/include/stdio.h \
+ /usr/include/secure/_stdio.h /usr/include/secure/_common.h \
+ /usr/include/string.h /usr/include/strings.h \
+ /usr/include/secure/_string.h /usr/include/errno.h \
+ /usr/include/sys/errno.h /usr/include/sys/param.h \
+ /usr/include/sys/types.h /usr/include/sys/syslimits.h \
+ /usr/include/machine/param.h /usr/include/i386/param.h \
+ /usr/include/i386/_param.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/limits.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/syslimits.h \
+ /usr/include/limits.h /usr/include/machine/limits.h \
+ /usr/include/i386/limits.h /usr/include/i386/_limits.h \
+ /usr/include/unistd.h /usr/include/sys/unistd.h \
+ /usr/include/sys/select.h /usr/include/sys/_select.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stddef.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include-fixed/math.h \
+ /sw/lib/gcc4.7/lib/gcc/x86_64-apple-darwin12.2.0/4.7.2/include/stdarg.h \
+ /usr/include/sys/time.h /usr/include/time.h /usr/include/_structs.h \
+ ../include/clb_os_wrapper.h ../include/cio_fileops.h \
+ ../include/cio_output.h ../include/clb_dstrings.h \
+ ../include/clb_memory.h ../include/cio_commandline.h \
+ ../include/clb_stringtrees.h ../include/clb_avlgeneric.h \
+ ../include/clb_pstacks.h

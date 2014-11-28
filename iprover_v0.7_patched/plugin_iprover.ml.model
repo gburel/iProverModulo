@@ -1,0 +1,75 @@
+open Symbol
+open Term
+open Lib
+
+let rec rev_append2 ((r1,r2) as r) = function
+    [], [] -> Some r
+  | x1::q1,x2::q2 -> rev_append2 (x1::r1,x2::r2) (q1,q2)
+  | _ -> None
+
+let rec equal_list = function
+    [],[] -> true
+  | Fun(s1,a1,_)::q1,Fun(s2,a2,_)::q2 -> 
+      s1.name = s2.name && (match rev_append2 (q1,q2) (a1,a2) with
+				None -> false | Some r -> equal_list r)
+  | Var(v1,_)::q1,Var(v2,_)::q2 -> 
+      v1 = v2 && equal_list (q1,q2)
+  | _ -> false
+  
+let equal s t = 
+  equal_list ([s],[t])
+    
+
+let match_term = function
+(* add rules here *)
+  | _ -> None
+
+(*let rec top_down f t = 
+  match f t with
+      Some _ as o -> o
+    | None -> 
+	match t with 
+	    Var _ -> None
+	  | Fun(s, l, fi) ->
+	      let rec aux = function
+		  [] -> None
+		| x::q -> 
+		    match top_down f x with
+			Some x' -> Some (x':: q)
+		      | None -> match aux q with
+			    Some q' -> Some (x::q')
+			  | None -> None
+	      in match aux l with 
+		  Some l' -> Some(Fun(s, l', empty_fun_info ()))
+		| None -> None
+*)
+
+let rec bottom_up f t = 
+  match t with
+      Var _ -> None 
+    | Fun({ name = "h" }, _, _) -> None
+    | Fun(s, l, fi) ->
+	let rec aux = function
+	    [] -> None
+	  | x::q -> 
+	      match bottom_up f x with
+		  Some x' -> Some (x':: q)
+		| None -> match aux q with
+		      Some q' -> Some (x::q')
+		    | None -> None
+	in
+	  match aux l with
+	      Some l' -> Some(Fun(s, l', empty_fun_info ()))
+	    | None -> f t
+	  
+let rec normalize f t = 
+  match bottom_up f t with
+      Some t' -> normalize f t'
+    | None -> t 
+    
+let _ = 
+  print_string "Loading plugin: "; flush stdout;
+  SymbolDB.iter (fun s -> Plugin.add_symb s)
+    !Parsed_input_to_db.symbol_db_ref;
+  Plugin.normalize := normalize match_term;
+  print_endline "done."

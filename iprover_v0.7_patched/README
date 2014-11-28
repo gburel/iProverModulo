@@ -1,0 +1,123 @@
+
+--------------------iProver-----------------------
+
+
+--------------------------------------------------
+                  General Info
+--------------------------------------------------
+
+iProver is a reasoner for first-order logic.
+
+iProver is based on an instantiation calculus Inst-Gen, 
+which is complete for first-order logic:
+http://www.cs.man.ac.uk/~korovink/my_pub/instantiation_lics03.ps
+
+iProver has been developed and implemented by 
+Konstantin Korovin (korovin[@]cs.man.ac.uk), 
+The University of Manchester, UK
+In 2008 Christoph Sticksel has joined the project.
+
+iProver combines instantiation with resolution and implements a number 
+of redundancy elimination methods:
+http://www.cs.man.ac.uk/~korovink/my_pub/inv_to_inst.ps
+(see also the list of options for details)
+
+For ground reasoning iProver uses C version of MiniSat:
+http://www.cs.chalmers.se/Cs/Research/FormalMethods/MiniSat/
+
+iProver accepts problems in TPTP format:
+http://www.cs.miami.edu/~tptp/
+
+For problems in fof (and not just cnf) format, 
+iProver uses E prover (GNU GPL)
+http://www4.informatik.tu-muenchen.de/~schulz/WORK/eprover.html for clausification.
+Note that E prover unfolds includes according to the environment variable TPTP.
+
+E prover is NOT required if the input is in cnf and 
+is included only in the bundeled distribution.
+You can use any other tool to convert fof problems into cnf. 
+
+iProver has a satisfiability mode which includes a finite model finder, 
+incorporating some ideas from Paradox and DarwinFM.
+
+To activate satisfiability mode use "iproveropt --sat_mode true".
+
+----------------------------------------------
+                Installation: 
+-----------------------------------------------
+
+We assume OCaml v3.10 >= and gcc are already installed. 
+
+Run:
+1) ./configure
+2) "make" to create the executable iproveropt.
+
+-1) "make clean"     to remove created objects and executable files
+-2) "make clean_all" to remove created objects and executable files including E objects
+
+--------------------------------------------
+              Examples:
+-------------------------------------------
+
+1) "iproveropt PUZ039-1.p"
+
+2) "iproveropt --sat_mode true BOO037-1.p"
+
+3) "iproveropt -help"
+
+-------------------------------------------
+
+
+It might be convenient to collect options you like in a file 
+(e.g. example.opt) and run 
+
+iproveropt $(cat example.opt) problem.p
+
+The default options should be generally ok.
+
+-----------------------------------------------------
+
+iProver combines instantiation with resolution 
+
+If you would like to run pure instantiation/resolution 
+then you can switch the corresponding flag 
+(see -help for all options)
+
+-----------------------------------------------------
+                   Output
+----------------------------------------------------
+
+Output: the output of iProver is according to a modified version of SZS ontology:
+
+"SZS status Theorem"  
+                       corresponds to a proved theorem where 
+                       the input is first-order and contains 
+                       a theorem represented by a conjecture.
+
+"SZS status CounterSatisfiable" 
+	               corresponds to disproving the theorem where
+                       the input is first-order and contains 
+                       a theorem represented by a conjecture. 
+
+"SZS status Unsatisfiable"
+                       corresponds to an unsatisfiable set of input formulas                     
+                       where the input does not contain a theorem 
+                       (i.e. either cnf or fof and doesnot contain a conjecture)	
+
+"SZS status Satisfiable"
+                       corresponds to a satisfiable set of input formulas
+                       where the input does not contain a theorem
+                       (i.e. contains neither a conjecture or a negated_conjecture)
+
+
+
+
+--------------------------------------------------------------------------------------------
+Please send any comments, report bugs to korovin[@]cs.man.ac.uk
+If you are interested in a different from GNU GPL license please email korovin[@]cs.man.ac.uk
+--------------------------------------------------------------------------------------------
+
+External libraries (freely available with LGPL compatible licenses) are: 
+
+MiniSat by Niklas Een and Niklas Sorensson
+Heaps   by Jean-Christophe Filliatre

@@ -1,0 +1,1 @@
+--instantiation_flag false --schedule false --prep_prop_sim false --ground_splitting off --res_to_prop_solver none --res_prop_simpl_given false --res_lit_sel kbo_max --large_theory_mode false --res_time_limit 1000 --res_orphan_elimination false

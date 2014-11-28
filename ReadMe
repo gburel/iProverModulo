@@ -1,0 +1,71 @@
+iProver Modulo 0.7+0.2
+======================
+
+Installation
+------------
+
+To configure, compile and install iProver Modulo, use the following
+commands: 
+
+./configure [options]
+make
+make install
+
+The following options are actually used by the configure script :
+
+--prefix=PREFIX      install files in PREFIX [default /usr/local]
+--help               print some help
+
+Note that some files are installed in the directory
+PREFIX/share/iprover_modulo, whatever the value passed to a 
+--datadir or --datarootdir option.
+
+You may need superuser rights to perform the installation.
+
+
+Requirements
+------------
+
+For compiling, iProver modulo needs a C compiler. A version of the
+OCaml compiler is included in this package, it is installed with the
+prover and is needed at runtime to compile rewriting rules. Similarly,
+a version of eprover is included.
+
+At runtime, iProver modulo needs eprover to transform clauses into CNF
+(only version 1.4 was tested, but others should work as well), and
+ocamlopt.opt to compile rewrite rules.
+
+
+Execution
+---------
+
+iProver Modulo can be launched using the following command, where %s
+has to be replaced by the problem file name and %d by the time limit:
+
+iprover_modulo_launcher.sh %s %d
+
+This executable calls the programs autotheo and iprover_moduloopt,
+which themselves call eprover and ocamlopt.opt. The PATH is modified to
+access the executables installed with the prover.
+
+
+Solutions
+---------
+Solutions are given following the SZS ontology. For instance
+
+% SZS status Theorem
+
+or 
+
+% SZS status GaveUp
+
+When a (partial) proof is given, it is enclosed within the following
+delimiters:
+
+% SZS output start IncompleteCNFRefutation
+[...]
+% SZS output end IncompleteCNFRefutation
+
+Proofs are given using Dedukti's format, see
+https://www.rocq.inria.fr/deducteam/Dedukti/index.html
+

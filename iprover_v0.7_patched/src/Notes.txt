@@ -1,0 +1,33 @@
+First version of iprover !
+
+Instantiation loop is exhaustive:
+
+Instantiation Loop
+--------------------------
+unprocessed -> passive -> 
+run sat solver 
+if unsat then return Unsatisfiable else  get prop model ->
+move clauses from active to passive based on the changed model 
+(for this each var in the model has references 
+ to all clauses in active in which the  selection 
+is based on that choice of truth val)
+-> until passive is not empty pick a clause in passive 
+   make all instantiations with active upon sel lits 
+   add results to unprocessed  
+-> when  passive is empty move unprocessed to passive
+ if (passive is empty and unprocessed is empty and model does not change) 
+ then return Satisfiable  
+-------------------------------------
+unification index: discrimination tree
+
+The simplification of clauses is trivial: 
+if a new clause is already in the clauseDB then we don't add anything
+
+ Dismatching constraints are implemented
+ 
+Next to implement: 
+Priority Queues for passive; 
+ 
+Redundancy: 
+
+3. use resolution for simplification
