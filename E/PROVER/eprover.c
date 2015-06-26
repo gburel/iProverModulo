@@ -1589,7 +1589,10 @@ int main(int argc, char* argv[])
                               proofstate->processed_neg_units);
          ClauseSetPushClauses(proofstate->extract_roots,
                               proofstate->processed_non_units);
-         derivation = DerivationCompute(proofstate->extract_roots, 
+         if(cnf_only)
+           ClauseSetPushClauses(proofstate->extract_roots,
+                              proofstate->unprocessed);
+	 derivation = DerivationCompute(proofstate->extract_roots,
                                         proofstate->signature);
          DerivationPrint(GlobalOut, derivation, sat_status);
          DerivationFree(derivation);
