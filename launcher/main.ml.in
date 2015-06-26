@@ -22,6 +22,7 @@ let _ =
   let strat_list = Str.(split (regexp ";") strategies) in
   let time_limit = int_of_string Sys.argv.(2) in
   let temp_input = Filename.temp_file "iprover_modulo_" ".p" in
+  let last_szs = Filename.temp_file "iprover_modulo_szs" "" in
   let process_strategy time_limit s =
     let autotheo_res = Sys.command (autotheo ^ " -H '" ^ s ^ "' --include_path " ^ !include_path ^ " " ^ file_name ^ " > " ^
 				      temp_input) in
@@ -65,15 +66,24 @@ let _ =
     Buffer.add_string command_buffer (" | tee " ^ temp_output ^ " | grep -v \"SZS\"");
     print_endline ("Executing " ^ Buffer.contents command_buffer);
     Sys.command (Buffer.contents command_buffer);
-    if Sys.command ("grep 'SZS status Theorem\\|SZS Status Unsatisfiable' " ^ temp_output) = 0 then begin
+    if Sys.command ("grep 'SZS status Theorem' " ^ temp_output) = 0 ||
+      Sys.command ("grep 'SZS status Unsatisfiable' " ^ temp_output) = 0 
+    then begin
       Sys.remove temp_output;
       Sys.remove temp_input;
       exit 0
     end
-    else Sys.remove temp_output
+    else 
+      begin
+	Sys.command ("grep 'SZS' " ^ temp_output ^ " > " ^ last_szs);
+	Sys.remove temp_output
+      end
   in
   List.iter (process_strategy (time_limit / List.length strat_list)) strat_list;
   Sys.remove temp_input;
+  print_endline "Last SZS status :";
+  Sys.command ("cat " ^ last_szs);
+  Sys.remove last_szs;
   exit 1
     
 
