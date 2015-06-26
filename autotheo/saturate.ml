@@ -3,7 +3,9 @@ exception Not_saturable
 exception Unsatisfiable
 
 let saturate tes = 
-  let from_E,to_E as p = Unix.open_process (!Globals.eprover_path ^ "eprover --tstp-format -S -s -tAuto -xAuto --soft-cpu-limit=" ^ string_of_int !Globals.saturate_timeout) in
+  let timeoutstring = 
+    " --soft-cpu-limit=" ^ string_of_int !Globals.saturate_timeout in
+  let from_E,to_E as p = Unix.open_process (!Globals.eprover_path ^ "eprover --tstp-format -S -s --satauto" ^ timeoutstring) in
   pp_parsing_type ~out_ch:to_E tes;
   flush to_E;
   close_out to_E;
@@ -13,7 +15,7 @@ let saturate tes =
     Parser_tptp.main Lexer_tptp.token lexbuf
   in
   match Unix.close_process p with
-    Unix.WEXITED 0 ->
+    Unix.WEXITED 0 | Unix.WEXITED 8 (* 8 = RESSOURCEOUT *) ->
       let sat = ref false in
       let r = List.fold_left 
 	(fun r -> function 
@@ -34,13 +36,14 @@ let saturate tes =
 	r
       in
       if !sat then r else raise Not_saturable
+  | Unix.WEXITED 6 | Unix.WEXITED 137 -> (Printf.eprintf "Saturation probably timed out\n"; raise Not_saturable)
   | Unix.WEXITED x -> Printf.eprintf "Error in saturation (eprover exited with code %i)\n" x; raise Not_saturable
   | Unix.WSTOPPED x -> Printf.eprintf "Error in saturation (eprover stoped with signal %i)\n" x; raise Not_saturable
   | Unix.WSIGNALED x -> Printf.eprintf "Error in saturation (eprover killed with signal %i)\n" x; raise Not_saturable
 
 
 let presat tes = 
-  let from_E,to_E as p = Unix.open_process (!Globals.eprover_path ^ "eprover --tstp-format -S -s -P " ^ string_of_int !Globals.presat_nbprocessed) in
+  let from_E,to_E as p = Unix.open_process (!Globals.eprover_path ^ "eprover --tstp-format -S -s --satauto -P " ^ string_of_int !Globals.presat_nbprocessed) in
   pp_parsing_type ~out_ch:to_E tes;
   flush to_E;
   close_out to_E;
@@ -50,7 +53,7 @@ let presat tes =
     Parser_tptp.main Lexer_tptp.token lexbuf
   in
   match Unix.close_process p with
-    Unix.WEXITED 0 ->
+    Unix.WEXITED 0 | Unix.WEXITED 8 (* 8 = RESSOURCEOUT *) ->
       let proc = ref true in
       let r = List.fold_left 
 	(fun (p,u) -> function 
