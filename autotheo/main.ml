@@ -23,9 +23,8 @@ let anon s =
     print_endline "% FOF problem with conjecture";
   print_endline "% Orientation found";
   pp_parsing_type oriented_axioms;
-  List.iter (fun te -> 
-    let cnf = Cnf.top_element_to_cnf te in
-    pp_parsing_type cnf) others;
+  let cnf = Cnf.parsing_type_to_cnf others in
+  pp_parsing_type cnf
     
     
 open Arg
