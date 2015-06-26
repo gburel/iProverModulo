@@ -3,14 +3,21 @@ EDIR=@EDIR@
 
 all:
 	make -C $(OCAMLDIR) world opt opt.opt
+	make -C $(OCAMLDIR) install
 	make -C $(EDIR)
 	make -C iprover_v0.7_patched
 	make -C autotheo
 	make -C launcher
 
 install:
-	make -C $(OCAMLDIR) install
 	make -C $(EDIR) install
 	make -C iprover_v0.7_patched install
 	make -C autotheo install
 	make -C launcher install
+
+clean:
+	make -C $(OCAMLDIR) clean
+	make -C $(EDIR) clean
+	make -C iprover_v0.7_patched clean
+	make -C autotheo clean
+	make -C launcher clean
