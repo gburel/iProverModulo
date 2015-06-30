@@ -196,7 +196,7 @@ let clausify_rules_into_te rs =
 	      failwith "Clausification of rules failed 1" end
       end
     | UnaryFormula(Negation,Atom(UserTerm(Fun(id,_)))) as l ->
-      if String.length id >= 5 & String.sub id 0 5 = "epred" then
+      if String.length id >= 5 && String.sub id 0 5 = "epred" then
 	bor l accu
       else begin
 	prerr_endline (formula_to_string (bor accu l));

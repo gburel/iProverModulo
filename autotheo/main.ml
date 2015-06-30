@@ -47,6 +47,8 @@ let spec = Arg.align
    "--debug-level", Set_int Debug.debug_level, "l set debug level to l";
    "-T", Set_int Globals.timeout, "t set timeout to t (default 0 = no timeout)";
    "--timeout", Set_int Globals.timeout, "t set timeout to t (default 0 = no timeout)";
+   "-P", String Globals.set_proof_output, "f output the cnf derivations in file f";
+   "--proof-output", String Globals.set_proof_output, "f output the cnf derivations in file f"
   ]
 
 let usage = "Theory preprocessor\n\nUsage:\n  "
