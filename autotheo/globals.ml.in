@@ -37,5 +37,13 @@ let available_heuristics, set_heuristic =
   "h ::= { Equiv(h) | ClausalAll | Sat | Presat(h) | Id | Nil }",
   fun s -> heuristic := string_to_heuristic s
 
+let rec output_heuristic ch = function
+  Equiv h -> Printf.fprintf ch "Equiv(%a)" output_heuristic h
+| ClausalAll -> output_string ch "ClausalAll"
+| Sat ->  output_string ch "Sat"
+| Presat h -> Printf.fprintf ch "Presat(%a)" output_heuristic h
+| Id ->  output_string ch "Id"
+| Nil -> output_string ch "Nil"
+
 let seen_conjecture = ref false
 let seen_fof = ref false

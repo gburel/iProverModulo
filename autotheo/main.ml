@@ -23,6 +23,7 @@ let anon s =
     print_endline "% FOF problem with conjecture";
   print_endline "% Orientation found";
   pp_parsing_type oriented_axioms;
+  output_string !Globals.proof_output "# CNF of non-axioms\n";
   let cnf = Cnf.parsing_type_to_cnf others in
   pp_parsing_type cnf
     
