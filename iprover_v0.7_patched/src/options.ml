@@ -1,5 +1,5 @@
 (*----------------------------------------------------------------------(C)-*)
-(* Copyright (C) 2006-2008 K. Korovin and The University of Manchester. 
+(* Copyright (C) 2006-2008 K. Korovin and The University of Manchester.
    This file is part of iProver - a theorem prover for first-order logic.
 
    iProver is free software: you can redistribute it and/or modify
@@ -8,7 +8,7 @@
    (at your option) any later version.
    iProver is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
    See the GNU General Public License for more details.
    You should have received a copy of the GNU General Public License
    along with iProver.  If not, see <http://www.gnu.org/licenses/>.         *)
@@ -21,101 +21,101 @@ open Lib
 (*--prase list options----*)
 exception Parse_list_fail
 
-let parse_list_opt str = 
+let parse_list_opt str =
   let str_ln = String.length str in
   if (str.[0] = '[') & (str.[(str_ln-1)] = ']')
-  then 
+  then
     let new_str = String.sub str 1 (str_ln-2) in
-    let str_list = Str.split (Str.regexp "[|;|]") new_str in 
-    str_list 
-  else 
+    let str_list = Str.split (Str.regexp "[|;|]") new_str in
+    str_list
+  else
     raise Parse_list_fail
 
 (*--parse functional options of form "fun_name[arg1;arg2;...]"---*)
 (*--returns ("fun_name",["arg1";"arg2";...]--*)
 exception Parse_fun_fail
-let parse_fun_opt str = 
+let parse_fun_opt str =
   let br_reg_exp = Str.regexp "\\[\\([0-9]\\|[a-z]\\|[A-Z]\\|;\\)+\\]" in
-    try 
+    try
       let list_start = Str.search_forward br_reg_exp str 0 in
       let fun_str   = String.sub str 0 list_start in
       out_str ("fun_str"^fun_str^"\n");
       let arg_str   = Str.matched_string str in
       (fun_str,(parse_list_opt arg_str))
-    with 
+    with
     | Not_found | Parse_list_fail -> raise Parse_fun_fail
 
 (*-----------------Option Types---------------------------*)
 
 (*---------General----------*)
-type out_options_type = Out_All_Opt | Out_Control_Opt | Out_No_Opt 
-  
-let out_options_type_to_str opt = 
-  match opt with 
+type out_options_type = Out_All_Opt | Out_Control_Opt | Out_No_Opt
+
+let out_options_type_to_str opt =
+  match opt with
   |Out_All_Opt     -> "all"
   |Out_Control_Opt -> "control"
   |Out_No_Opt      -> "none"
-   
+
 exception Unknown_out_options_type
-let str_to_out_options_type str = 
-  match str with 
-  |"all"     -> Out_All_Opt 
-  |"control" -> Out_Control_Opt 
+let str_to_out_options_type str =
+  match str with
+  |"all"     -> Out_All_Opt
+  |"control" -> Out_Control_Opt
   |"none"    -> Out_No_Opt
   |_         -> raise Unknown_out_options_type
 
 (*--------*)
-type ground_splitting_type = Split_Input |Split_Full | Split_Off 
+type ground_splitting_type = Split_Input |Split_Full | Split_Off
 
-let ground_splitting_type_to_str opt = 
-  match opt with 
+let ground_splitting_type_to_str opt =
+  match opt with
   |Split_Input -> "input"
   |Split_Full  -> "full"
   |Split_Off   -> "off"
 
 exception Unknown_ground_splitting_type
-let str_to_ground_splitting_type str = 
-  match str with 
-  |"input" -> Split_Input 
-  |"full" -> Split_Full  
-  |"off"   -> Split_Off    
+let str_to_ground_splitting_type str =
+  match str with
+  |"input" -> Split_Input
+  |"full" -> Split_Full
+  |"off"   -> Split_Off
   |_       -> raise Unknown_ground_splitting_type
 
 (*-----Lit Params----------*)
 
-type lit_cmp_type = 
-  | Lit_Sign    of bool 
+type lit_cmp_type =
+  | Lit_Sign    of bool
   | Lit_Ground  of bool
   | Lit_Num_of_Var  of bool
   | Lit_Num_of_Symb of bool
-  | Lit_Split       of bool 
-  | Lit_has_conj_symb of bool 
-  | Lit_has_non_prolific_conj_symb of bool  
+  | Lit_Split       of bool
+  | Lit_has_conj_symb of bool
+  | Lit_has_non_prolific_conj_symb of bool
 
 
-let lit_cmp_type_to_str par = 
-  match par with 
+let lit_cmp_type_to_str par =
+  match par with
   |Lit_Sign        b   -> if b then "+sign"      else "-sign"
   |Lit_Ground      b   -> if b then "+ground"    else "-ground"
   |Lit_Num_of_Var  b   -> if b then "+num_var"   else "-num_var"
   |Lit_Num_of_Symb b   -> if b then "+num_symb"  else "-num_symb"
   |Lit_Split       b   -> if b then "+split"     else "-split"
   |Lit_has_conj_symb b -> if b then "+conj_symb" else "-conj_symb"
-  |Lit_has_non_prolific_conj_symb b -> 
+  |Lit_has_non_prolific_conj_symb b ->
       if b then "+non_prol_conj_symb" else "-non_prol_conj_symb"
 
 
 exception Unknown_lit_cmp_type
-let str_to_lit_cmp_type str = 
-  match str with 
-  | "+sign"        -> Lit_Sign        true 
-  | "-sign"        -> Lit_Sign        false  
-  | "+ground"      -> Lit_Ground      true 
-  | "-ground"      -> Lit_Ground      false  
-  | "+num_var"     -> Lit_Num_of_Var  true 
-  | "-num_var"     -> Lit_Num_of_Var  false  
-  | "+num_symb"    -> Lit_Num_of_Symb true 
-  | "-num_symb"    -> Lit_Num_of_Symb false  
+let str_to_lit_cmp_type str =
+  match str with
+  | "+sign"        -> Lit_Sign        true
+  | "-sign"        -> Lit_Sign        false
+  | "+ground"      -> Lit_Ground      true
+  | "-ground"      -> Lit_Ground      false
+  | "+num_var"     -> Lit_Num_of_Var  true
+  | "-num_var"     -> Lit_Num_of_Var  false
+  | "+num_symb"    -> Lit_Num_of_Symb true
+  | "-num_symb"    -> Lit_Num_of_Symb false
   | "+split"       -> Lit_Split       true
   | "-split"       -> Lit_Split       false
   | "+conj_symb"   -> Lit_has_conj_symb true
@@ -128,26 +128,26 @@ let lit_cmp_type_list_str = "<[((+|-)(sign|ground|num_var|num_symb|split|conj_sy
 
 (* if there is no conjectures then we can to remove corresponding comparisons*)
 
-let strip_conj_lit_type_list lit_type_list = 
-  let rec strip' rest list = 
-    match list with 
-    | h::tl -> 
-	(match h with 
+let strip_conj_lit_type_list lit_type_list =
+  let rec strip' rest list =
+    match list with
+    | h::tl ->
+	(match h with
 	|Lit_has_conj_symb _ -> strip' rest tl
 	|Lit_has_non_prolific_conj_symb _ -> strip' rest tl
 	| _ -> strip' (h::rest) tl
 	)
     |[] -> List.rev rest
-  in 
+  in
   strip' [] lit_type_list
-    
+
 
 (*----Clause Param---------*)
-type cl_cmp_type = 
+type cl_cmp_type =
   |Cl_Age         of bool
-  |Cl_Num_of_Var  of bool   
-  |Cl_Num_of_Symb of bool   
-  |Cl_Num_of_Lits of bool   
+  |Cl_Num_of_Var  of bool
+  |Cl_Num_of_Symb of bool
+  |Cl_Num_of_Lits of bool
   |Cl_Ground      of bool
   |Cl_Conj_Dist   of bool
   |Cl_Has_Conj_Symb of bool
@@ -160,15 +160,15 @@ type cl_cmp_type =
 
 
 let cl_cmp_type_to_str par =
-  match par with 
-  |Cl_Age              b -> if b then "+age"       else "-age" 
-  |Cl_Num_of_Var       b -> if b then "+num_var"   else "-num_var" 
-  |Cl_Num_of_Symb      b -> if b then "+num_symb"  else "-num_symb" 
-  |Cl_Num_of_Lits      b -> if b then "+num_lits"  else "-num_lits" 
-  |Cl_Ground           b -> if b then "+ground"    else "-ground" 
-  |Cl_Conj_Dist        b -> if b then "+conj_dist" else "-conj_dist" 
-  |Cl_Has_Conj_Symb b -> if b then "+conj_symb" else "-conj_symb" 
-  |Cl_Has_Non_Prolific_Conj_Symb b -> if b then "+conj_non_prolific_symb" else "-conj_non_prolific_symb" 
+  match par with
+  |Cl_Age              b -> if b then "+age"       else "-age"
+  |Cl_Num_of_Var       b -> if b then "+num_var"   else "-num_var"
+  |Cl_Num_of_Symb      b -> if b then "+num_symb"  else "-num_symb"
+  |Cl_Num_of_Lits      b -> if b then "+num_lits"  else "-num_lits"
+  |Cl_Ground           b -> if b then "+ground"    else "-ground"
+  |Cl_Conj_Dist        b -> if b then "+conj_dist" else "-conj_dist"
+  |Cl_Has_Conj_Symb b -> if b then "+conj_symb" else "-conj_symb"
+  |Cl_Has_Non_Prolific_Conj_Symb b -> if b then "+conj_non_prolific_symb" else "-conj_non_prolific_symb"
   |Cl_Max_Atom_Input_Occur b -> if b then "+max_atom_input_occur" else
     "-max_atom_input_occur"
   |Cl_Horn         b -> if b then "+horn" else "-horn"
@@ -176,9 +176,9 @@ let cl_cmp_type_to_str par =
   |Cl_Has_Eq_Lit   b -> if b then "+has_eq" else "-has_eq"
   |Cl_From_Narrow  b -> if b then "+nar" else "-nar"
 
-exception Unknown_cl_cmp_type 
-let str_to_cl_cmp_type str = 
-  match str with 
+exception Unknown_cl_cmp_type
+let str_to_cl_cmp_type str =
+  match str with
   |"+age"        -> Cl_Age                true
   |"-age"        -> Cl_Age                false
   |"+num_var"    -> Cl_Num_of_Var         true
@@ -195,7 +195,7 @@ let str_to_cl_cmp_type str =
   |"-conj_symb"  -> Cl_Has_Conj_Symb   false
   |"+conj_non_prolific_symb" -> Cl_Has_Non_Prolific_Conj_Symb true
   |"-conj_non_prolific_symb" -> Cl_Has_Non_Prolific_Conj_Symb false
-  |"+max_atom_input_occur" -> Cl_Max_Atom_Input_Occur true 
+  |"+max_atom_input_occur" -> Cl_Max_Atom_Input_Occur true
   |"-max_atom_input_occur" -> Cl_Max_Atom_Input_Occur false
   |"+horn"      -> Cl_Horn        true
   |"-horn"      -> Cl_Horn        false
@@ -205,81 +205,81 @@ let str_to_cl_cmp_type str =
   |"-has_eq"    -> Cl_Has_Eq_Lit  false
   |"+nar"    -> Cl_From_Narrow true
   |"-nar"    -> Cl_From_Narrow false
-  | _           -> raise Unknown_cl_cmp_type 
+  | _           -> raise Unknown_cl_cmp_type
 
 let cl_cmp_type_list_str = "<[((+|-)(age|num_var|num_symb|num_lits|ground|conj_dist|conj_symb|max_atom_input_occur|horn|epr|has_eq|nar)^+]>"
 
 
-let strip_conj_clause_type_list clause_type_list = 
-  let rec strip' rest list = 
-    match list with 
-    | h::tl -> 
-	(match h with 
+let strip_conj_clause_type_list clause_type_list =
+  let rec strip' rest list =
+    match list with
+    | h::tl ->
+	(match h with
 	|Cl_Conj_Dist _ -> strip' rest tl
 	|Cl_Has_Conj_Symb _ -> strip' rest tl
 	|Cl_Has_Non_Prolific_Conj_Symb _ -> strip' (h::rest) tl
 	| _ -> strip' (h::rest) tl
 	)
     |[] -> List.rev rest
-  in 
+  in
   strip' [] clause_type_list
-    
+
 (*--------------------Instantiation Option Types--------------*)
 
 
 (*---Inst Lit Sel----*)
 
-type inst_lit_sel_type    = lit_cmp_type list 
+type inst_lit_sel_type    = lit_cmp_type list
 
-let  inst_lit_sel_type_to_str t = 
+let  inst_lit_sel_type_to_str t =
      ("["^(list_to_string lit_cmp_type_to_str t ";")^"]")
 
-type pass_queue_type = cl_cmp_type  list  
+type pass_queue_type = cl_cmp_type  list
 
-let pass_queue_type_to_str t = 
+let pass_queue_type_to_str t =
      ("["^(list_to_string cl_cmp_type_to_str  t ";")^"]")
 
 
-type inst_sel_renew_type = Inst_SR_Solver | Inst_SR_Model 
-  
-let inst_sel_renew_type_to_str opt = 
-  match opt with 
+type inst_sel_renew_type = Inst_SR_Solver | Inst_SR_Model
+
+let inst_sel_renew_type_to_str opt =
+  match opt with
   |Inst_SR_Solver -> "solver"
   |Inst_SR_Model  -> "model"
 
-  
+
 exception Unknown_inst_sel_renew_type
-let str_to_inst_sel_renew_type str = 
-  match str with 
+let str_to_inst_sel_renew_type str =
+  match str with
   |"solver"  -> Inst_SR_Solver
-  |"model"   -> Inst_SR_Model 
+  |"model"   -> Inst_SR_Model
   |_         -> raise Unknown_inst_sel_renew_type
 
 
 (*--------------------Resolution Option Types--------------*)
 
 
-(*----Subsumption----*) 
+(*----Subsumption----*)
 type res_subs_type = Subs_Full | Subs_Subset | Subs_By_Length of int
 
-let res_subs_type_to_str t = 
-  match t with 
+let res_subs_type_to_str t =
+  match t with
   | Subs_Full ->     "full"
-  | Subs_Subset  ->  "subset_subsumption"  
-  | Subs_By_Length l ->   
+  | Subs_Subset  ->  "subset_subsumption"
+  | Subs_By_Length l ->
       ("length["^(string_of_int l)^"]")
 
 exception Unknown_res_subs_type
-let str_to_res_subs_type str = 
-  match str with 
-  |"full" -> Subs_Full 
-  |"subset_subsumption" -> Subs_Subset 
-  |str -> 
-      try 
+let str_to_res_subs_type str =
+  match str with
+  |"full" -> Subs_Full
+  |"subset_subsumption" -> Subs_Subset
+  |str ->
+      try
 	let (fun_str, arg_list) = parse_fun_opt str in
-	match fun_str with 
+	match fun_str with
 	|"length" ->
-	    (match arg_list with 
+	    (match arg_list with
 	    |[num_str] -> Subs_By_Length (int_of_string num_str)
 	    |_ -> failwith "str_to_res_subs_type wrong args"
 	    )
@@ -291,12 +291,12 @@ let res_subs_type_str = "<full | subset_subsumption | length[<int>]>"
 
 (*---Selection Fun----*)
 
-type res_lit_sel_type = 
+type res_lit_sel_type =
     Res_Adaptive | Res_KBO_Max | Res_Neg_Sel_Max | Res_Neg_Sel_Min | Res_All
   | Res_Pos_Sel_Max
 
-let res_lit_sel_type_to_str res_sel_type = 
-  match res_sel_type with 
+let res_lit_sel_type_to_str res_sel_type =
+  match res_sel_type with
   |Res_Adaptive    ->  "adaptive"
   |Res_KBO_Max     ->  "kbo_max"
   |Res_Pos_Sel_Max ->  "pos_max"
@@ -304,34 +304,34 @@ let res_lit_sel_type_to_str res_sel_type =
   |Res_Neg_Sel_Min ->  "neg_min"
   |Res_All         ->  "all"
 
-exception Unknown_res_sel_fun_type 
-let str_to_sel_type str = 
-  match str with 
-  |"adaptive" -> Res_Adaptive  
+exception Unknown_res_sel_fun_type
+let str_to_sel_type str =
+  match str with
+  |"adaptive" -> Res_Adaptive
   |"kbo_max"  -> Res_KBO_Max
-  |"pos_max"  -> Res_Pos_Sel_Max 
-  |"neg_max"  -> Res_Neg_Sel_Max 
-  |"neg_min"  -> Res_Neg_Sel_Min 
+  |"pos_max"  -> Res_Pos_Sel_Max
+  |"neg_max"  -> Res_Neg_Sel_Max
+  |"neg_min"  -> Res_Neg_Sel_Min
   |"all"      -> Res_All
-  | _         -> raise Unknown_res_sel_fun_type 
+  | _         -> raise Unknown_res_sel_fun_type
 
 (*-----*)
 
-type res_to_prop_solver_type = 
+type res_to_prop_solver_type =
     Res_to_Solver_Active | Res_to_Solver_Passive | Res_to_Solver_None
 
-let res_to_prop_solver_type_to_str t = 
-  match t with 
+let res_to_prop_solver_type_to_str t =
+  match t with
   |Res_to_Solver_Active   -> "active"
   |Res_to_Solver_Passive  -> "passive"
   |Res_to_Solver_None     -> "none"
 
 exception Unknown_res_to_prop_solver_type
-let str_to_res_to_prop_solver_type str = 
-  match str with 
-  |"active"  -> Res_to_Solver_Active   
-  |"passive" -> Res_to_Solver_Passive  
-  |"none"    -> Res_to_Solver_None     
+let str_to_res_to_prop_solver_type str =
+  match str with
+  |"active"  -> Res_to_Solver_Active
+  |"passive" -> Res_to_Solver_Passive
+  |"none"    -> Res_to_Solver_None
   |_         -> raise Unknown_res_to_prop_solver_type
 
 
@@ -340,8 +340,8 @@ let str_to_res_to_prop_solver_type str =
 type normalization_type =
     [`No | `Pipe | `Interpreted | `Dtree | `Plugin | `Size_based]
 
-let normalization_type_to_str t = 
-  match t with 
+let normalization_type_to_str t =
+  match t with
   | `No   -> "none"
   | `Pipe  -> "pipe"
   | `Interpreted    -> "interp"
@@ -350,8 +350,8 @@ let normalization_type_to_str t =
   | `Size_based -> "size_based"
 
 exception Unknown_normalization_type
-let str_to_normalization_type str = 
-  match str with 
+let str_to_normalization_type str =
+  match str with
   | "none"  -> `No
   | "pipe" -> `Pipe
   | "interp" -> `Interpreted
@@ -362,7 +362,7 @@ let str_to_normalization_type str =
 
 (*---Dedukti proof output---*)
 
-type dedukti_output = Stdout | Prefix of string
+type dedukti_output = Stdout | Prefix of string | Tempfile of string
 
 (*-----All options-----*)
 
@@ -370,11 +370,11 @@ type options = {
     mutable out_options           : out_options_type;
 
 (*----Input-------*)
-    mutable problem_path          : string; 
-    mutable include_path          : string; 
-    mutable problem_files         : string list;    
+    mutable problem_path          : string;
+    mutable include_path          : string;
+    mutable problem_files         : string list;
     mutable eprover_path          : string;
-    
+
 (*----General--------*)
     mutable fof                   : bool;
     mutable ground_splitting      : ground_splitting_type;
@@ -390,16 +390,16 @@ type options = {
     mutable lt_threshold          : int;
 
 (*----Sat Mode-----------*)
-    mutable sat_mode              : bool; 
+    mutable sat_mode              : bool;
     mutable sat_gr_def            : bool;
     mutable sat_finite_models     : bool;
 
 (*----Instantiation------*)
     mutable instantiation_flag                : bool;
-    mutable inst_lit_sel                      : inst_lit_sel_type;  
+    mutable inst_lit_sel                      : inst_lit_sel_type;
     mutable inst_solver_per_active            : int;
     mutable inst_solver_per_clauses           : int;
-    mutable inst_pass_queue1                  : pass_queue_type; 
+    mutable inst_pass_queue1                  : pass_queue_type;
     mutable inst_pass_queue2                  : pass_queue_type;
     mutable inst_pass_queue1_mult             : int;
     mutable inst_pass_queue2_mult             : int;
@@ -412,23 +412,23 @@ type options = {
     mutable inst_learning_factor              : int;
     mutable inst_start_prop_sim_after_learn   : int;
     mutable inst_sel_renew                    : inst_sel_renew_type;
-    mutable inst_lit_activity_flag            : bool;     
+    mutable inst_lit_activity_flag            : bool;
 
 (*----Resolution---------*)
     mutable resolution_flag               : bool;
     mutable res_lit_sel                   : res_lit_sel_type;
-    mutable res_to_prop_solver            : res_to_prop_solver_type;      
+    mutable res_to_prop_solver            : res_to_prop_solver_type;
     mutable res_prop_simpl_new            : bool;
     mutable res_prop_simpl_given          : bool;
- 
-    mutable res_passive_queue_flag        : bool; 
-    mutable res_pass_queue1               : pass_queue_type; 
+
+    mutable res_passive_queue_flag        : bool;
+    mutable res_pass_queue1               : pass_queue_type;
     mutable res_pass_queue2               : pass_queue_type;
     mutable res_pass_queue1_mult          : int;
     mutable res_pass_queue2_mult          : int;
- 
-    mutable res_forward_subs              : res_subs_type; 
-    mutable res_backward_subs             : res_subs_type; 
+
+    mutable res_forward_subs              : res_subs_type;
+    mutable res_backward_subs             : res_subs_type;
     mutable res_forward_subs_resolution   : bool;
     mutable res_backward_subs_resolution  : bool;
     mutable res_orphan_elimination        : bool;
@@ -445,20 +445,20 @@ type options = {
 
 (*----Combination--------*)
     mutable comb_res_mult                 : int;
-    mutable comb_inst_mult                : int; 
+    mutable comb_inst_mult                : int;
   }
-    
+
 
 let default_options () = {
-  
-    out_options   = Out_All_Opt;   
-  
+
+    out_options   = Out_All_Opt;
+
 (*----Input-------*)
-  problem_path            = ""; 
+  problem_path            = "";
   include_path            = "";
   problem_files           = [];
   eprover_path            = "E_Prover";
-  
+
 (*----General--------*)
   fof                     = true;
   ground_splitting        = Split_Input;
@@ -469,8 +469,8 @@ let default_options () = {
   schedule                = true;
 
 (*---Large Theories---------------*)
-  large_theory_mode       = true; 
-  prolific_symb_bound     = 500; 
+  large_theory_mode       = true;
+  prolific_symb_bound     = 500;
   lt_threshold            = 2000;
 
 
@@ -482,13 +482,13 @@ let default_options () = {
 
 (*----Instantiation------*)
   instantiation_flag             = true;
-  inst_lit_sel                   = [Lit_Sign true; Lit_Ground true;  
+  inst_lit_sel                   = [Lit_Sign true; Lit_Ground true;
 				    Lit_Num_of_Var false; Lit_Num_of_Symb false];
 
   inst_solver_per_active         = 750;
   inst_solver_per_clauses        = 5000;
   inst_pass_queue1               = [Cl_Conj_Dist false; Cl_Has_Conj_Symb true;
-				    Cl_Num_of_Var false]; 
+				    Cl_Num_of_Var false];
   inst_pass_queue2               = [Cl_Age true; Cl_Num_of_Symb false];
 
 (*"[+age;-num_symb]";*)
@@ -508,14 +508,14 @@ let default_options () = {
 (*----Resolution---------*)
   resolution_flag                = true;
   res_lit_sel                    = Res_Adaptive;
-  res_to_prop_solver             = Res_to_Solver_Active;      
+  res_to_prop_solver             = Res_to_Solver_Active;
   res_prop_simpl_new             = false;
   res_prop_simpl_given           = true;
   (*switch between simpl and priority queues*)
-  (* TO DO  Queues options like in Inst. *)   
+  (* TO DO  Queues options like in Inst. *)
   res_passive_queue_flag         = true;
   res_pass_queue1                =  [Cl_Conj_Dist false; Cl_Has_Conj_Symb true;
-				    Cl_Num_of_Symb false]; 
+				    Cl_Num_of_Symb false];
   res_pass_queue2                = [Cl_Age true; Cl_Num_of_Symb false];
   res_pass_queue1_mult           = 15;
   res_pass_queue2_mult           = 5;
@@ -544,17 +544,17 @@ let default_options () = {
 
 
 (*---------*)
-let current_options = ref (default_options ()) 
+let current_options = ref (default_options ())
 
 (*---------*)
-let args_error_msg opt_name str = 
-  ("Input Options: "^opt_name^" unsupported value \'"^str^"\'")  
+let args_error_msg opt_name str =
+  ("Input Options: "^opt_name^" unsupported value \'"^str^"\'")
 
 
-let add_file_options file_name = 
+let add_file_options file_name =
   !current_options.problem_files <- file_name::(!current_options.problem_files)
-					
-let default_arg_fun = add_file_options 
+
+let default_arg_fun = add_file_options
 
 (*---------------------Preparing for Args:---------------*)
 (* 1. option name  ---*)
@@ -566,50 +566,50 @@ let string_str = "<string>"
 let int_str    = "<int>"
 let float_str    = "<float>"
 let inf_pref  = "\n    "
-let example_str = inf_pref^"example: " 
+let example_str = inf_pref^"example: "
 
 
 (*-----*)
 let out_options_str   = "--out_options"
 
-let out_options_fun str = 
-  try 
+let out_options_fun str =
+  try
     !current_options.out_options <- (str_to_out_options_type str)
-  with 
-    Unknown_out_options_type -> 
-      failwith (args_error_msg out_options_str str)  
+  with
+    Unknown_out_options_type ->
+      failwith (args_error_msg out_options_str str)
 
-let out_options_inf  = 
+let out_options_inf  =
   "<all | control | none>"^
   inf_pref^"controls output of options \n"
 
 (*----Input-------*)
 
-let problem_path_str = "--problem_path"      
+let problem_path_str = "--problem_path"
 
-let problem_path_fun str =      
+let problem_path_fun str =
   !current_options.problem_path <- str
 
-let problem_path_inf =  
+let problem_path_inf =
   string_str^
   example_str^problem_path_str^" /home/TPTP-v3.1.1/Problems/PUZ/\n"
 
 
 (*--------*)
-let include_path_str = "--include_path"      
+let include_path_str = "--include_path"
 
-let include_path_fun str =      
+let include_path_fun str =
   !current_options.include_path <- str
 
-let include_path_inf =  
+let include_path_inf =
   string_str^
   example_str^include_path_str^" /home/TPTP-v3.1.1/\n"
-	
+
 
 (*--------*)
 let eprover_path_str = "--eprover_path"
 
-let eprover_path_fun str = 
+let eprover_path_fun str =
     !current_options.eprover_path <- str
 
 let eprover_path_inf =
@@ -621,14 +621,14 @@ let eprover_path_inf =
 
 let fof_str = "--fof"
 
-let fof_fun b = 
+let fof_fun b =
   !current_options.fof <- b
 
 let fof_inf =
   bool_str^
   inf_pref^"if false then it is assumed that the input is in cnf"^
   inf_pref^"if true  then full first-order syntax is accepted"^
-  inf_pref^"in the latter case eprover is used for clausification\n"  
+  inf_pref^"in the latter case eprover is used for clausification\n"
 
 
 
@@ -640,8 +640,8 @@ let ground_splitting_fun str =
   try
     !current_options.ground_splitting <- (str_to_ground_splitting_type str)
   with
-    Unknown_ground_splitting_type -> 
-      failwith (args_error_msg ground_splitting_str str)  
+    Unknown_ground_splitting_type ->
+      failwith (args_error_msg ground_splitting_str str)
 
 let ground_splitting_inf  =
   "<input | full | off >"^
@@ -657,7 +657,7 @@ let non_eq_to_eq_fun b =
 
 let non_eq_to_eq_inf  =
   bool_str^
-  inf_pref^"replace all non-equational predicates with equational"^ 
+  inf_pref^"replace all non-equational predicates with equational"^
   inf_pref^"e.g. p with f_p = top and  ~p with f_p != top\n"
 
 
@@ -667,30 +667,30 @@ let non_eq_to_eq_inf  =
 (*--------*)
 let prep_prop_sim_str = "--prep_prop_sim"
 
-let prep_prop_sim_fun b = 
+let prep_prop_sim_fun b =
   !current_options.prep_prop_sim <- b
 
-let prep_prop_sim_inf = 
+let prep_prop_sim_inf =
   bool_str^
   inf_pref^"simplify input clauses using propositonal solver \n"
 
 (*--------*)
 let time_out_real_str = "--time_out_real"
 
-let time_out_real_fun f = 
+let time_out_real_fun f =
   !current_options.time_out_real <- f
 
-let time_out_real_inf = 
+let time_out_real_inf =
   float_str^
   inf_pref^"time out in real time, if <0. then no time limit is imposed (in real time) \n"
 
 (*--------*)
 let time_out_virtual_str = "--time_out_virtual"
 
-let time_out_virtual_fun f = 
+let time_out_virtual_fun f =
   !current_options.time_out_virtual <- f
 
-let time_out_virtual_inf = 
+let time_out_virtual_inf =
   float_str^
   inf_pref^"time out in virtual time, if <0. then no time limit is imposed (in virtual time) \n"
 
@@ -709,10 +709,10 @@ let schedule_inf  =
 
 let large_theory_mode_str = "--large_theory_mode"
 
-let large_theory_mode_fun b = 
+let large_theory_mode_fun b =
   !current_options.large_theory_mode <- b
 
-let large_theory_mode_inf = 
+let large_theory_mode_inf =
   bool_str^
   inf_pref^"Large theory mode"
 
@@ -720,57 +720,57 @@ let large_theory_mode_inf =
 
 let prolific_symb_bound_str = "--prolific_symb_bound"
 
-let prolific_symb_bound_fun int = 
+let prolific_symb_bound_fun int =
   !current_options.prolific_symb_bound <- int
 
-let prolific_symb_bound_inf = 
+let prolific_symb_bound_inf =
   int_str^
   inf_pref^"Large theory mode: if the number of occurrences of a symbol in the input is greater or equal to prolific_symb_bound then the symbol is declared as prolific\n"
 
 (*--------*)
 let lt_threshold_str = "--lt_threshold"
 
-let lt_threshold_fun int = 
+let lt_threshold_fun int =
   !current_options.lt_threshold <- int
 
-let lt_threshold_inf = 
+let lt_threshold_inf =
   int_str^
   inf_pref^"Large theory mode: if the number of input clauses >= threshold then the theory is considered to be large\n"
 
 (*---Sat Mode-----*)
 let sat_mode_str = "--sat_mode"
 
-let sat_mode_fun b = 
+let sat_mode_fun b =
   !current_options.sat_mode <- b
 
-let sat_mode_inf = 
+let sat_mode_inf =
   bool_str^
   inf_pref^"Satisfiability mode \n"
 
 (*--------*)
 let sat_gr_def_str = "--sat_gr_def"
 
-let sat_gr_def_fun b = 
+let sat_gr_def_fun b =
   !current_options.sat_gr_def <- b
 
-let sat_gr_def_inf = 
+let sat_gr_def_inf =
   bool_str^
   inf_pref^"Add definitions of ground terms in sat mode\n"
 
 (*--------*)
 let sat_finite_models_str = "--sat_finite_models"
 
-let sat_finite_models_fun b = 
+let sat_finite_models_fun b =
   !current_options.sat_finite_models <-b
 
-let sat_finite_models_inf = 
+let sat_finite_models_inf =
   bool_str^
   inf_pref^"Finte model finder, sat_mode should be true\n"
 
 
 (*----Instantiation------*)
 
-let instantiation_flag_str = "--instantiation_flag" 
+let instantiation_flag_str = "--instantiation_flag"
 
 let instantiation_flag_fun b =
   !current_options.instantiation_flag <- b
@@ -785,11 +785,11 @@ let instantiation_flag_inf  =
 let inst_lit_sel_str  = "--inst_lit_sel"
 
 let inst_lit_sel_fun str =
-  try 
+  try
     let str_list = parse_list_opt str in
     let inst_lit_sel = List.map str_to_lit_cmp_type str_list in
     !current_options.inst_lit_sel  <- inst_lit_sel
-  with 
+  with
   | Parse_list_fail | Unknown_lit_cmp_type->
       failwith (args_error_msg inst_lit_sel_str str)
 
@@ -797,7 +797,7 @@ let inst_lit_sel_inf  =
   lit_cmp_type_list_str^
   inf_pref^"instantiation selection function is a lex product of functions in the list"^
   example_str^inst_lit_sel_str^" [+sign;+ground;-num_symb]"^
-  inf_pref^"in this ex. priority is given to positive literals,"^ 
+  inf_pref^"in this ex. priority is given to positive literals,"^
   inf_pref^"then to ground and then to lits with fewer number of symbols\n"
 
 (*--------*)
@@ -827,11 +827,11 @@ let inst_solver_per_clauses_inf  =
 let inst_pass_queue1_str  = "--inst_pass_queue1"
 
 let inst_pass_queue1_fun str =
-  try 
+  try
     let str_list = parse_list_opt str in
     let queue = List.map str_to_cl_cmp_type str_list in
     !current_options.inst_pass_queue1  <- queue
-  with 
+  with
   | Parse_list_fail | Unknown_cl_cmp_type->
       failwith (args_error_msg inst_pass_queue1_str str)
 
@@ -840,7 +840,7 @@ let inst_pass_queue1_inf  =
   inf_pref^"first passive priority queue for instantiation "^
   inf_pref^"priority is based on lex combination of parameters in the list"^
   example_str^inst_pass_queue1_str^" [-num_var;-num_symb]"^
-  inf_pref^"in this ex. priority is given to clauses with fewer number of vars"^ 
+  inf_pref^"in this ex. priority is given to clauses with fewer number of vars"^
   inf_pref^"then with fewer number of symbols\n"
 
 (*--------*)
@@ -848,11 +848,11 @@ let inst_pass_queue1_inf  =
 let inst_pass_queue2_str  = "--inst_pass_queue2"
 
 let inst_pass_queue2_fun str =
-  try 
+  try
     let str_list = parse_list_opt str in
     let queue = List.map str_to_cl_cmp_type str_list in
     !current_options.inst_pass_queue2  <- queue
-  with 
+  with
   | Parse_list_fail | Unknown_cl_cmp_type->
       failwith (args_error_msg inst_pass_queue2_str str)
 
@@ -861,12 +861,12 @@ let inst_pass_queue2_inf  =
   inf_pref^"second passive priority queue for instantiation "^
   inf_pref^"priority is based on lex combination of parameters in the list"^
   example_str^inst_pass_queue2_str^" [+age;-num_symb]"^
-  inf_pref^"in this ex. priority is given to clauses which were generated at an earlier stage"^ 
+  inf_pref^"in this ex. priority is given to clauses which were generated at an earlier stage"^
   inf_pref^"then with fewer number of symbols\n"
 
 
 (*--------*)
- 
+
 let inst_pass_queue1_mult_str  = "--inst_pass_queue1_mult"
 
 let inst_pass_queue1_mult_fun i =
@@ -874,11 +874,11 @@ let inst_pass_queue1_mult_fun i =
 
 let inst_pass_queue1_mult_inf  =
   int_str^
-  inf_pref^"first priority queue multiple:"^ 
+  inf_pref^"first priority queue multiple:"^
   inf_pref^"the number of clauses taken before switching to the next queue\n"
 
 (*--------*)
- 
+
 let inst_pass_queue2_mult_str  = "--inst_pass_queue2_mult"
 
 let inst_pass_queue2_mult_fun i =
@@ -903,21 +903,21 @@ let inst_dismatching_inf  =
 (*--------*)
 
 let inst_eager_unprocessed_to_passive_str  = "--inst_eager_unprocessed_to_passive"
-    
+
 let inst_eager_unprocessed_to_passive_fun b =
   !current_options.inst_eager_unprocessed_to_passive <- b
-      
+
 let inst_eager_unprocessed_to_passive_inf =
   bool_str^"\n"
-    
+
 (*--------*)
 
 let inst_prop_sim_given_str = "--inst_prop_sim_given"
 
-let inst_prop_sim_given_fun b = 
+let inst_prop_sim_given_fun b =
   !current_options.inst_prop_sim_given <- b
 
-let inst_prop_sim_given_inf = 
+let inst_prop_sim_given_inf =
   bool_str^
   inf_pref^"instantiation: propositional simplification of the given clause\n"
 
@@ -925,10 +925,10 @@ let inst_prop_sim_given_inf =
 
 let inst_prop_sim_new_str = "--inst_prop_sim_new"
 
-let inst_prop_sim_new_fun b = 
+let inst_prop_sim_new_fun b =
   !current_options.inst_prop_sim_new <- b
 
-let inst_prop_sim_new_inf = 
+let inst_prop_sim_new_inf =
   bool_str^
   inf_pref^"instantiation: propositional simplification of newly produced clauses\n"
 
@@ -968,7 +968,7 @@ let inst_learning_factor_inf  =
   inf_pref^"learning is repeated after that"^
   inf_pref^"the bound on number of loops is multiplied by this factor\n"
 
-  
+
 (*--------*)
 let inst_start_prop_sim_after_learn_str = "--inst_start_prop_sim_after_learn"
 
@@ -987,9 +987,9 @@ let inst_sel_renew_str  = "--inst_sel_renew"
 let inst_sel_renew_fun str =
   try
     !current_options.inst_sel_renew <- (str_to_inst_sel_renew_type str)
-  with  
-    Unknown_out_options_type -> 
-      failwith (args_error_msg inst_sel_renew_str str) 
+  with
+    Unknown_out_options_type ->
+      failwith (args_error_msg inst_sel_renew_str str)
 
 let inst_sel_renew_inf  =
   "<model|solver>"^
@@ -1025,17 +1025,17 @@ let resolution_flag_inf  =
 let res_lit_sel_str  = "--res_lit_sel"
 
 let res_lit_sel_fun str =
-  try  
+  try
     !current_options.res_lit_sel <- (str_to_sel_type str)
-  with 
-    Unknown_res_sel_fun_type ->     
-      failwith (args_error_msg res_lit_sel_str str)  
+  with
+    Unknown_res_sel_fun_type ->
+      failwith (args_error_msg res_lit_sel_str str)
 
 
 let res_lit_sel_inf  =
   "<adaptive|kbo_max|neg_max|neg_min>"^
   inf_pref^"resolution literal selection functions:"^
-  inf_pref^"adaptive: select to negative until no inferences"^ 
+  inf_pref^"adaptive: select to negative until no inferences"^
   inf_pref^"then change to kbo maximal (Y. Kazakov)"^
   inf_pref^"kbo_max: selects kbo maximal literals"^
   inf_pref^"neg_max: selects negative with a maximal number of symbols, otherwise kbo_max"^
@@ -1048,10 +1048,10 @@ let res_to_prop_solver_str  = "--res_to_prop_solver"
 let res_to_prop_solver_fun str =
   try
     !current_options.res_to_prop_solver <- (str_to_res_to_prop_solver_type str)
-  with 
+  with
     Unknown_res_to_prop_solver_type ->
-      failwith (args_error_msg res_to_prop_solver_str str)  
-	
+      failwith (args_error_msg res_to_prop_solver_str str)
+
 let res_to_prop_solver_inf  =
   "<active | passive | none>"^
   inf_pref^"adding grounding of clauses to the propositional solver\n"
@@ -1085,7 +1085,7 @@ let res_passive_queue_flag_fun b =
   !current_options.res_passive_queue_flag <- b
 
 let res_passive_queue_flag_inf  =
-  bool_str^ 
+  bool_str^
   inf_pref^"if true then passive priority queues else simple queue is used\n"
 
 
@@ -1094,11 +1094,11 @@ let res_passive_queue_flag_inf  =
 let res_pass_queue1_str  = "--res_pass_queue1"
 
 let res_pass_queue1_fun str =
-  try 
+  try
     let str_list = parse_list_opt str in
     let queue = List.map str_to_cl_cmp_type str_list in
     !current_options.res_pass_queue1  <- queue
-  with 
+  with
   | Parse_list_fail | Unknown_cl_cmp_type->
       failwith (args_error_msg res_pass_queue1_str str)
 
@@ -1107,7 +1107,7 @@ let res_pass_queue1_inf  =
   inf_pref^"first passive priority queue for resolution "^
   inf_pref^"priority is based on lex combination of parameters in the list"^
   example_str^res_pass_queue1_str^" [-num_var;-num_symb]"^
-  inf_pref^"in this ex. priority is given to clauses with fewer number of vars"^ 
+  inf_pref^"in this ex. priority is given to clauses with fewer number of vars"^
   inf_pref^"then with fewer number of symbols\n"
 
 (*--------*)
@@ -1115,11 +1115,11 @@ let res_pass_queue1_inf  =
 let res_pass_queue2_str  = "--res_pass_queue2"
 
 let res_pass_queue2_fun str =
-  try 
+  try
     let str_list = parse_list_opt str in
     let queue = List.map str_to_cl_cmp_type str_list in
     !current_options.res_pass_queue2  <- queue
-  with 
+  with
   | Parse_list_fail | Unknown_cl_cmp_type->
       failwith (args_error_msg res_pass_queue2_str str)
 
@@ -1128,12 +1128,12 @@ let res_pass_queue2_inf  =
   inf_pref^"second passive priority queue for resolution "^
   inf_pref^"priority is based on lex combination of parameters in the list"^
   example_str^res_pass_queue2_str^" [+age;-num_symb]"^
-  inf_pref^"in this ex. priority is given to clauses which were generated at an earlier stage"^ 
+  inf_pref^"in this ex. priority is given to clauses which were generated at an earlier stage"^
   inf_pref^"then with fewer number of symbols\n"
 
 
 (*--------*)
- 
+
 let res_pass_queue1_mult_str  = "--res_pass_queue1_mult"
 
 let res_pass_queue1_mult_fun i =
@@ -1141,11 +1141,11 @@ let res_pass_queue1_mult_fun i =
 
 let res_pass_queue1_mult_inf  =
   int_str^
-  inf_pref^"first priority queue multiple:"^ 
+  inf_pref^"first priority queue multiple:"^
   inf_pref^"the number of clauses taken before switching to the next queue\n"
 
 (*--------*)
- 
+
 let res_pass_queue2_mult_str  = "--res_pass_queue2_mult"
 
 let res_pass_queue2_mult_fun i =
@@ -1164,11 +1164,11 @@ let res_forward_subs_fun str =
   try
     !current_options.res_forward_subs <- (str_to_res_subs_type str)
   with  Unknown_res_subs_type ->
-    failwith (args_error_msg res_forward_subs_str str)  
+    failwith (args_error_msg res_forward_subs_str str)
 
 let res_forward_subs_inf  =
   res_subs_type_str^
-  inf_pref^"forward subsumption: full;"^ 
+  inf_pref^"forward subsumption: full;"^
   inf_pref^"subset subsumption efficient but incomplete (always on);"^
   inf_pref^"subsumption by clauses of length less or equal to the argument"^
   example_str^res_forward_subs_str^" length[1]\n"
@@ -1181,11 +1181,11 @@ let res_backward_subs_fun str =
   try
     !current_options.res_backward_subs <- (str_to_res_subs_type str)
   with  Unknown_res_subs_type ->
-    failwith (args_error_msg res_backward_subs_str str)  
+    failwith (args_error_msg res_backward_subs_str str)
 
 let res_backward_subs_inf  =
   res_subs_type_str^
-  inf_pref^"backward subsumption: full;"^ 
+  inf_pref^"backward subsumption: full;"^
   inf_pref^"subset subsumption efficient but incomplete (always on);"^
   inf_pref^"subsumption by clauses of length less or equal to the argument"^
   example_str^res_backward_subs_str^" length[1]\n"
@@ -1228,85 +1228,96 @@ let res_orphan_elimination_inf  =
 (*--------*)
 let res_time_limit_str = "--res_time_limit"
 
-let res_time_limit_fun f = 
+let res_time_limit_fun f =
   !current_options.res_time_limit <- f
 
-let res_time_limit_inf = 
+let res_time_limit_inf =
   float_str^
   inf_pref^"time limit (in seconds) for each iteration of the resolution loop\n"
 
 (*--------*)
 let res_out_proof_str = "--res_out_proof"
 
-let res_out_proof_fun b = 
+let res_out_proof_fun b =
   !current_options.res_out_proof <- b
 
-let res_out_proof_inf = 
+let res_out_proof_inf =
   bool_str^
   inf_pref^"Outputs the proof, if it is found by resolution\n"
 
 (*--------*)
 let dedukti_out_proof_str = "--dedukti_out_proof"
 
-let dedukti_out_proof_fun b = 
+let dedukti_out_proof_fun b =
   !current_options.dedukti_out_proof <- b
 
-let dedukti_out_proof_inf = 
+let dedukti_out_proof_inf =
   bool_str^
   inf_pref^"Outputs the proof in dedukti format, if it is found by resolution\n"
 
 (*--------*)
 let dedukti_prefix_str = "--dedukti_prefix"
 
-let dedukti_prefix_fun s = 
+let dedukti_prefix_fun s =
   !current_options.dedukti_prefix <- Prefix s
 
-let dedukti_prefix_inf = 
+let dedukti_prefix_inf =
   string_str^
   inf_pref^"Prefix of the files containing the dedukti proof (default: printed on standard output)\n"
 
 (*--------*)
+let dedukti_tempfile_str = "--dedukti_tempfile"
+
+let dedukti_tempfile_fun s =
+  !current_options.dedukti_prefix <- Tempfile s
+
+let dedukti_tempfile_inf =
+  string_str^
+  inf_pref^"Unique temporary file containing the dedukti proof (default: printed on standard output)\n"
+
+
+(*--------*)
 let modulo_str = "--modulo"
 
-let modulo_fun b = 
+let modulo_fun b =
   !current_options.modulo <- b;
   if b then !current_options.omit_eq <- true
 
-let modulo_inf = 
+let modulo_inf =
   bool_str^
   inf_pref^"Polarized resolution mode\n"
 
 (*--------*)
 let omit_eq_str = "--omit_eq"
 
-let omit_eq_fun b = 
+let omit_eq_fun b =
   !current_options.omit_eq <- b
 
-let omit_eq_inf = 
+let omit_eq_inf =
   bool_str^
   inf_pref^"Omit the axioms for equality (default when in PRM)\n"
 
 (*--------*)
 let normalization_size_str = "--normalization_size"
 
-let normalization_size_fun i = 
+let normalization_size_fun i =
   !current_options.normalization_size <- i
 
-let normalization_size_inf = 
+let normalization_size_inf =
   int_str^
   inf_pref^"terms of lower size are normalized by interp, the other by plugin\n"
 
 (*--------*)
 let normalization_type_str = "--normalization_type"
 
-let normalization_type_fun str = 
-  try  
+let normalization_type_fun str =
+  try
     !current_options.normalization_type <- (str_to_normalization_type str)
-  with 
-    Unknown_normalization_type ->     
-      failwith (args_error_msg normalization_type_str str)  
+  with
+    Unknown_normalization_type ->
+      failwith (args_error_msg normalization_type_str str)
 
-let normalization_type_inf = 
+let normalization_type_inf =
   "<size_based | pipe | interp | dtree | plugin | none>"^
     inf_pref^"select how normalization is performed"^
     inf_pref^"\tsize_based: use plugin or interp depending on the size of the term,"^
@@ -1315,16 +1326,16 @@ let normalization_type_inf =
     inf_pref^"\tinterp: interprete rewrite rules"^
     inf_pref^"\tdtree: use discrimination trees"^
     inf_pref^"\tplugin: compile the rules and load them as a plugin"^
-    inf_pref^"\tnone: do not normalize term\n"    
+    inf_pref^"\tnone: do not normalize term\n"
 
 (*--------*)
 let force_thm_status_str = "--force_thm_status"
 
-let force_thm_status_fun b = 
+let force_thm_status_fun b =
   !current_options.force_thm_status <- b;
   if b then !current_options.omit_eq <- true
 
-let force_thm_status_inf = 
+let force_thm_status_inf =
   bool_str^
   inf_pref^"Force printing of theorem status if proof found\n"
 
@@ -1351,7 +1362,7 @@ let comb_inst_mult_inf  =
   int_str^
   inf_pref^"instantiation multiple in combination of instantiation and resolution\n"
 
-  
+
 (*
 
 let _str  = "--"
@@ -1375,7 +1386,7 @@ inf_pref^
 
 
 (*let info_str str = "\n    "^str*)
-let spec_list = 
+let spec_list =
   [(out_options_str, Arg.String(out_options_fun), out_options_inf);
    (problem_path_str, Arg.String(problem_path_fun), problem_path_inf);
    (include_path_str, Arg.String(include_path_fun), include_path_inf);
@@ -1383,7 +1394,7 @@ let spec_list =
 (*------General-------*)
    (fof_str, Arg.Bool(fof_fun), fof_inf);
    (ground_splitting_str,Arg.String(ground_splitting_fun), ground_splitting_inf);
-   (non_eq_to_eq_str,Arg.Bool(non_eq_to_eq_fun),non_eq_to_eq_inf); 
+   (non_eq_to_eq_str,Arg.Bool(non_eq_to_eq_fun),non_eq_to_eq_inf);
   (prep_prop_sim_str, Arg.Bool(prep_prop_sim_fun), prep_prop_sim_inf);
    (time_out_real_str, Arg.Float(time_out_real_fun), time_out_real_inf);
    (time_out_virtual_str, Arg.Float(time_out_virtual_fun), time_out_virtual_inf);
@@ -1392,7 +1403,7 @@ let spec_list =
    (large_theory_mode_str, Arg.Bool(large_theory_mode_fun),large_theory_mode_inf);
    (prolific_symb_bound_str, Arg.Int(prolific_symb_bound_fun),prolific_symb_bound_inf);
    (lt_threshold_str, Arg.Int(lt_threshold_fun),lt_threshold_inf);
-   
+
 (*-----Sat Mode----------*)
    (sat_mode_str, Arg.Bool(sat_mode_fun),sat_mode_inf);
    (sat_gr_def_str,Arg.Bool(sat_gr_def_fun),sat_gr_def_inf);
@@ -1401,74 +1412,75 @@ let spec_list =
 (*------Instantiation--*)
    (instantiation_flag_str, Arg.Bool(instantiation_flag_fun),instantiation_flag_inf);
    (inst_lit_sel_str, Arg.String(inst_lit_sel_fun), inst_lit_sel_inf);
-   (inst_solver_per_active_str, 
+   (inst_solver_per_active_str,
     Arg.Int(inst_solver_per_active_fun), inst_solver_per_active_inf);
-   (inst_solver_per_clauses_str, 
+   (inst_solver_per_clauses_str,
     Arg.Int(inst_solver_per_clauses_fun), inst_solver_per_clauses_inf);
    (inst_pass_queue1_str, Arg.String(inst_pass_queue1_fun), inst_pass_queue1_inf);
    (inst_pass_queue2_str, Arg.String(inst_pass_queue2_fun), inst_pass_queue2_inf);
-   (inst_pass_queue1_mult_str, 
+   (inst_pass_queue1_mult_str,
     Arg.Int(inst_pass_queue1_mult_fun), inst_pass_queue1_mult_inf);
-   (inst_pass_queue2_mult_str, 
+   (inst_pass_queue2_mult_str,
     Arg.Int(inst_pass_queue2_mult_fun), inst_pass_queue2_mult_inf);
    (inst_dismatching_str, Arg.Bool(inst_dismatching_fun), inst_dismatching_inf);
    (inst_eager_unprocessed_to_passive_str,
     Arg.Bool(inst_eager_unprocessed_to_passive_fun),
     inst_eager_unprocessed_to_passive_inf);
-   (inst_prop_sim_given_str, 
+   (inst_prop_sim_given_str,
     Arg.Bool(inst_prop_sim_given_fun), inst_prop_sim_given_inf);
    (inst_prop_sim_new_str, Arg.Bool(inst_prop_sim_new_fun), inst_prop_sim_new_inf);
    (inst_learning_loop_flag_str,
-    Arg.Bool(inst_learning_loop_flag_fun),inst_learning_loop_flag_inf); 
+    Arg.Bool(inst_learning_loop_flag_fun),inst_learning_loop_flag_inf);
    (inst_learning_start_str,
-    Arg.Int(inst_learning_start_fun),inst_learning_start_inf); 
+    Arg.Int(inst_learning_start_fun),inst_learning_start_inf);
    (inst_learning_factor_str,
-    Arg.Int(inst_learning_factor_fun),inst_learning_factor_inf); 
+    Arg.Int(inst_learning_factor_fun),inst_learning_factor_inf);
    (inst_start_prop_sim_after_learn_str,
-    Arg.Int(inst_start_prop_sim_after_learn_fun),inst_start_prop_sim_after_learn_inf); 
-   (inst_sel_renew_str,Arg.String(inst_sel_renew_fun),inst_sel_renew_inf); 
-   (inst_lit_activity_flag_str,Arg.Bool(inst_lit_activity_flag_fun),inst_lit_activity_flag_inf); 
+    Arg.Int(inst_start_prop_sim_after_learn_fun),inst_start_prop_sim_after_learn_inf);
+   (inst_sel_renew_str,Arg.String(inst_sel_renew_fun),inst_sel_renew_inf);
+   (inst_lit_activity_flag_str,Arg.Bool(inst_lit_activity_flag_fun),inst_lit_activity_flag_inf);
 
 
 (*------Resolution--*)
-   (resolution_flag_str,Arg.Bool(resolution_flag_fun),resolution_flag_inf); 
-   (res_lit_sel_str,Arg.String(res_lit_sel_fun),res_lit_sel_inf); 
-   (res_to_prop_solver_str,Arg.String(res_to_prop_solver_fun),res_to_prop_solver_inf); 
+   (resolution_flag_str,Arg.Bool(resolution_flag_fun),resolution_flag_inf);
+   (res_lit_sel_str,Arg.String(res_lit_sel_fun),res_lit_sel_inf);
+   (res_to_prop_solver_str,Arg.String(res_to_prop_solver_fun),res_to_prop_solver_inf);
    (res_prop_simpl_new_str,
-    Arg.Bool(res_prop_simpl_new_fun),res_prop_simpl_new_inf); 
+    Arg.Bool(res_prop_simpl_new_fun),res_prop_simpl_new_inf);
    (res_prop_simpl_given_str,
-    Arg.Bool(res_prop_simpl_given_fun),res_prop_simpl_given_inf); 
+    Arg.Bool(res_prop_simpl_given_fun),res_prop_simpl_given_inf);
    (res_passive_queue_flag_str,
-    Arg.Bool(res_passive_queue_flag_fun),res_passive_queue_flag_inf);   
+    Arg.Bool(res_passive_queue_flag_fun),res_passive_queue_flag_inf);
    (res_pass_queue1_str, Arg.String(res_pass_queue1_fun), res_pass_queue1_inf);
    (res_pass_queue2_str, Arg.String(res_pass_queue2_fun), res_pass_queue2_inf);
-   (res_pass_queue1_mult_str, 
+   (res_pass_queue1_mult_str,
     Arg.Int(res_pass_queue1_mult_fun), res_pass_queue1_mult_inf);
-   (res_pass_queue2_mult_str, 
+   (res_pass_queue2_mult_str,
     Arg.Int(res_pass_queue2_mult_fun), res_pass_queue2_mult_inf);
    (res_forward_subs_str,
-    Arg.String(res_forward_subs_fun),res_forward_subs_inf); 
+    Arg.String(res_forward_subs_fun),res_forward_subs_inf);
    (res_backward_subs_str,
-    Arg.String(res_backward_subs_fun),res_backward_subs_inf); 
+    Arg.String(res_backward_subs_fun),res_backward_subs_inf);
    (res_forward_subs_resolution_str,
-    Arg.Bool(res_forward_subs_resolution_fun),res_forward_subs_resolution_inf); 
+    Arg.Bool(res_forward_subs_resolution_fun),res_forward_subs_resolution_inf);
    (res_backward_subs_resolution_str,
-    Arg.Bool(res_backward_subs_resolution_fun),res_backward_subs_resolution_inf); 
+    Arg.Bool(res_backward_subs_resolution_fun),res_backward_subs_resolution_inf);
    (res_orphan_elimination_str,
     Arg.Bool(res_orphan_elimination_fun),res_orphan_elimination_inf);
    (res_time_limit_str, Arg.Float(res_time_limit_fun), res_time_limit_inf);
-   (res_out_proof_str, Arg.Bool(res_out_proof_fun),res_out_proof_inf);  
-   (dedukti_out_proof_str, Arg.Bool(dedukti_out_proof_fun),dedukti_out_proof_inf);   
-   (dedukti_prefix_str, Arg.String(dedukti_prefix_fun),dedukti_prefix_inf);  
+   (res_out_proof_str, Arg.Bool(res_out_proof_fun),res_out_proof_inf);
+   (dedukti_out_proof_str, Arg.Bool(dedukti_out_proof_fun),dedukti_out_proof_inf);
+   (dedukti_prefix_str, Arg.String(dedukti_prefix_fun),dedukti_prefix_inf);
+   (dedukti_tempfile_str, Arg.String(dedukti_tempfile_fun),dedukti_tempfile_inf);
    (modulo_str, Arg.Bool(modulo_fun),modulo_inf);
    (omit_eq_str, Arg.Bool(omit_eq_fun),omit_eq_inf);
    (normalization_type_str, Arg.String(normalization_type_fun),normalization_type_inf);
    (normalization_size_str, Arg.Int(normalization_size_fun),normalization_size_inf);
    (force_thm_status_str, Arg.Bool(force_thm_status_fun),force_thm_status_inf);
-   (comb_res_mult_str,Arg.Int(comb_res_mult_fun),comb_res_mult_inf); 
-   (comb_inst_mult_str,Arg.Int(comb_inst_mult_fun),comb_inst_mult_inf); 
+   (comb_res_mult_str,Arg.Int(comb_res_mult_fun),comb_res_mult_inf);
+   (comb_inst_mult_str,Arg.Int(comb_inst_mult_fun),comb_inst_mult_inf);
 (*
-    (_str,Arg.(_fun),_inf); 
+    (_str,Arg.(_fun),_inf);
 *)
    "--version", Arg.Unit (fun () -> print_endline "iProver modulo version 0.7+0.2"; exit 0), " print version and exit\n";
  ]
@@ -1481,25 +1493,25 @@ type opt_val_type = string * string
 
 let val_distance = 40
 
-let opt_val_to_str opt_val = 
+let opt_val_to_str opt_val =
   let (opt_name,val_str') = opt_val in
-  let val_str = 
+  let val_str =
     if val_str' = "" then "\"\"" else val_str' in
   (space_padding_str val_distance opt_name)^val_str
 
-let opt_val_list_to_str l = 
+let opt_val_list_to_str l =
   String.concat "\n" (List.map opt_val_to_str l)
 
-let input_options_str_list opt = 
-  [ 
+let input_options_str_list opt =
+  [
     (out_options_str, (out_options_type_to_str opt.out_options));
     (problem_path_str, opt.problem_path);
     (include_path_str, opt.include_path);
     (eprover_path_str, opt.eprover_path);
   ]
 
-let general_options_str_list opt = 
-  [    
+let general_options_str_list opt =
+  [
        (fof_str, (string_of_bool opt.fof));
        (ground_splitting_str, (ground_splitting_type_to_str opt.ground_splitting));
        (non_eq_to_eq_str, (string_of_bool opt.non_eq_to_eq));
@@ -1515,7 +1527,7 @@ let general_options_str_list opt =
        (sat_finite_models_str,(string_of_bool opt.sat_finite_models))
      ]
 
-let inst_options_str_list opt = 
+let inst_options_str_list opt =
   [
    (instantiation_flag_str,(string_of_bool opt.instantiation_flag));
    (inst_lit_sel_str, (inst_lit_sel_type_to_str opt.inst_lit_sel));
@@ -1537,7 +1549,7 @@ let inst_options_str_list opt =
    (inst_lit_activity_flag_str, (string_of_bool opt.inst_lit_activity_flag));
  ]
 
-let res_options_str_list opt = 
+let res_options_str_list opt =
   [
    (resolution_flag_str, (string_of_bool opt.resolution_flag));
    (res_lit_sel_str, (res_lit_sel_type_to_str opt.res_lit_sel));
@@ -1563,7 +1575,7 @@ let res_options_str_list opt =
  ]
 
 
-let comb_options_str_list opt = 
+let comb_options_str_list opt =
   [
    (comb_res_mult_str, (string_of_int opt.comb_res_mult));
    (comb_inst_mult_str, (string_of_int opt.comb_inst_mult));
@@ -1575,41 +1587,41 @@ let comb_options_str_list opt =
  (_str, opt.);
  (_str, (_type_to_str opt.));
  (_str, (string_of_ opt.));
- 
-*)  
+
+*)
 
 
-let input_opt_str opt = 
+let input_opt_str opt =
  "\n"^pref_str^"Input Options\n\n"^
   opt_val_list_to_str (input_options_str_list opt)
- 
-let general_opt_str opt = 
+
+let general_opt_str opt =
  "\n"^pref_str^"General Options\n\n"^
   opt_val_list_to_str (general_options_str_list opt)^"\n"
- 
-let inst_opt_str opt = 
+
+let inst_opt_str opt =
   "\n"^pref_str^"Instantiation Options\n\n"^
   opt_val_list_to_str (inst_options_str_list opt)^"\n"
 
-let res_opt_str opt = 
+let res_opt_str opt =
   "\n"^pref_str^"Resolution Options\n\n"^
   opt_val_list_to_str (res_options_str_list opt)^"\n"
-  
-let comb_opt_str opt = 
+
+let comb_opt_str opt =
   "\n"^pref_str^"Combination Options\n\n"^
   opt_val_list_to_str (comb_options_str_list opt)^"\n"
-    
-    
-let control_opt_str opt = 
+
+
+let control_opt_str opt =
   (general_opt_str opt)^(inst_opt_str opt)^(res_opt_str opt)^(comb_opt_str opt)
-								
-let all_opt_str opt = 
+
+let all_opt_str opt =
   (input_opt_str opt)^(control_opt_str opt)
-			 
+
 let options_to_str opt =
   let close_str = pref_str^"\n" in
   (*(pref_str^(out_options_type_to_str opt.out_options)^"\n";*)
-  match opt.out_options with 
+  match opt.out_options with
   | Out_All_Opt     ->  (all_opt_str opt)^close_str
   | Out_Control_Opt ->  (control_opt_str opt)^close_str
   | Out_No_Opt      ->  ""
@@ -1618,50 +1630,50 @@ let options_to_str opt =
 
 (* inferred options: *)
 
-let prop_solver_is_on () = 
+let prop_solver_is_on () =
   !current_options.instantiation_flag      ||
   !current_options.res_prop_simpl_new   ||
   !current_options.res_prop_simpl_given ||
   !current_options.prep_prop_sim           ||
-  (match !current_options.res_to_prop_solver with 
-    Res_to_Solver_Active | Res_to_Solver_Passive -> true 
+  (match !current_options.res_to_prop_solver with
+    Res_to_Solver_Active | Res_to_Solver_Passive -> true
   | Res_to_Solver_None    -> false)
-    
+
 
 (*-------------Read Current Options--------------------------*)
 
-let usage_msg = "iproveropt [options] [filename]\n" 
+let usage_msg = "iproveropt [options] [filename]\n"
 let help_msg = "-help  Display list of options\n"
 
 
 (*
-let read_args() = 
+let read_args() =
   Arg.parse spec_list default_arg_fun usage_msg
 *)
-  
+
 let read_args() =
   let args = Sys.argv in
   let ipr_name = args.(0) in
   let current = Arg.current in
   try
     Arg.parse_argv args spec_list default_arg_fun usage_msg
-  with 
+  with
 
   | Arg.Bad s -> (out_str (ipr_name^": "^"unknown option "
 			   ^"`"^(args.(!current))^"'"^"\n \n"
-			   ^usage_msg^"\n"^help_msg); 
+			   ^usage_msg^"\n"^help_msg);
 		  exit (0))
 
   | Arg.Help s -> (out_str (s); exit (0))
 
-let () = read_args(); 
-  if !current_options.problem_files = [] 
+let () = read_args();
+  if !current_options.problem_files = []
   then
     ((*Arg.usage spec_list usage_msg;*)
      out_str (usage_msg^"\n"^help_msg);
      failwith "No problem files to solve")
   else ()
-let get_problem_files () = !current_options.problem_files 
+let get_problem_files () = !current_options.problem_files
 
 
 (*-------------------------------------------------------------------*)
@@ -1671,60 +1683,60 @@ type named_options = {options_name : string; options : options}
 
 (*creates a fresh copy of the option*)
 (* we need to use dummy out_options = option.out_options *)
-let copy_options option = {option with out_options = option.out_options } 
+let copy_options option = {option with out_options = option.out_options }
 
 (* Input Options *)
 let input_options = copy_options !current_options
 
-let input_named_options = 
+let input_named_options =
   {options_name = "Input Options"; options = input_options}
 
 (*--------------------------------*)
 
-let strip_conj_named_opt named_opt = 
-  let new_opt = 
-    {named_opt.options with      
+let strip_conj_named_opt named_opt =
+  let new_opt =
+    {named_opt.options with
 
      inst_lit_sel = strip_conj_lit_type_list named_opt.options.inst_lit_sel;
-     
-     inst_pass_queue1 = 
+
+     inst_pass_queue1 =
      strip_conj_clause_type_list named_opt.options.inst_pass_queue1;
 
-     inst_pass_queue2 = 
+     inst_pass_queue2 =
      strip_conj_clause_type_list named_opt.options.inst_pass_queue2;
-     
-     res_pass_queue1 = 
+
+     res_pass_queue1 =
      strip_conj_clause_type_list named_opt.options.res_pass_queue1;
-     
-     res_pass_queue2 = 
+
+     res_pass_queue2 =
      strip_conj_clause_type_list named_opt.options.res_pass_queue2;
-     
-     
+
+
    }
   in
-  {options = new_opt;  
+  {options = new_opt;
    options_name = (named_opt.options_name^" stripped conjectures")}
-   
- 
+
+
 (*--------Creates a reasonable option to deal with many axioms such as SUMO-----*)
 (*-------based on a given option-------------------*)
-let named_opt_to_many_axioms_named_opt1 opt = 
-     let new_options = 
-       {opt.options with 
+let named_opt_to_many_axioms_named_opt1 opt =
+     let new_options =
+       {opt.options with
 
-	large_theory_mode       = true; 
-	prolific_symb_bound     = 500; 
+	large_theory_mode       = true;
+	prolific_symb_bound     = 500;
 	lt_threshold            = 2000;
 
-	inst_pass_queue1     = [Cl_Conj_Dist false; 
-				Cl_Has_Non_Prolific_Conj_Symb true; 
+	inst_pass_queue1     = [Cl_Conj_Dist false;
+				Cl_Has_Non_Prolific_Conj_Symb true;
 				Cl_Num_of_Var false];
 	inst_pass_queue1_mult          = 1000;
 	inst_pass_queue2_mult          = 2;
 
-	res_pass_queue1     =  [Cl_Conj_Dist false; 
+	res_pass_queue1     =  [Cl_Conj_Dist false;
 				Cl_Has_Non_Prolific_Conj_Symb true;
-				Cl_Num_of_Symb false]; 
+				Cl_Num_of_Symb false];
 
 	res_pass_queue1_mult           = 1000;
 	res_pass_queue2_mult           = 5;
@@ -1738,16 +1750,16 @@ let named_opt_to_many_axioms_named_opt1 opt =
        options = new_options }
 
 (*----------Many Axioms 2-----------------------*)
-let named_opt_to_many_axioms_named_opt2 opt = 
-     let new_options = 
-       {opt.options with 
+let named_opt_to_many_axioms_named_opt2 opt =
+     let new_options =
+       {opt.options with
 
-	large_theory_mode       = true; 
-	prolific_symb_bound     = 500; 
+	large_theory_mode       = true;
+	prolific_symb_bound     = 500;
 	lt_threshold            = 2000;
 
-	inst_pass_queue1     = [Cl_Conj_Dist false; 
-				Cl_Has_Non_Prolific_Conj_Symb true; 
+	inst_pass_queue1     = [Cl_Conj_Dist false;
+				Cl_Has_Non_Prolific_Conj_Symb true;
 				(*Cl_Max_Atom_Input_Occur false;*)
 				Cl_Num_of_Var false];
 
@@ -1763,10 +1775,10 @@ let named_opt_to_many_axioms_named_opt2 opt =
 	inst_learning_start            = 3000000;
 	inst_learning_factor           = 2;
 
-	res_pass_queue1     =  [Cl_Conj_Dist false; 
+	res_pass_queue1     =  [Cl_Conj_Dist false;
 				Cl_Has_Non_Prolific_Conj_Symb true;
-				Cl_Num_of_Var false; 				
-				(*Cl_Max_Atom_Input_Occur false*)]; 
+				Cl_Num_of_Var false;
+				(*Cl_Max_Atom_Input_Occur false*)];
 
 	res_prop_simpl_new             = false;
 	res_prop_simpl_given           = false;
@@ -1788,23 +1800,23 @@ let named_opt_to_many_axioms_named_opt2 opt =
 
 (*------------------------------------------------*)
 
-let named_opt_to_many_axioms_named_opt3 opt = 
-     let new_options = 
-       {opt.options with 
+let named_opt_to_many_axioms_named_opt3 opt =
+     let new_options =
+       {opt.options with
 
-	large_theory_mode       = true; 
-	prolific_symb_bound     = 500; 
+	large_theory_mode       = true;
+	prolific_symb_bound     = 500;
 	lt_threshold            = 2000;
 
-	inst_pass_queue1     = [Cl_Conj_Dist false; 
-				Cl_Has_Non_Prolific_Conj_Symb true; 
+	inst_pass_queue1     = [Cl_Conj_Dist false;
+				Cl_Has_Non_Prolific_Conj_Symb true;
 				Cl_Num_of_Var false;Cl_Max_Atom_Input_Occur false];
 	inst_pass_queue1_mult          = 1000;
 	inst_pass_queue2_mult          = 2;
 
-	res_pass_queue1     =  [Cl_Conj_Dist false; 
+	res_pass_queue1     =  [Cl_Conj_Dist false;
 				Cl_Has_Non_Prolific_Conj_Symb true;
-				Cl_Num_of_Symb false;Cl_Max_Atom_Input_Occur false]; 
+				Cl_Num_of_Symb false;Cl_Max_Atom_Input_Occur false];
 
 	res_pass_queue1_mult           = 1000;
 	res_pass_queue2_mult           = 5;
@@ -1816,19 +1828,19 @@ let named_opt_to_many_axioms_named_opt3 opt =
      in
      { options_name = ("Many Axioms 3 "^opt.options_name);
        options = new_options }
-       
+
 
 (*-------Negative Selections------------------------*)
 let option_1 () = {
-  
-  out_options   = !current_options.out_options;   
-  
+
+  out_options   = !current_options.out_options;
+
 (*----Input-------*)
-  problem_path            = !current_options.problem_path; 
+  problem_path            = !current_options.problem_path;
   include_path            = !current_options.include_path;
   problem_files           = !current_options.problem_files;
   eprover_path            = !current_options.eprover_path;
-  
+
 (*----General--------*)
   fof                     = false;
   ground_splitting        = Split_Input;
@@ -1838,25 +1850,25 @@ let option_1 () = {
   time_out_virtual        = -1.;
   schedule                = true;
 
-  large_theory_mode       = true; 
-  prolific_symb_bound     = 500; 
+  large_theory_mode       = true;
+  prolific_symb_bound     = 500;
   lt_threshold            = 2000;
 
 
 (*----Sat Mode------*)
   sat_mode                = false;
   sat_gr_def              = false;
-  sat_finite_models       = false; 
+  sat_finite_models       = false;
 
 (*----Instantiation------*)
   instantiation_flag             = true;
-  inst_lit_sel                   = [Lit_Sign false;   
+  inst_lit_sel                   = [Lit_Sign false;
 				    Lit_Num_of_Var false; Lit_Num_of_Symb true];
 
   inst_solver_per_active         = 750;
   inst_solver_per_clauses        = 5000;
   inst_pass_queue1               = [Cl_Conj_Dist false; Cl_Has_Conj_Symb true;
-				    Cl_Num_of_Var false]; 
+				    Cl_Num_of_Var false];
   inst_pass_queue2               = [Cl_Age true; Cl_Num_of_Symb false];
 
 (*"[+age;-num_symb]";*)
@@ -1876,19 +1888,19 @@ let option_1 () = {
 (*----Resolution---------*)
   resolution_flag                = true;
   res_lit_sel                    = Res_Neg_Sel_Max;
-  res_to_prop_solver             = Res_to_Solver_Active;      
+  res_to_prop_solver             = Res_to_Solver_Active;
   res_prop_simpl_new             = false;
   res_prop_simpl_given           = true;
   (*switch between simpl and priority queues*)
-  (* TO DO  Queues options like in Inst. *)   
+  (* TO DO  Queues options like in Inst. *)
   res_passive_queue_flag         = true;
   res_pass_queue1                =  [Cl_Conj_Dist false; Cl_Has_Conj_Symb true;
-				    Cl_Num_of_Symb false]; 
+				    Cl_Num_of_Symb false];
   res_pass_queue2                = [Cl_Age true; Cl_Num_of_Symb false];
   res_pass_queue1_mult           = 15;
   res_pass_queue2_mult           = 5;
 
-  
+
   res_forward_subs               = Subs_Full;
   res_backward_subs              = Subs_Subset;
   res_forward_subs_resolution    = true;
@@ -1909,19 +1921,19 @@ let option_1 () = {
 }
 
 
-let named_option_1 () = 
+let named_option_1 () =
   {options_name = "Option_1: Negative Selections"; options = (option_1())}
 
 (*--------------*)
-let option_1_1 () = {(input_options) with 
+let option_1_1 () = {(input_options) with
 
-		  inst_lit_sel                   = [Lit_Sign false;   
-						    Lit_Num_of_Var false; 
+		  inst_lit_sel                   = [Lit_Sign false;
+						    Lit_Num_of_Var false;
 						    Lit_Num_of_Symb true];
-		  res_lit_sel                    = Res_Neg_Sel_Max		  
+		  res_lit_sel                    = Res_Neg_Sel_Max
 		}
 
-let named_option_1_1 () = 
+let named_option_1_1 () =
  {options_name = "Option_1_1: Negative Selections"; options = (option_1_1())}
 
 
@@ -1929,23 +1941,23 @@ let named_option_1_1 () =
 
 
 
-let option_1_2 () = {(input_options) with 
-		
+let option_1_2 () = {(input_options) with
+
 
   inst_pass_queue1               = [Cl_Conj_Dist false; Cl_Has_Conj_Symb true;
 				    Cl_EPR true;
-				    Cl_Num_of_Var false]; 
+				    Cl_Num_of_Var false];
   inst_pass_queue2               = [Cl_Age true; Cl_Num_of_Symb false];
 
   res_pass_queue1                =  [Cl_Conj_Dist false; Cl_Has_Conj_Symb true;
 				     Cl_Horn true;
-				     Cl_Num_of_Symb false]; 
+				     Cl_Num_of_Symb false];
   res_pass_queue2                = [Cl_Age true; Cl_Num_of_Symb false];
 
 
 		}
 
-let named_option_1_2 () = 
+let named_option_1_2 () =
  {options_name = "Option_1_2: EPR, Horn"; options = (option_1_2())}
 
 
@@ -1953,15 +1965,15 @@ let named_option_1_2 () =
 (*--Option 2----------------*)
 
 let option_2 () = {
-  
-  out_options   = !current_options.out_options;   
-  
+
+  out_options   = !current_options.out_options;
+
 (*----Input-------*)
-  problem_path            = !current_options.problem_path; 
+  problem_path            = !current_options.problem_path;
   include_path            = !current_options.include_path;
   problem_files           = !current_options.problem_files;
   eprover_path            = !current_options.eprover_path;
-  
+
 (*----General--------*)
   fof                     = false;
   ground_splitting        = Split_Input;
@@ -1971,24 +1983,24 @@ let option_2 () = {
   time_out_virtual        = -1.;
   schedule                = true;
 
-  large_theory_mode       = true; 
-  prolific_symb_bound     = 500; 
+  large_theory_mode       = true;
+  prolific_symb_bound     = 500;
   lt_threshold            = 2000;
 
 
 (*----Sat Mode--------*)
   sat_mode                = false;
   sat_gr_def              = false;
-  sat_finite_models       = false; 
+  sat_finite_models       = false;
 
 (*----Instantiation------*)
   instantiation_flag             = true;
-  inst_lit_sel                   = [Lit_Sign false;   
+  inst_lit_sel                   = [Lit_Sign false;
 				    Lit_Num_of_Var false; Lit_Num_of_Symb false];
 
   inst_solver_per_active         = 750;
   inst_solver_per_clauses        = 5000;
-  inst_pass_queue1               = [Cl_Num_of_Symb false; Cl_Num_of_Var false;Cl_Conj_Dist false; Cl_Has_Conj_Symb true]; 
+  inst_pass_queue1               = [Cl_Num_of_Symb false; Cl_Num_of_Var false;Cl_Conj_Dist false; Cl_Has_Conj_Symb true];
   inst_pass_queue2               = [Cl_Age true; Cl_Num_of_Symb false];
 
 (*"[+age;-num_symb]";*)
@@ -2008,18 +2020,18 @@ let option_2 () = {
 (*----Resolution---------*)
   resolution_flag                = true;
   res_lit_sel                    = Res_KBO_Max;
-  res_to_prop_solver             = Res_to_Solver_Active;      
+  res_to_prop_solver             = Res_to_Solver_Active;
   res_prop_simpl_new             = false;
   res_prop_simpl_given           = true;
   (*switch between simpl and priority queues*)
-  (* TO DO  Queues options like in Inst. *)   
+  (* TO DO  Queues options like in Inst. *)
   res_passive_queue_flag         = true;
-  res_pass_queue1                =  [Cl_Num_of_Symb false;Cl_Has_Conj_Symb true; ]; 
+  res_pass_queue1                =  [Cl_Num_of_Symb false;Cl_Has_Conj_Symb true; ];
   res_pass_queue2                = [Cl_Age true; Cl_Num_of_Symb false];
   res_pass_queue1_mult           = 15;
   res_pass_queue2_mult           = 5;
 
-  
+
   res_forward_subs               = Subs_Full;
   res_backward_subs              = Subs_Subset;
   res_forward_subs_resolution    = true;
@@ -2039,18 +2051,18 @@ let option_2 () = {
   comb_inst_mult                 = 1000;
 }
 
-let named_option_2 () = 
+let named_option_2 () =
   {options_name = "Option_2: Max Selections"; options = (option_2())}
 
-let option_2_1 () = {(option_2 ()) with 
-		  inst_lit_sel                   =  [Lit_Sign false;   
-						     Lit_Num_of_Var false; 
+let option_2_1 () = {(option_2 ()) with
+		  inst_lit_sel                   =  [Lit_Sign false;
+						     Lit_Num_of_Var false;
 						     Lit_Num_of_Symb true];
 
-		  res_lit_sel                    = Res_KBO_Max;		  
+		  res_lit_sel                    = Res_KBO_Max;
 		}
 
-let named_option_2_1 () = 
+let named_option_2_1 () =
  {options_name = "Option_2_1: Max Selections"; options = (option_2_1())}
 
 
@@ -2058,15 +2070,15 @@ let named_option_2_1 () =
 (*--Option 3----------------*)
 
 let option_3 () = {
-  
-  out_options   = !current_options.out_options;   
-  
+
+  out_options   = !current_options.out_options;
+
 (*----Input-------*)
-  problem_path            = !current_options.problem_path; 
+  problem_path            = !current_options.problem_path;
   include_path            = !current_options.include_path;
   problem_files           = !current_options.problem_files;
   eprover_path            = !current_options.eprover_path;
-  
+
 (*----General--------*)
   fof                     = false;
   ground_splitting        = Split_Input;
@@ -2076,15 +2088,15 @@ let option_3 () = {
   time_out_virtual        = -1.;
   schedule                = true;
 
-  large_theory_mode       = true; 
-  prolific_symb_bound     = 500; 
+  large_theory_mode       = true;
+  prolific_symb_bound     = 500;
   lt_threshold            = 2000;
 
 
 (*----Sat Mode--------*)
   sat_mode                = false;
   sat_gr_def              = false;
-  sat_finite_models       = false; 
+  sat_finite_models       = false;
 
 (*----Instantiation------*)
   instantiation_flag             = true;
@@ -2092,7 +2104,7 @@ let option_3 () = {
 
   inst_solver_per_active         = 750;
   inst_solver_per_clauses        = 5000;
-  inst_pass_queue1               = [Cl_Num_of_Symb false; Cl_Conj_Dist false; Cl_Has_Conj_Symb true]; 
+  inst_pass_queue1               = [Cl_Num_of_Symb false; Cl_Conj_Dist false; Cl_Has_Conj_Symb true];
   inst_pass_queue2               = [Cl_Age true; Cl_Num_of_Symb false];
 
 (*"[+age;-num_symb]";*)
@@ -2112,18 +2124,18 @@ let option_3 () = {
 (*----Resolution---------*)
   resolution_flag                = true;
   res_lit_sel                    = Res_Neg_Sel_Min;
-  res_to_prop_solver             = Res_to_Solver_Active;      
+  res_to_prop_solver             = Res_to_Solver_Active;
   res_prop_simpl_new             = false;
   res_prop_simpl_given           = true;
   (*switch between simpl and priority queues*)
-  (* TO DO  Queues options like in Inst. *)   
+  (* TO DO  Queues options like in Inst. *)
   res_passive_queue_flag         = true;
-  res_pass_queue1                =  [Cl_Num_of_Symb false;Cl_Has_Conj_Symb true; ]; 
+  res_pass_queue1                =  [Cl_Num_of_Symb false;Cl_Has_Conj_Symb true; ];
   res_pass_queue2                = [Cl_Age true; Cl_Num_of_Symb false];
   res_pass_queue1_mult           = 15;
   res_pass_queue2_mult           = 5;
 
-  
+
   res_forward_subs               = Subs_Full;
   res_backward_subs              = Subs_Subset;
   res_forward_subs_resolution    = true;
@@ -2143,15 +2155,15 @@ let option_3 () = {
   comb_inst_mult                 = 1000;
 }
 
-let named_option_3 () = 
+let named_option_3 () =
   {options_name = "Option_3: Min Selections"; options = (option_3())}
 
-let option_3_1 () = {(input_options) with 
+let option_3_1 () = {(input_options) with
 		  inst_lit_sel                   = [Lit_Sign false; Lit_Num_of_Symb true];
 		  res_lit_sel                    = Res_Neg_Sel_Min;
 		}
 
-let named_option_3_1 () = 
+let named_option_3_1 () =
  {options_name = "Option_3_1: Min Selections"; options = (option_3_1())}
 
 
@@ -2159,15 +2171,15 @@ let named_option_3_1 () =
 (*--Option 4----------------*)
 
 let option_4 () = {
-  
-  out_options   = !current_options.out_options;   
-  
+
+  out_options   = !current_options.out_options;
+
 (*----Input-------*)
-  problem_path            = !current_options.problem_path; 
+  problem_path            = !current_options.problem_path;
   include_path            = !current_options.include_path;
   problem_files           = !current_options.problem_files;
   eprover_path            = !current_options.eprover_path;
-  
+
 (*----General--------*)
   fof                     = false;
   ground_splitting        = Split_Input;
@@ -2177,15 +2189,15 @@ let option_4 () = {
   time_out_virtual        = -1.;
   schedule                = true;
 
-  large_theory_mode       = true; 
-  prolific_symb_bound     = 500; 
+  large_theory_mode       = true;
+  prolific_symb_bound     = 500;
   lt_threshold            = 2000;
 
 
 (*----Sat Mode--------*)
   sat_mode                = false;
   sat_gr_def              = false;
-  sat_finite_models       = false; 
+  sat_finite_models       = false;
 
 (*----Instantiation------*)
   instantiation_flag             = true;
@@ -2193,7 +2205,7 @@ let option_4 () = {
 
   inst_solver_per_active         = 750;
   inst_solver_per_clauses        = 5000;
-  inst_pass_queue1               = [Cl_Has_Conj_Symb true; Cl_Num_of_Symb false ]; 
+  inst_pass_queue1               = [Cl_Has_Conj_Symb true; Cl_Num_of_Symb false ];
   inst_pass_queue2               = [Cl_Age true;];
 
 (*"[+age;-num_symb]";*)
@@ -2213,18 +2225,18 @@ let option_4 () = {
 (*----Resolution---------*)
   resolution_flag                = true;
   res_lit_sel                    = Res_Adaptive;
-  res_to_prop_solver             = Res_to_Solver_Active;      
+  res_to_prop_solver             = Res_to_Solver_Active;
   res_prop_simpl_new             = false;
   res_prop_simpl_given           = true;
   (*switch between simpl and priority queues*)
-  (* TO DO  Queues options like in Inst. *)   
+  (* TO DO  Queues options like in Inst. *)
   res_passive_queue_flag         = true;
-  res_pass_queue1                =  [Cl_Has_Conj_Symb true; ]; 
+  res_pass_queue1                =  [Cl_Has_Conj_Symb true; ];
   res_pass_queue2                = [Cl_Age true; Cl_Num_of_Symb false];
   res_pass_queue1_mult           = 15;
   res_pass_queue2_mult           = 10;
 
-  
+
   res_forward_subs               = Subs_Full;
   res_backward_subs              = Subs_Subset;
   res_forward_subs_resolution    = false;
@@ -2244,43 +2256,43 @@ let option_4 () = {
   comb_inst_mult                 = 1000;
 }
 
-let named_option_4 () = 
+let named_option_4 () =
   {options_name = "Option_4: Selections"; options = (option_4())}
 
 
-let option_4_1 () = {(input_options) with 
+let option_4_1 () = {(input_options) with
 		  inst_lit_sel                   = [Lit_Sign true; Lit_Num_of_Var false; Lit_Num_of_Symb false];
-		  res_lit_sel                    = Res_Adaptive; 
+		  res_lit_sel                    = Res_Adaptive;
 		}
 
-let named_option_4_1 () = 
+let named_option_4_1 () =
  {options_name = "Option_4_1: Selections"; options = (option_4_1())}
 
 
 
 
 (*------Finite Models--------------------------------------*)
-let named_opt_sat_mode_off named_opt = 
+let named_opt_sat_mode_off named_opt =
    {options_name = named_opt.options_name^" sat_mode off";
-    options = { named_opt.options with 
+    options = { named_opt.options with
 		sat_mode = false; sat_finite_models = false; }}
 
-let named_opt_sat_mode_on named_opt = 
+let named_opt_sat_mode_on named_opt =
    {options_name = named_opt.options_name^" sat_mode on";
     options = { named_opt.options with sat_mode = true; sat_finite_models = true; }}
 
 
 let option_finite_models () = {
 
- out_options   = !current_options.out_options;   
-  
+ out_options   = !current_options.out_options;
+
 (*----Input-------*)
-  problem_path            = !current_options.problem_path; 
+  problem_path            = !current_options.problem_path;
   include_path            = !current_options.include_path;
   problem_files           = !current_options.problem_files;
   eprover_path            = !current_options.eprover_path;
- 
-  
+
+
 (*----General--------*)
   fof                     = true;
   ground_splitting        = Split_Input;
@@ -2290,35 +2302,35 @@ let option_finite_models () = {
   time_out_virtual        = -1.;
   schedule                = false;
 
-  large_theory_mode       = false; 
-  prolific_symb_bound     = 500; 
+  large_theory_mode       = false;
+  prolific_symb_bound     = 500;
   lt_threshold            = 2000;
 
 (*----Sat Mode-----*)
   sat_mode                = true;
   sat_gr_def              = false;
   sat_finite_models       = true;
- 
+
 
 (*----Instantiation------*)
   instantiation_flag             = true;
 
 
-  inst_lit_sel                   = [Lit_Sign false; Lit_Ground true;  
+  inst_lit_sel                   = [Lit_Sign false; Lit_Ground true;
 				    Lit_Num_of_Var false; Lit_Num_of_Symb false];
 (*
- inst_lit_sel                   = [Lit_Sign true;   
+ inst_lit_sel                   = [Lit_Sign true;
 				    Lit_Num_of_Var false; Lit_Num_of_Symb false];
 *)
 (*
- inst_lit_sel                   = [ Lit_Ground true; Lit_Sign false; 
+ inst_lit_sel                   = [ Lit_Ground true; Lit_Sign false;
 				    Lit_Num_of_Var true; Lit_Num_of_Symb false];
 *)
 
   inst_solver_per_active         = 750;
   inst_solver_per_clauses        = 5000;
 
-  inst_pass_queue1               = [Cl_Num_of_Var false;Cl_Num_of_Symb false]; 
+  inst_pass_queue1               = [Cl_Num_of_Var false;Cl_Num_of_Symb false];
   inst_pass_queue2               = [Cl_Age true; Cl_Num_of_Symb false];
 
 (*"[+age;-num_symb]";*)
@@ -2341,14 +2353,14 @@ let option_finite_models () = {
 (*---always resolution_flag false-------------------*)
   resolution_flag                = false;
   res_lit_sel                    = Res_Adaptive;
-  res_to_prop_solver             = Res_to_Solver_Active;      
+  res_to_prop_solver             = Res_to_Solver_Active;
   res_prop_simpl_new             = false;
   res_prop_simpl_given           = true;
   (*switch between simpl and priority queues*)
-  (* TO DO  Queues options like in Inst. *)   
+  (* TO DO  Queues options like in Inst. *)
   res_passive_queue_flag         = true;
   res_pass_queue1                =  [Cl_Conj_Dist false; Cl_Has_Conj_Symb true;
-				    Cl_Num_of_Symb false]; 
+				    Cl_Num_of_Symb false];
   res_pass_queue2                = [Cl_Age true; Cl_Num_of_Symb false];
   res_pass_queue1_mult           = 15;
   res_pass_queue2_mult           = 5;
@@ -2373,21 +2385,21 @@ let option_finite_models () = {
   comb_inst_mult                 = 1000;
 }
 
-let named_option_finite_models () = 
+let named_option_finite_models () =
  {options_name = "Option: Finite Models"; options = (option_finite_models())}
 
 (*------------------------------------*)
 let option_epr_non_horn () = {
-(*------------------------------------*) 
+(*------------------------------------*)
 
-  out_options   = !current_options.out_options;   
-  
+  out_options   = !current_options.out_options;
+
 (*----Input-------*)
-  problem_path            = !current_options.problem_path; 
+  problem_path            = !current_options.problem_path;
   include_path            = !current_options.include_path;
   problem_files           = !current_options.problem_files;
   eprover_path            = !current_options.eprover_path;
-  
+
 (*----General--------*)
   fof                     = false;
   ground_splitting        = Split_Input;
@@ -2397,15 +2409,15 @@ let option_epr_non_horn () = {
   time_out_virtual        = -1.;
   schedule                = true;
 
-  large_theory_mode       = true; 
-  prolific_symb_bound     = 500; 
+  large_theory_mode       = true;
+  prolific_symb_bound     = 500;
   lt_threshold            = 2000;
 
 
 (*----Sat Mode--------*)
   sat_mode                = false;
   sat_gr_def              = false;
-  sat_finite_models       = false; 
+  sat_finite_models       = false;
 
 (*----Instantiation------*)
   instantiation_flag             = true;
@@ -2416,7 +2428,7 @@ let option_epr_non_horn () = {
   inst_pass_queue1               = [Cl_Conj_Dist false;
                                     Cl_Has_Conj_Symb true;
 	(*			    Cl_Ground true;*)
-                                    Cl_Num_of_Var false]; 
+                                    Cl_Num_of_Var false];
   inst_pass_queue2               = [Cl_Age true; Cl_Num_of_Symb false];
 
 (*"[+age;-num_symb]";*)
@@ -2437,18 +2449,18 @@ let option_epr_non_horn () = {
   resolution_flag                = false;
 (*------------------------------------------*)
   res_lit_sel                    = Res_Adaptive;
-  res_to_prop_solver             = Res_to_Solver_Active;      
+  res_to_prop_solver             = Res_to_Solver_Active;
   res_prop_simpl_new             = false;
   res_prop_simpl_given           = false;
   (*switch between simpl and priority queues*)
-  (* TO DO  Queues options like in Inst. *)   
+  (* TO DO  Queues options like in Inst. *)
   res_passive_queue_flag         = true;
-  res_pass_queue1                =  [Cl_Has_Conj_Symb true; ]; 
+  res_pass_queue1                =  [Cl_Has_Conj_Symb true; ];
   res_pass_queue2                = [Cl_Age true; Cl_Num_of_Symb false];
   res_pass_queue1_mult           = 15;
   res_pass_queue2_mult           = 10;
 
-  
+
   res_forward_subs               = Subs_Subset;
   res_backward_subs              = Subs_Subset;
   res_forward_subs_resolution    = false;
@@ -2470,7 +2482,7 @@ let option_epr_non_horn () = {
 }
 
 
-let named_option_epr_non_horn () = 
+let named_option_epr_non_horn () =
   {options_name = "Option_epr_non_horn"; options = (option_epr_non_horn())}
 
 
@@ -2478,15 +2490,15 @@ let named_option_epr_non_horn () =
 
 
 let option_epr_horn () = {
-  
-  out_options   = !current_options.out_options;   
-  
+
+  out_options   = !current_options.out_options;
+
 (*----Input-------*)
-  problem_path            = !current_options.problem_path; 
+  problem_path            = !current_options.problem_path;
   include_path            = !current_options.include_path;
   problem_files           = !current_options.problem_files;
   eprover_path            = !current_options.eprover_path;
-  
+
 (*----General--------*)
   fof                     = false;
   ground_splitting        = Split_Input;
@@ -2496,15 +2508,15 @@ let option_epr_horn () = {
   time_out_virtual        = -1.;
   schedule                = true;
 
-  large_theory_mode       = true; 
-  prolific_symb_bound     = 500; 
+  large_theory_mode       = true;
+  prolific_symb_bound     = 500;
   lt_threshold            = 2000;
 
 
 (*----Sat Mode--------*)
   sat_mode                = false;
   sat_gr_def              = false;
-  sat_finite_models       = false; 
+  sat_finite_models       = false;
 
 (*----------------------Instantiation------*)
   instantiation_flag             = false;
@@ -2517,7 +2529,7 @@ let option_epr_horn () = {
   inst_pass_queue1               = [Cl_Conj_Dist false;
                                     Cl_Has_Conj_Symb true;
 				    Cl_Ground true;
-                                    Cl_Num_of_Var false]; 
+                                    Cl_Num_of_Var false];
   inst_pass_queue2               = [Cl_Age true; Cl_Num_of_Symb false];
 
 (*"[+age;-num_symb]";*)
@@ -2538,20 +2550,20 @@ let option_epr_horn () = {
   resolution_flag                = true;
 (*------------------------------------------*)
   res_lit_sel                    = Res_Neg_Sel_Min;
-  res_to_prop_solver             = Res_to_Solver_Active;      
+  res_to_prop_solver             = Res_to_Solver_Active;
   res_prop_simpl_new             = false;
   res_prop_simpl_given           = true;
   (*switch between simpl and priority queues*)
-  (* TO DO  Queues options like in Inst. *)   
+  (* TO DO  Queues options like in Inst. *)
 (*-----------------------------*)
   res_passive_queue_flag         = false;
 (*-----------------------------*)
-  res_pass_queue1                =  [Cl_Has_Conj_Symb true; ]; 
+  res_pass_queue1                =  [Cl_Has_Conj_Symb true; ];
   res_pass_queue2                = [Cl_Age true; Cl_Num_of_Symb false];
   res_pass_queue1_mult           = 15;
   res_pass_queue2_mult           = 10;
 
-  
+
   res_forward_subs               = Subs_Subset;
   res_backward_subs              = Subs_Subset;
   res_forward_subs_resolution    = false;
@@ -2574,5 +2586,5 @@ let option_epr_horn () = {
 }
 
 
-let named_option_epr_horn () = 
+let named_option_epr_horn () =
   {options_name = "Option_epr_horn"; options = (option_epr_horn())}

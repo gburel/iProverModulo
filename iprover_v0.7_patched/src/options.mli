@@ -59,7 +59,7 @@ type res_to_prop_solver_type =
 type normalization_type =
    [`No | `Pipe | `Interpreted  | `Dtree | `Plugin | `Size_based]
 
-type dedukti_output = Stdout | Prefix of string
+type dedukti_output = Stdout | Prefix of string | Tempfile of string
 
 (*-----All options-----*)
 
