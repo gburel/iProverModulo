@@ -15,7 +15,7 @@ let symbol_name s =
   if Symbol.equal s Symbol.symb_equality then "builtin_eq" else Symbol.get_name s
 
 let sig_id s = let open Options in match !current_options.dedukti_prefix with
-      Stdout -> Qid("iprover_sig", s)
+      Stdout | Tempfile _ -> Qid("iprover_sig", s)
     | Prefix p -> Qid(p^"_sig", s)
 
 

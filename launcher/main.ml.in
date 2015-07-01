@@ -8,18 +8,18 @@ let dedukti_name f = Id_encoding.encode_id (Filename.chop_extension f)
 let cat filename =
   let chan = open_in filename in
   let size = 4 * 1024 in
-  let buffer = String.create size in
+  let buffer = Bytes.create size in
   let eof = ref false in
-    while not !eof do
-      let len = input chan buffer 0 size in
-	if len > 0
-	then print_string (String.sub buffer 0 len)
-	else eof := true
-    done;
-    close_in chan
+  while not !eof do
+    let len = input chan buffer 0 size in
+    if len > 0
+    then print_string (Bytes.sub buffer 0 len)
+    else eof := true
+  done;
+  close_in chan
 
 
-let_ =
+let _ =
   if Array.length Sys.argv < 3 then
     begin
       print_endline ("Usage: " ^ Sys.argv.(0) ^ " file_name time_limit [other args]");
@@ -30,9 +30,9 @@ let_ =
   let include_path =
     ref (Filename.dirname file_name) in
   let strategies = if Array.length Sys.argv >= 5 && Sys.argv.(3) = "--strategies"
-    then Sys.argv.(4)
-    else
-      "Equiv(ClausalAll);ClausalAll" in
+		   then Sys.argv.(4)
+		   else
+		     "Equiv(ClausalAll);ClausalAll" in
   let strat_list = Str.(split (regexp ";") strategies) in
   let time_limit = int_of_string Sys.argv.(2) in
   let temp_input = Filename.temp_file "iprover_modulo_" ".p" in
@@ -40,11 +40,17 @@ let_ =
   let dedukti_proof = Filename.temp_file "dedukti_proof_" ".dk" in
   let last_szs = Filename.temp_file "iprover_modulo_szs" "" in
   let process_strategy time_limit s =
-    let command = Printf.sprintf " %s-H '% s ' --include_path %s -P %s %s > %s" autotheo
-		    s !include_path autotheo_proof file_name
-				      temp_inputin
-let autotheo_res =
-  Sys.command command in
+    let command = Printf.sprintf
+		    "%s -H '%s' --include_path %s -P %s %s > %s"
+		    autotheo
+		    s
+		    !include_path
+		    autotheo_proof
+		    file_name
+		    temp_input
+    in
+    let autotheo_res =
+      Sys.command command in
     let autotheo_res =
       if autotheo_res = 2 then
 	try
@@ -101,13 +107,15 @@ let autotheo_res =
 	print_endline "% SZS output start CNFRefutation";
 	print_endline "% Axioms transformation by autotheo";
 	cat autotheo_proof;
+	print_endline "\n%-------------------------------------------------------------";
 	print_endline "% Dedukti proof by iprover";
-	cat autotheo_proof;
+	cat dedukti_proof;
 	print_endline "% SZS output end CNFRefutation";
 	Sys.remove temp_output;
 	Sys.remove autotheo_proof;
 	Sys.remove dedukti_proof;
 	Sys.remove temp_input;
+	Sys.remove last_szs;
 	exit 0
       end
     else
@@ -115,12 +123,12 @@ let autotheo_res =
 	Sys.command ("grep 'SZS' " ^ temp_output ^ " > " ^ last_szs);
 	Sys.remove temp_output
       end
-    in
-    List.iter (process_strategy (time_limit / List.length strat_list)) strat_list;
-    Sys.remove temp_input;
-    Sys.remove autotheo_proof;
-    Sys.remove dedukti_proof;
-    print_endline "Last SZS status :";
-    cat last_szs;
-    Sys.remove last_szs;
-    exit 1
+  in
+  List.iter (process_strategy (time_limit / List.length strat_list)) strat_list;
+  Sys.remove temp_input;
+  Sys.remove autotheo_proof;
+  Sys.remove dedukti_proof;
+  print_endline "Last SZS status :";
+  cat last_szs;
+  Sys.remove last_szs;
+  exit 1
