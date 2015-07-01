@@ -39,12 +39,6 @@ let neg f = match f with
     UnaryFormula(Negation, g) -> g
   | _ -> UnaryFormula(Negation, f)
 
-let pp_rule ch = function
-    P(l,r) ->
-    output_string ch (formula_to_string (BinaryFormula(Or,Atom l,r)))
-  | N(l,r) ->
-    output_string ch (formula_to_string (BinaryFormula(Or,neg (Atom l),r)))
-
 
 let bor f g =
 match f with
@@ -119,6 +113,26 @@ let rec free_vars acc = function
     free_vars acc l
   | TheoryTerm(RealNumber (_, _)|PositiveInteger _|False|True) -> acc
 
+let rec free_vars_formula = function
+     Atom a -> free_vars VS.empty a
+   | QuantifiedFormula(_, v, f) ->
+      let fvars = free_vars_formula f in
+      List.fold_left (fun s v -> VS.remove v s) fvars v
+   | UnaryFormula(_,f) -> free_vars_formula f
+   |BinaryFormula(_,f1,f2) ->
+     VS.union (free_vars_formula f1) (free_vars_formula f2)
+
+
+let pp_rule ch r =
+  let formula = match r with
+      P(l,r) -> BinaryFormula(Or,Atom l,r)
+    | N(l,r) -> BinaryFormula(Or,neg (Atom l),r)
+  in
+  let vars = free_vars_formula formula in
+  let qf = QuantifiedFormula(ForAll, VS.elements vars, formula) in
+  output_string ch (formula_to_string qf)
+
+
 let rec subst_var vs ts var =
   match vs, ts with
   | [], [] -> var
@@ -167,7 +181,7 @@ let clausify_rules_into_te rs =
 	  Hashtbl.add id_to_atom_map id (Atom l, vars);
 	  Printf.fprintf
 	    !Globals.proof_output
-	    "fof(def_%s, axiom, ![%s] %s(%s) <=> %s, inference(definition,[],[]))\n"
+	    "fof(def_%s, axiom, ![%s]: %s(%s) <=> %s, inference(definition,[],[]))\n"
 	    id
             (var_list_to_string vars)
 	    id
@@ -178,10 +192,12 @@ let clausify_rules_into_te rs =
       in
       let name = fresh_formula_name "to_be_clausified" in
       let new_form = BinaryFormula(Or,Atom(UserTerm(Fun(id, vars))),r) in
+      let all_vars = free_vars_formula new_form in
       Printf.fprintf
 	!Globals.proof_output
-	"fof(%s, plain, %s, inference(fold_definition,[status(thm)],[%s, def_%s]))\n"
+	"fof(%s, plain, ![%s]: %s, inference(fold_definition,[status(thm)],[%s, def_%s]))\n"
 	name
+	(variables_to_string (VS.elements all_vars))
 	(formula_to_string new_form)
 	n
 	id;
@@ -197,7 +213,7 @@ let clausify_rules_into_te rs =
 	  Hashtbl.add id_to_atom_map id (neg (Atom l), vars);
 	  Printf.fprintf
 	    !Globals.proof_output
-	    "fof(def_%s, axiom, ![%s] %s(%s) <=> ~%s, inference(definition,[],[]))\n"
+	    "fof(def_%s, axiom, ![%s]: %s(%s) <=> ~%s, inference(definition,[],[]))\n"
 	    id
             (var_list_to_string vars)
 	    id
@@ -208,10 +224,12 @@ let clausify_rules_into_te rs =
       in
       let name = fresh_formula_name "to_be_clausified" in
       let new_form = BinaryFormula(Or,Atom(UserTerm(Fun(id, vars))),r) in
+      let all_vars = free_vars_formula new_form in
       Printf.fprintf
 	!Globals.proof_output
-	"fof(%s, plain, %s, inference(fold_definition,[status(thm)],[%s, def_%s]))\n"
+	"fof(%s, plain, ![%s]: %s, inference(fold_definition,[status(thm)],[%s, def_%s]))\n"
 	name
+	(variables_to_string (VS.elements all_vars))
 	(formula_to_string new_form)
 	n
 	id;

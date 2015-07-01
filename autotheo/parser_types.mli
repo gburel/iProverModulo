@@ -90,6 +90,8 @@ val init_lexbuf : Lexing.lexbuf -> unit
 (* to_string functions*)
 val var_list_to_string : parsed_term list -> string
 
+val variables_to_string : variables -> string
+
 val parsing_type_to_string : parsing_type -> string
 
 val formula_to_string :  formula -> string
