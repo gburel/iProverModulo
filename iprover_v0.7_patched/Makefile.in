@@ -194,7 +194,7 @@ obj/%.cmo : src/%.ml
 
 .PHONY: clean depend archive
 clean:
-	rm $(IPROVER_NAME) src/$(LEXER).ml src/$(PARSER).ml obj/*.cmo obj/*.cmx obj/*.cmi obj/*.o
+	-rm $(IPROVER_NAME) src/$(LEXER).ml src/$(PARSER).ml obj/*.cmo obj/*.cmx obj/*.cmi obj/*.o
 
 
 #archive:

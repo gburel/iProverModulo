@@ -24,4 +24,4 @@ install:
 	$(INSTALL) $(TARGET).sh $(bindir)
 
 clean: 
-	rm *.cmx $(TARGET)
+	-rm *.cmx $(TARGET)
