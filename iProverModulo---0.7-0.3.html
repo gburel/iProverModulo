@@ -1,0 +1,133 @@
+<HR><!------------------------------------------------------------------------>
+<H2>iProverModulo 0.7-0.3</H2>
+G. Burel<BR>
+ENSIIE/Cedric, France<BR>
+
+<H3>Architecture</H3>
+
+iProverModulo [Bur11] is an extension of iProver [Kor08] to integrate Polarized
+resolution modulo [Dow10]. 
+Polarized resolution modulo consists in presenting the theory in which the 
+problem has to be solved by means of polarized rewriting rules instead of
+axioms. 
+It can also be seen as a combination of the set-of-support strategy and 
+selection of literals.
+<P>
+iProverModulo consists of two tools: First, autotheo is a theory
+preprocessor that converts the axioms of the input into rewriting
+rules that can be used by Polarized resolution modulo. Second, these
+rewriting rules are handled by a
+patched version of iProver 0.7 which integrates Polarized resolution modulo.
+The integration of polarized resolution modulo in iProver only affects
+its ordered resolution calculus, so that the instantiation calculus is
+untouched.
+<P>
+iProverModulo 0.7-0.3 outputs a proof that is made of two parts:
+First, autotheo print a derivation of the transformation of the axioms
+into rewriting rules. This derivation is in TSTP format and includes
+the CNF conversions obtained from E. Second, the modified version of
+iProver outputs a Dedukti proof from this rewriting rules and the non-axiom
+formulas, following the ideas of [Bur13].
+
+
+  
+<H3>Strategies</H3>
+
+Autotheo is first run to transform the formulas of the
+problem whose role is "axiom" into polarized rewriting rules. 
+Autotheo offers a set of strategies to that purpose.
+For the competition, the Equiv and the ClausalAll strategies 
+will be used. 
+The former strategy orients formulas intuitively depending of their
+shape. It may be incomplete, so that the prover may give up in certain cases. 
+However, it shows interesting results on some problems. 
+The second strategy should be complete, at least when equality is not 
+involved. 
+The rewriting system for the first strategy is tried for half the time 
+given for the problem, then the prover is restarted with the second strategy 
+if no proof has been found.
+<P>
+The patched version of iProver is run on the remaining formulas
+modulo the rewriting rules produced by autotheo. No scheduling is
+performed. To be compatible with Polarized resolution modulo, literals
+are selected only when they are maximal w.r.t. a KBO ordering, and orphans
+are not eliminated. To take advantage of Polarized resolution modulo,
+the resolution calculus is triggered more often than the instantiation
+calculus, on the contrary to the original iProver.
+<P>
+Normalization of clauses w.r.t. the term rewriting system produced by
+autotheo is performed by transforming these rules into an
+OCaml program, compiling this program, and dynamically linking it with
+the prover.
+
+<H3>Implementation</H3>
+
+iProverModulo is available as a patch to iProver. 
+The most important additions are the plugin-based normalization engine and 
+the handling of polarized rewriting rules.
+iProverModulo is available from
+<PRE>
+  <A HREF="http://www.ensiie.fr/~guillaume.burel/blackandwhite_iProverModulo.html.en">http://www.ensiie.fr/~guillaume.burel/blackandwhite_iProverModulo.html.en</A></PRE>
+Since iProverModulo needs to compile rewriting rules, an OCaml
+compiler is also provided.
+<P>
+Autotheo is available independently from iProverModulo from
+<PRE>
+    <A HREF="http://www.ensiie.fr/~guillaume.burel/blackandwhite_autotheo.html.en">http://www.ensiie.fr/~guillaume.burel/blackandwhite_autotheo.html.en</A></PRE>
+Autotheo uses E to compute clausal normal form of formula. The version
+of E it uses is very slightly modified to make it print the CNF
+derivation even if no proof is found.
+<P>
+Both of autotheo and iProver are written in OCaml.
+
+<H3>Expected Competition Performance</H3>
+
+The core of iProverModulo was untouched since last time it entered the
+competition in CASC-24. However, compilation of rewriting rules failed
+at the time, so a slight improvement is to be expected this year.
+
+The main modification is that iProverModulo now outputs a  proof.
+
+<H3>References</H3>
+<DL>
+<DT> Bur11
+<DD> Burel G. (2011),
+     <STRONG>Experimenting with Deduction Modulo</STRONG>,
+     Bjorner N., Sofronie-Stokkermans V.,
+     <EM>Proceedings of the 23rd International Conference on Automated Deduction</EM>
+(Wroclaw, Poland),
+     162-176,
+     Lecture Notes in Artificial Intelligence 6803,
+  Springer-Verlag.
+<DT> Bur13
+<DD> Burel G. (2013),
+     <STRONG>A Shallow Embedding of Resolution and Superposition Proofs into the lambda-Pi-Calculus Modulo</STRONG>,
+     Blanchette J. C., Urban J.
+     <EM>Third International Workshop on
+Proof Exchange for Theorem Proving </EM>
+(Lake Placid, USA),
+     43-57,
+     ePiC Series 14,
+     EasyChair.
+<DT> Dow10
+<DD> Dowek G. (2010),
+     <STRONG>Polarized Resolution Modulo</STRONG>,
+     Calude C., Sassone V.,
+     <EM>Theoretical Computer Science</EM>,
+     182-196,
+     IFIP Advances in Information and Communication Technology 323,
+     Springer-Verlag.  
+<DT> Kor08
+<DD> Korovin K. (2008),
+     <STRONG>iProver - An Instantiation-Based Theorem Prover for First-order Logic (System Description)</STRONG>,
+     Armando A., Baumgartner P., Dowek G.,
+     <EM>Proceedings of the 4th International Joint Conference on Automated Reasoning</EM>
+(Sydney, Australia),
+     292-298,
+     Lecture Notes in Artificial Intelligence 5195,
+     Springer-Verlag.
+</DL>     
+
+       
+
+<HR><!------------------------------------------------------------------------>
