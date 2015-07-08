@@ -52,7 +52,7 @@ AC_SUBST(EDIR, $EDIR)
 OCAMLOPT_LOCAL="$OCAMLDIR/ocamlopt.opt -I $OCAMLDIR/stdlib -I $OCAMLDIR/otherlibs/unix -I $OCAMLDIR/otherlibs/str -I $OCAMLDIR/otherlibs/dynlink"
 AC_SUBST(OCAMLOPT_LOCAL, $OCAMLOPT_LOCAL)
 
-OCAMLOPT="${runningpath}/ocamlopt.opt -I ${running_path}/../lib/ocaml/"
+OCAMLOPT="${runningpath}/ocamlopt.opt -I ${runningpath}/../lib/ocaml/"
 AC_SUBST(OCAMLOPT, $OCAMLOPT)
 OCAMLC="${OCAMLDIR}/ocamlc -I $OCAMLDIR/stdlib -I $OCAMLDIR/otherlibs/unix -I $OCAMLDIR/otherlibs/str -I $OCAMLDIR/otherlibs/dynlink"
 AC_SUBST(OCAMLC, $OCAMLC)
