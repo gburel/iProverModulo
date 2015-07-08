@@ -2,6 +2,9 @@ OCAMLDIR=@OCAMLDIR@
 EDIR=@EDIR@
 ROOT=@prefix@/bin
 
+TODELINK=eprover ocamlopt.opt autotheo iprover_moduloopt
+DELINK=$(TODELINK:%=$(ROOT)/%.delink)
+
 all:
 	make -C $(OCAMLDIR) world opt opt.opt
 	make -C $(OCAMLDIR) install
@@ -16,11 +19,14 @@ install:
 	make -C autotheo install
 	make -C launcher install
 
-starexec_install:
-	cp /lib/x86_64-linux-gnu/libc.so.6 ${ROOT}/
-	cp /lib/x86_64-linux-gnu/libdl.so.2 ${ROOT}/
-	cp /lib/x86_64-linux-gnu/libm.so.6 ${ROOT}/
-	cp /lib64/ld-linux-x86-64.so.2 ${ROOT}/ld.so
+%.delink: %
+	./delinkify.sh $<
+
+starexec_install: $(DELINK)
+	cp /lib/x86_64-linux-gnu/libc.so.6 $(ROOT)/
+	cp /lib/x86_64-linux-gnu/libdl.so.2 $(ROOT)/
+	cp /lib/x86_64-linux-gnu/libm.so.6 $(ROOT)/
+	cp /lib64/ld-linux-x86-64.so.2 $(ROOT)/ld.so
 
 clean:
 	make -C $(OCAMLDIR) clean
