@@ -1,5 +1,6 @@
 OCAMLDIR=@OCAMLDIR@
 EDIR=@EDIR@
+ROOT=@prefix@/bin
 
 all:
 	make -C $(OCAMLDIR) world opt opt.opt
@@ -14,6 +15,12 @@ install:
 	make -C iprover_v0.7_patched install
 	make -C autotheo install
 	make -C launcher install
+
+starexec_install:
+	cp /lib/x86_64-linux-gnu/libc.so.6 ${ROOT}/
+	cp /lib/x86_64-linux-gnu/libdl.so.2 ${ROOT}/
+	cp /lib/x86_64-linux-gnu/libm.so.6 ${ROOT}/
+	cp /lib64/ld-linux-x86-64.so.2 ${ROOT}/ld.so
 
 clean:
 	make -C $(OCAMLDIR) clean

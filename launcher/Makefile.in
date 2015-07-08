@@ -1,7 +1,7 @@
 prefix= @prefix@
 exec_prefix = @exec_prefix@
 bindir = @bindir@
-OCAMLOPT= @OCAMLOPT_LOCAL@
+OCAMLOPT= @OCAMLOPT_LOCAL@ 
 MKDIR_P=@MKDIR_P@
 INSTALL=@INSTALL@
 TARGET=iprover_modulo_launcher
@@ -22,6 +22,7 @@ install:
 	$(MKDIR_P) $(bindir)
 	$(INSTALL) $(TARGET) $(bindir)
 	$(INSTALL) $(TARGET).sh $(bindir)
+	$(INSTALL) starexec_run_CASC $(bindir)
 
 clean: 
 	-rm *.cmx $(TARGET)

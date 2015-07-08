@@ -1,4 +1,4 @@
-let share_dir = "@prefix@/share/iprovermodulo"
+let share_dir = "@DYNSHAREDIR@"
   
 let ocamlopt = "@OCAMLOPT@"
 

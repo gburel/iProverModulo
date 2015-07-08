@@ -87,7 +87,7 @@ let _ =
 	s = "% FOF problem with conjecture"
       with End_of_file -> false in
     close_in f;
-    let initial_command = iproveropt ^ " --modulo true --schedule false --prep_prop_sim false --res_to_prop_solver none --res_prop_simpl_given false --res_lit_sel kbo_max --large_theory_mode false --res_time_limit 1000 --res_orphan_elimination false --normalization_type plugin --dedukti_out_proof true --dedukti_tempfile " ^ dedukti_proof ^ " --force_thm_status " ^ (if has_conj_fof then "true " else "false ") ^ "--comb_res_mult 1000 --comb_inst_mult 300 --eprover_path " ^ "@DATADIR@/bin/ " in
+    let initial_command = iproveropt ^ " --modulo true --schedule false --prep_prop_sim false --res_to_prop_solver none --res_prop_simpl_given false --res_lit_sel kbo_max --large_theory_mode false --res_time_limit 1000 --res_orphan_elimination false --normalization_type plugin --dedukti_out_proof true --dedukti_tempfile " ^ dedukti_proof ^ " --force_thm_status " ^ (if has_conj_fof then "true " else "false ") ^ "--comb_res_mult 1000 --comb_inst_mult 300 --eprover_path " ^ "@runningpath@ " in
     let command_buffer = Buffer.create 400 in
     Buffer.add_string command_buffer initial_command;
     Buffer.add_string command_buffer ("--time_out_real " ^ string_of_int (time_limit));
