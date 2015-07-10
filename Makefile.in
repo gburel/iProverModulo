@@ -6,9 +6,9 @@ all:
 	make -C $(OCAMLDIR) world opt opt.opt
 	make -C $(OCAMLDIR) install
 	make -C $(EDIR)
-	make -C iprover_v0.7_patched
-	make -C autotheo
-	make -C launcher
+	PATH=@externdir@/bin:$$PATH make -C iprover_v0.7_patched
+	PATH=@externdir@/bin:$$PATH make -C autotheo
+	PATH=@externdir@/bin:$$PATH make -C launcher
 
 install:
 	make -C $(EDIR) install
