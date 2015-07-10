@@ -1,7 +1,5 @@
 #!/bin/sh
 
 export PATH=./:$PATH
-export LD_LIBRARY_PATH=${PWD}
-
-exec ./ld.so ./iprover_modulo_launcher $1 $STAREXEC_CPU_LIMIT
+iprover_modulo_launcher $1 $STAREXEC_CPU_LIMIT
 
