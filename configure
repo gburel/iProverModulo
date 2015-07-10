@@ -2618,7 +2618,7 @@ OCAMLYACC=${OCAMLDIR}/yacc/ocamlyacc
 OCAMLYACC=$OCAMLYACC
 
 
-ocamllib=$DATADIR/lib/ocaml
+ocamllib=$externdir/lib/ocaml
 OCAMLLIB=$ocamllib
 
 

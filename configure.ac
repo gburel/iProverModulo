@@ -61,7 +61,7 @@ AC_SUBST(OCAMLLEX, $OCAMLLEX)
 OCAMLYACC=${OCAMLDIR}/yacc/ocamlyacc
 AC_SUBST(OCAMLYACC, $OCAMLYACC)
 
-ocamllib=$DATADIR/lib/ocaml
+ocamllib=$externdir/lib/ocaml
 AC_SUBST(OCAMLLIB, $ocamllib) 
 
 AC_PROG_INSTALL
