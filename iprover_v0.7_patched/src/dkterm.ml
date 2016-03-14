@@ -11,10 +11,12 @@ type dkterm =
 | DVar of qid
 | DPi of qid * dkterm * dkterm
 | DFun of qid * dkterm * dkterm
+| DUFun of qid * dkterm
 | DApp of dkterm * dkterm
 
 type statement =
 | Declaration of qid * dkterm
+| Defdecl of qid * dkterm
 | Rules of ((qid * dkterm) list * dkterm * dkterm) list
 | Definition of qid * dkterm * dkterm
 | End
@@ -29,6 +31,10 @@ let rec subst v t = function
       DFun(Id w, subst v t ty, te)
   | DFun(i, ty, te) ->
       DFun(i, subst v t ty, subst v t te)
+  | DUFun(Id w, te) as t when v = w ->
+     t
+  | DUFun(i, te) ->
+      DUFun(i, subst v t te)
   | DApp(t1,t2) -> DApp(subst v t t1, subst v t t2)
   | t -> t
 
@@ -36,6 +42,7 @@ let rec bound_var v = function
   | DVar v' -> v = v'
   | DKind | DType -> false
   | DPi(v', t1, t2) | DFun(v', t1, t2) -> bound_var v t1 || (v <> v' && bound_var v t2)
+  | DUFun(v', t2) -> v <> v' && bound_var v t2
   | DApp(t1, t2) -> bound_var v t1 || bound_var v t2
 
 let rec prlist_with_sep sep elem l = match l with
@@ -55,6 +62,7 @@ let surround_curlys p = hov 1 (str "{" ++ p ++ str "}")
 
 let pr_comma () = str "," ++ spc ()
 
+let pr_def () = str "def" ++ spc ()
 
 class virtual base_pp  = object (self)
 
@@ -109,6 +117,9 @@ class external_pp = object (self)
   | DFun (n,t1,t2) ->
     surround (self#pr_qid n ++ pr_colon () ++ self#pr_dkterm t1
 	      ++ spc () ++ self#fun_arr () ++ spc () ++ self#pr_dkterm t2)
+  | DUFun (n,t2) ->
+     surround (self#pr_qid n ++ spc () ++ self#fun_arr () ++ spc ()
+	       ++ self#pr_dkterm t2)
   | DApp (t1,t2) -> surround (self#pr_dkterm t1 ++ spc () ++
 				self#pr_dkterm' t2)
 
@@ -125,7 +136,8 @@ class external_pp = object (self)
 
   method pr_statement = function
   | Declaration (n, t) -> self#pr_binding (n, t) ++ str "."
-  | Definition (n, ty, te) -> surround_curlys (self#pr_qid n) ++ pr_colon () ++ self#pr_dkterm ty ++ spc () ++ str ":="
+  | Defdecl (n, t) -> pr_def () ++ self#pr_binding (n, t) ++ str "."
+  | Definition (n, ty, te) -> pr_def () ++ self#pr_qid n ++ pr_colon () ++ self#pr_dkterm ty  ++ spc () ++  str ":="
     ++ spc() ++ self#pr_dkterm te ++ str "."
   | Rules l -> prlist_with_sep fnl self#pr_rule l  ++ str "."
   | End -> mt ()

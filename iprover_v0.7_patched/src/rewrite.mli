@@ -27,3 +27,5 @@ module Rewrite_options (RC:RewriteCandidate): RewriteM
 module Rewrite_dtree (RC:RewriteCandidate): RewriteM
 
 module Rewrite_size_based (RC:RewriteCandidate): RewriteM
+
+val rewrite : (module RewriteM) ref

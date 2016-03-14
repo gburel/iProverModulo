@@ -530,7 +530,11 @@ let (unif_index_ref : (unif_index_elem DiscrTreeM.index) ref )
     let retrieve_candidates t = DiscrTreeM.unif_candidates !rewrite_index_ref t
   end
 
-  module Rewrite = Rewrite.Rewrite_options(RC)
+  module Rewritep = Rewrite.Rewrite_options(RC)
+
+  let _ = Rewrite.rewrite := (module Rewritep : Rewrite.RewriteM)
+
+  module Rewrite = Rewritep
 
 
 (*-------------------------------------*)
@@ -1369,7 +1373,7 @@ let rec discount_loop_body () =
 	  all_resolutions  given_clause selected_literals;
 (* 	       print_endline " Done";
  	       print_string "\nParamodulations: "; flush stdout; *)
-	       all_superpositions given_clause selected_literals;
+	  all_superpositions given_clause selected_literals;
 	  add_to_unif_index  given_clause  selected_literals;
 	  Clause.set_bool_param true Clause.in_active  given_clause;
 	  incr_int_stat 1 res_num_in_active;

@@ -8,10 +8,12 @@ type dkterm =
 | DVar of qid
 | DPi of qid * dkterm * dkterm
 | DFun of qid * dkterm * dkterm
+| DUFun of qid * dkterm
 | DApp of dkterm * dkterm
 
 type statement =
 | Declaration of qid * dkterm
+| Defdecl of qid * dkterm
 | Rules of ((qid * dkterm) list * dkterm * dkterm) list
 | Definition of qid * dkterm * dkterm
 | End
