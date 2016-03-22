@@ -28,7 +28,6 @@ let term_db_ref = Parsed_input_to_db.term_db_ref
 
 let apply_subst_and_normalize rl nv term_db_ref mgu bt =
   let t = SubstBound.apply_bsubst_bterm' rl nv term_db_ref mgu bt in
-  (* will work only if plugin has been initialized with the rewriting rules *)
   let module M = (val !(Rewrite.rewrite) : Rewrite.RewriteM)
 	in M.normalize t
 

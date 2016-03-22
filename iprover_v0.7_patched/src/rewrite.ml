@@ -480,11 +480,27 @@ struct
 end
 
 
-open Options
-module Rewrite_options =
-  (val (
-    let module AddStat (M : RewriteM) = struct
-      type term = M.term
+let rewrite = ref (module Rewrite_no : RewriteM)
+let rewrite_nostat = ref !rewrite
+
+let set_from_options (module RC : RewriteCandidate) =
+  let open Options in
+  Printf.printf "Setting rewrite.\n";
+  rewrite := match !current_options.normalization_type with
+      | `Pipe -> (module Rewrite_pipe : RewriteM)
+      | `Interpreted -> (module Rewrite_int : RewriteM)
+      | `Plugin -> (module Rewrite_plugin : RewriteM)
+      | `Dtree -> (module Rewrite_dtree(RC) : RewriteM)
+      | `Size_based ->  (module Rewrite_size_based(RC) : RewriteM)
+      | `No -> (module Rewrite_no : RewriteM)
+
+let add_stats () =
+  Printf.printf "Adding stats.\n";
+  rewrite_nostat := !rewrite;
+  rewrite :=
+    let module M = (val !rewrite : RewriteM) in
+    let module A = struct
+      type term =  Term.term
       let add_rule = M.add_rule
       let normalize t =
 	Statistics.incr_int_stat 1 Statistics.normalization_requests;
@@ -494,25 +510,8 @@ module Rewrite_options =
 	t'
       let clean_up = M.clean_up
     end in
-    match !current_options.normalization_type with
-      | `Pipe -> let module M = functor (RC : RewriteCandidate) -> AddStat(Rewrite_pipe)
-	       in
-	       (module M : RewriteType)
-      | `Interpreted -> let module M = functor (RC : RewriteCandidate) -> AddStat(Rewrite_int)
-	       in
-	       (module M : RewriteType)
-      | `Plugin -> let module M = functor (RC : RewriteCandidate) -> AddStat(Rewrite_plugin)
-	       in
-	       (module M : RewriteType)
-      | `Dtree -> let module M = functor (RC : RewriteCandidate) -> AddStat(Rewrite_dtree(RC))
-		  in
-		  (module M : RewriteType)
-      | `Size_based ->  let module M = functor (RC : RewriteCandidate) -> AddStat(Rewrite_size_based(RC))
-		       in
-		       (module M : RewriteType)
-      | `No -> let module M = functor (RC : RewriteCandidate) -> Rewrite_no
-	      in
-	      (module M : RewriteType))
-  : RewriteType)
+    (module A : RewriteM)
 
-let rewrite = ref (module Rewrite_no : RewriteM)
+
+let rem_stats () =
+  rewrite := !rewrite_nostat

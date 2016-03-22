@@ -41,6 +41,7 @@ let out_proof_fun clause =
 
 
 let dedukti_proof_fun clause =
+  Rewrite.rem_stats ();
   let outch_sig, outch_prf, prefix = match !current_options.dedukti_prefix with
       Stdout -> stdout, stdout, "iprover"
     | Tempfile f ->
@@ -530,11 +531,12 @@ let (unif_index_ref : (unif_index_elem DiscrTreeM.index) ref )
     let retrieve_candidates t = DiscrTreeM.unif_candidates !rewrite_index_ref t
   end
 
-  module Rewritep = Rewrite.Rewrite_options(RC)
 
-  let _ = Rewrite.rewrite := (module Rewritep : Rewrite.RewriteM)
+  let _ =
+    Rewrite.set_from_options (module RC : Rewrite.RewriteCandidate);
+    Rewrite.add_stats ()
 
-  module Rewrite = Rewritep
+  module Rewrite = (val !Rewrite.rewrite : Rewrite.RewriteM)
 
 
 (*-------------------------------------*)
