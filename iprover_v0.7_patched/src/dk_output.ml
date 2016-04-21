@@ -17,7 +17,13 @@ let notdk = DVar (Qid ("FOL","not"))
 (* translation of terms, literals, ... *)
 let symbol_name s =
   if Symbol.equal s Symbol.symb_equality then "builtin_eq"
-  else Symbol.get_name s
+  else let name = Symbol.get_name s in
+       (* dedukti reserved keywords *)
+       match name with
+       | "def" -> "iprover_def"
+       | "thm" -> "iprover_thm"
+       | _ -> name
+	  
 
 let sig_id s = let open Options in match !current_options.dedukti_prefix with
       Stdout | Tempfile _ -> Qid("iprover_sig", s)
