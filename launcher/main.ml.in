@@ -20,6 +20,11 @@ let cat filename =
 
 
 let _ =
+  if Array.length Sys.argv >= 2 && Sys.argv.(1) = "--version" then
+    begin
+      print_endline "iProverModulo v0.7+0.3";
+      exit 0
+    end;
   if Array.length Sys.argv < 3 then
     begin
       print_endline ("Usage: " ^ Sys.argv.(0) ^ " file_name time_limit [other args]");
