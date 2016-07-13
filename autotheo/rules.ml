@@ -340,6 +340,8 @@ let rec equivalences_to_rules = function
     else [P(t, Atom t)]
   | Atom t -> [P(t, false_atom)]
   | UnaryFormula(Negation,Atom t) -> [N(t, false_atom)]
+  | BinaryFormula(And, l, r) ->
+    equivalences_to_rules l @ equivalences_to_rules r
   | _ -> raise Not_orientable
 
 let rec clause_to_list = function
@@ -451,3 +453,10 @@ let rec orient_formulas h tes =
   | Nil ->
      output_string !Globals.proof_output "# Removing (remaining) axioms.\n";
      []
+  | Why ->
+     let rewrite, other = List.partition
+       (function Formula(_,_,_,_,[Source("rewrite")]) -> true | _ -> false) tes in
+     let oriented = orient_formulas (Equiv ClausalAll) rewrite in
+     let not_oriented = List.map
+       (function Formula(l,n,_,f,a) -> Formula(l,n,UserType(Plain),f,a)) other in
+     oriented @ not_oriented

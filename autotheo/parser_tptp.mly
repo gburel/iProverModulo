@@ -465,7 +465,8 @@ source :
  |ExternalSource  LeftParen  external_source RightParen {foo} 
 /* |external_source {foo} this also works but for uniformity replaced with above */ 
  |Unknown {foo}  
-;
+ |name {$1}
+  ;
 
 dag_source  : 
  | name {foo}

@@ -16,12 +16,14 @@ type heuristic =
 | Presat of heuristic
 | Id
 | Nil
-
+| Why
+    
 let rec string_to_heuristic = function
   | "ClausalAll" -> ClausalAll
   | "Sat" -> Sat
   | "Id" -> Id
   | "Nil" -> Nil
+  | "Why" -> Why
   | s ->
     let n = String.length s in
     if n > 7 && String.sub s 0 7 = "Presat(" && s.[n-1] = ')' then
@@ -34,7 +36,7 @@ let rec string_to_heuristic = function
 let heuristic = ref (Equiv ClausalAll)
 
 let available_heuristics, set_heuristic =
-  "h ::= { Equiv(h) | ClausalAll | Sat | Presat(h) | Id | Nil }",
+  "h ::= { Equiv(h) | ClausalAll | Sat | Presat(h) | Id | Nil | Why}",
   fun s -> heuristic := string_to_heuristic s
 
 let rec output_heuristic ch = function
@@ -43,6 +45,7 @@ let rec output_heuristic ch = function
 | Sat ->  output_string ch "Sat"
 | Presat h -> Printf.fprintf ch "Presat(%a)" output_heuristic h
 | Id ->  output_string ch "Id"
+| Why ->  output_string ch "Why"
 | Nil -> output_string ch "Nil"
 
 let seen_conjecture = ref false
