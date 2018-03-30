@@ -444,8 +444,16 @@ and history_to_dk_aux clause decls =
 
       | Forward_Subsumption_Resolution(main, sides) ->
 	let vars = variables_in_clause clause in
+	let renaming_list = Clause.get_renaming_list clause in
+	let main_lits_renamed =
+	  let rl = ref renaming_list and nv = ref (Var.get_first_var ()) in
+	  List.map (fun lp -> apply_subst_and_normalize rl nv term_db_ref (SubstBound.create ()) (1, lp)) (get_literals main) in
+	let mapcond = TermHtbl.create 20 in
+	List.iter2 (fun lit_renamed lit_before ->
+	  TermHtbl.add mapcond lit_before (literal_to_dkvar lit_renamed))
+	  main_lits_renamed (get_literals main);
 	let res, decls' =
-	  do_side vars decls (TermHtbl.create 13) main sides
+	  do_side ~renaming_list vars decls mapcond main sides
 	in
 	let res = abstract_literals res (get_literals clause) in
 	let rhs = abstract_variables res vars in
