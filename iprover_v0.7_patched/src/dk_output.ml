@@ -23,7 +23,7 @@ let symbol_name s =
        | "def" -> "iprover_def"
        | "thm" -> "iprover_thm"
        | _ -> name
-	  
+
 
 let sig_id s = let open Options in match !current_options.dedukti_prefix with
       Stdout | Tempfile _ -> Qid("iprover_sig", s)
@@ -32,11 +32,13 @@ let sig_id s = let open Options in match !current_options.dedukti_prefix with
 
 let term_db_ref = Parsed_input_to_db.term_db_ref
 
+let normalize t =
+  let module M = (val !(Rewrite.rewrite) : Rewrite.RewriteM)
+  in M.normalize t
+
 let apply_subst_and_normalize rl nv term_db_ref mgu bt =
   let t = SubstBound.apply_bsubst_bterm' rl nv term_db_ref mgu bt in
-  let module M = (val !(Rewrite.rewrite) : Rewrite.RewriteM)
-	in M.normalize t
-
+  normalize t
 
 let rec term_to_dk ?(sig_pref=true) term = match term with
     Var (v,_) -> DVar (Id (Var.to_string v))
@@ -183,7 +185,7 @@ let rec apply_inst clause rl nv free_vars vars i mgu =
 
 let fresh_id =
   let i = ref 0 in
-  fun () -> (incr i; Id ("lit" ^ string_of_int !i))
+  (fun () -> (incr i; Id ("lit" ^ string_of_int !i)))
 
 let add_input_clause c _ = c
 
@@ -204,6 +206,7 @@ let rec apply_literals core literals =
       in
       apply_literals (DApp(core,arg)) q
 
+(* TODO: comment! *)
 let rec apply_literals_cond core lcond fcond literals =
   match literals with
     | [] -> core
@@ -428,11 +431,11 @@ and history_to_dk_aux clause decls =
 	let vars_c = variables_in_clause c in
 	let rl = ref (Clause.get_renaming_list clause)
 	and nv = ref (Var.get_first_var ()) in
-	let l1 = apply_subst_and_normalize rl nv term_db_ref mgu (1, l1) in
-	let l2 = apply_subst_and_normalize rl nv term_db_ref mgu (2, l2) in
 	let lits = List.map
 	  (fun l ->  apply_subst_and_normalize rl nv term_db_ref mgu (1, l))
 	  (get_literals c) in
+	let l1 = apply_subst_and_normalize rl nv term_db_ref mgu (1, l1) in
+	let l2 = normalize l2 in
 	let c_name, decls' = history_to_dk_aux c decls in
 	let ground_c = apply_inst (DVar c_name) rl nv vars vars_c 1 mgu in
 	let res = apply_literals_cond ground_c
@@ -518,6 +521,7 @@ let add_rewrite_rule_to_dk l r =
       (Id (Var.to_string v), iota)::c) [] v in
   dk_rules := Rules([context, term_to_dk ~sig_pref:false l, term_to_dk ~sig_pref:false r])::!dk_rules;
   definable_symbols := match l with Fun(s,_,_) -> s :: !definable_symbols
+  | _ -> failwith (Term.to_string l ^ " does not start with a function symbol")
 
 
 let add_split_to_dk lit lits =
