@@ -39,7 +39,7 @@ OCAMLLIB=@OCAMLLIB@
 #KK replace avbove by this for cpp version of minisat
 #CC        = g++
 
-BASE_NAMES = config two_way_stacks options statistics bit_vec tableArray heap priority_queues tree trie trie_func vectorIndex abstDB abstAssignDB symbol symbolDB var term plugin termDB orderings subst substBound dismatching clause selection clauseAssignDB clauseDB  parsed_input_to_db context parseFiles rewrite pp_control pp dkterm dk_output splitting unif unifIndex discrTree subsetSubsume subsumptionIndex eq_axioms propSolver prop_solver_exchange inference_rules finite_models preprocess large_theories 
+BASE_NAMES = config two_way_stacks options statistics bit_vec tableArray heap priority_queues tree trie trie_func vectorIndex abstDB abstAssignDB symbol symbolDB var term plugin termDB orderings subst substBound dismatching clause selection clauseAssignDB clauseDB  parsed_input_to_db context parseFiles rewrite git_version pp_control pp dkterm dk_output splitting unif unifIndex discrTree subsetSubsume subsumptionIndex eq_axioms propSolver prop_solver_exchange inference_rules finite_models preprocess large_theories
 
 OBJ_BASE_NAMES = $(BEFORE_PARSING) $(LEXER) $(PARSER) $(BASE_NAMES)
 
@@ -190,6 +190,8 @@ obj/%.cmo : src/%.ml
 #obj/%.cmx : src/%.ml 
 #	$(OCAMLOPT) $(OCAMLFLAGS) -o $@ -c $<
 
+src/git_version.ml: ../.git/index
+	git rev-parse HEAD | sed 's/.*/let commit_id = "&"/' > $@
 
 
 .PHONY: clean depend archive
