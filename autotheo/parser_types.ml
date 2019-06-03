@@ -108,6 +108,47 @@ let init_lexbuf lexbuf =
   let open Lexing in
   lexbuf.lex_curr_p <- { lexbuf.lex_curr_p with pos_lnum = 1 }
 
+
+(* signature retrieval *)
+module IdMap = Map.Make(String)
+
+type symbol_type = Prop | Term
+
+let rec signature_term st l = function
+  | TheoryTerm t -> signature_theory_term l t
+  | UserTerm t -> signature_user_term st l t
+  | Var _ -> l
+
+and signature_theory_term l = function
+  | Equality (t1, t2)
+  | NegEquality (t1, t2)
+  | Plus (t1, t2)
+  | Minus (t1, t2) -> signature_term Term (signature_term Term l t1) t2
+  | True
+  | False
+  | PositiveInteger _
+  | RealNumber (_,_) -> l
+  | UnaryMinus t -> signature_term Term l t
+
+and signature_user_term st l = function
+  | Fun (s, a) -> List.fold_left (signature_term Term)
+     (IdMap.add s (List.length a,st) l) a
+
+
+let rec signature_formula l = function
+  | Atom t -> signature_term Prop l t
+  | QuantifiedFormula (_,_,f) | UnaryFormula (_,f) -> signature_formula l f
+  | BinaryFormula (_,f1,f2) -> signature_formula (signature_formula l f1) f2
+
+
+let signature_top_element l = function
+  | Formula (_, _, _, formula,_) -> signature_formula l formula
+  | _ -> l
+
+
+let get_signature tes = List.fold_left signature_top_element IdMap.empty tes
+
+
 (*--------to_string functions-------------*)
 let init_spacing = "   "
 let language_to_string  = function
@@ -407,3 +448,188 @@ let pp_top_element out_ch = function
 
 
 let pp_parsing_type ?(out_ch=stdout) pt = List.iter (pp_top_element out_ch) pt
+
+
+
+(* Output in Zipperposition format *)
+open Format
+
+let list_union l1 l2 =
+  let rec add_without_duplicate  accu l x =
+    match l with
+      [] -> x::accu
+    | y::q ->
+       if x = y then add_without_duplicate accu q x
+       else add_without_duplicate (y::accu) q x
+  in
+  List.fold_left (add_without_duplicate []) l1 l2
+
+let list_difference l1 l2 =
+  List.fold_left (fun l x -> List.filter ((<>) x) l) l1 l2
+
+let rec free_vars_term t = match t with
+    Var v -> [v]
+  | UserTerm(Fun(_,ts)) ->
+     List.fold_left (fun fv t -> list_union fv (free_vars_term t)) [] ts
+  |TheoryTerm tt -> match tt with
+    |Equality (t1,t2)
+    |NegEquality (t1,t2)
+    |Plus (t1,t2)
+    |Minus (t1,t2) -> list_union (free_vars_term t1) (free_vars_term t2)
+    |UnaryMinus t -> free_vars_term t
+    |True
+    |False
+    |PositiveInteger _
+    |RealNumber _ -> []
+
+
+
+
+let rec free_vars f = match f with
+  |Atom a -> free_vars_term a
+  |QuantifiedFormula (_, vs, f) ->
+     let fvs = free_vars f in
+     List.filter (fun x -> not (List.mem x vs)) fvs
+  |UnaryFormula (_, f) -> free_vars f
+  |BinaryFormula (_, f1, f2) ->
+     list_union (free_vars f1) (free_vars f2)
+
+let zf_symbol out_ch =
+  let h = Hashtbl.create 23 in
+  Hashtbl.add h "in" "zf_in";
+  fun s ->
+    let s' = try
+               Hashtbl.find h s
+      with
+        Not_found -> s
+    in
+    fprintf out_ch "%s" s'
+
+let rec zf_term out_ch t = match t with
+    Var v -> fprintf out_ch "%s" v
+  | UserTerm(Fun(f,ts)) ->
+     fprintf out_ch "%a%a" zf_symbol f zf_terms_par ts
+  |TheoryTerm tt -> match tt with
+    |Equality (t1,t2) -> fprintf out_ch "%a = %a" zf_term t1 zf_term t2
+    |NegEquality (t1,t2) -> fprintf out_ch "%a != %a" zf_term t1 zf_term t2
+    |Plus (t1,t2) -> fprintf out_ch "%a + %a" zf_term t1 zf_term t2
+    |Minus (t1,t2)  -> fprintf out_ch "%a - %a" zf_term t1 zf_term t2
+    |UnaryMinus t -> fprintf out_ch "-(%a)" zf_term t
+    |True -> fprintf out_ch "true"
+    |False -> fprintf out_ch "false"
+    |PositiveInteger i -> fprintf out_ch "%s" i
+    |RealNumber (l,r) -> fprintf out_ch "%s.%s" l r
+and zf_terms_par out_ch l = match l with
+    [] -> ()
+  | x::q-> fprintf out_ch " (%a)%a" zf_term x zf_terms_par q
+
+let rec zf_quantifier out_ch = function
+  | Exists -> fprintf out_ch "exists"
+  | ForAll -> fprintf out_ch "forall"
+
+let rec zf_variables out_ch v = match v with
+    [] -> ()
+  | x :: q -> fprintf out_ch " %s%a" x zf_variables q
+
+let rec zf_connective out_ch = function
+  | And -> fprintf out_ch "&&"
+  | Or -> fprintf out_ch "||"
+  | Equivalence -> fprintf out_ch "<=>"
+  | ImplicationLR -> fprintf out_ch "=>"
+  | c -> failwith ("unsupported connective %s" ^ binary_connective_to_string c)
+
+let zf_quantified_vars out_ch (q, l) =
+    match l with
+      [] -> ();
+    | _ -> fprintf out_ch "@[%a%a.@ @]" zf_quantifier q zf_variables l
+
+let rec zf_formula out_ch = function
+  |Atom a -> zf_term out_ch a
+  |QuantifiedFormula (q, vs, f) ->
+     fprintf out_ch "%a(%a)"
+       zf_quantified_vars (q, vs)
+       zf_formula f
+  |UnaryFormula (Negation, f) -> fprintf out_ch "~ (%a)" zf_formula f
+  |BinaryFormula (c, f1, f2) ->
+     fprintf out_ch "(%a) %a (%a)" zf_formula f1 zf_connective c zf_formula f2
+
+let zf_rewrite_rule out_ch name f =
+  fprintf out_ch "@[<2>rewrite[name %s]@ " name;
+  begin
+  match f with
+    Atom _ | UnaryFormula(Negation, _) ->
+      let vars = free_vars f in
+      zf_quantified_vars out_ch (ForAll, vars);
+      zf_formula out_ch f
+  | BinaryFormula(Or, (Atom _ as l), r) ->
+     let vars_left = free_vars l in
+     let vars_right = list_difference (free_vars r) vars_left in
+     fprintf out_ch "%a(~ (%a) => (%a%a))"
+       zf_quantified_vars (ForAll, vars_left)
+       zf_formula l
+       zf_quantified_vars (ForAll, vars_right)
+       zf_formula r
+  | BinaryFormula(Or, UnaryFormula(Negation, (Atom _ as l)), r) ->
+     let vars_left = free_vars l in
+     let vars_right = list_difference (free_vars r) vars_left in
+     fprintf out_ch "%a(%a => (%a%a))"
+       zf_quantified_vars (ForAll, vars_left)
+       zf_formula l
+       zf_quantified_vars (ForAll, vars_right)
+       zf_formula r
+  | _ -> failwith ("Unrecognize rule " ^ formula_to_string f)
+  end;
+  fprintf out_ch ".@]@."
+
+
+let zf_assert out_ch name f =
+  fprintf out_ch "@[<2>assert[name %s]@ @[%a.@]@]@." name zf_formula f
+
+let zf_goal out_ch name f =
+  fprintf out_ch "@[<2>goal[name %s]@ @[%a.@]@]@." name zf_formula f
+
+let zf_top_element out_ch = function
+  |Formula (language, name, formula_type, formula,(formula_annotation_list))->
+     begin
+       match formula_type with
+         UserType (Axiom) ->
+           begin
+             match formula with
+             | Atom(TheoryTerm(True|False)) ->
+                zf_assert out_ch name formula
+             | _ -> zf_rewrite_rule out_ch name formula
+           end
+       | UserType (Conjecture) ->
+           zf_goal out_ch name formula
+       | _ ->
+          zf_assert out_ch name formula
+     end
+  |Include (file_name, formula_selection)->
+     failwith "Not supported"
+  |Annotation(annotation) ->
+     failwith "Not supported"
+  |Comment(comment) ->
+     fprintf out_ch "#%s@." comment
+  |CommentEprover(comment) ->
+     fprintf out_ch "#%s@." comment
+
+
+
+let zf_parsing_type ?(out_ch=Format.std_formatter) pt = List.iter (zf_top_element out_ch) pt
+
+let rec zf_arguments out_ch i =
+  if i > 0 then begin fprintf out_ch "iota ->@ "; zf_arguments out_ch (i-1) end
+
+let zf_term_type out_ch = function
+  | Prop -> fprintf out_ch "prop"
+  | Term -> fprintf out_ch "iota"
+
+let zf_signature_item out_ch s (i,t) =
+  fprintf out_ch "@[val@ %a@ :@ %a@ %a.@]@."
+    zf_symbol s
+    zf_arguments i
+    zf_term_type t
+
+let zf_signature ?(out_ch=Format.std_formatter) s =
+  fprintf out_ch "@[val@ iota :@ type.@]@.";
+  IdMap.iter (zf_signature_item out_ch) s

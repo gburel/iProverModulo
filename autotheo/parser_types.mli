@@ -87,6 +87,12 @@ type parsing_type =  top_element list
 
 val init_lexbuf : Lexing.lexbuf -> unit
 
+module IdMap : Map.S
+
+type symbol_type = Prop | Term
+
+val get_signature : parsing_type -> (int * symbol_type) IdMap.t
+
 (* to_string functions*)
 val var_list_to_string : parsed_term list -> string
 
@@ -97,3 +103,7 @@ val parsing_type_to_string : parsing_type -> string
 val formula_to_string :  formula -> string
 
 val pp_parsing_type : ?out_ch:out_channel -> parsing_type -> unit
+
+val zf_parsing_type : ?out_ch:Format.formatter -> parsing_type -> unit
+
+val zf_signature : ?out_ch:Format.formatter -> (int * symbol_type) IdMap.t -> unit

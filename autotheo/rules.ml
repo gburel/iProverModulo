@@ -47,6 +47,11 @@ match f with
   | Atom((TheoryTerm False)) -> f
   | _ -> BinaryFormula(Or,f,g)
 
+let rec bor_left_atom f g =
+  match f with
+    BinaryFormula(Or,f1,f2) -> bor_left_atom f1 (bor f2 g)
+  | _ -> bor f g
+
 let rec clausal_rule_to_te = function
   | P(l,Atom((TheoryTerm False))) ->
     Formula(CNF,"one_way_clause", UserType(Axiom),
@@ -371,7 +376,7 @@ let clause_all_perm accu te =
       ->
        let name = fresh_formula_name n in
        let new_prev_lits = bor l prev_lits in
-       let new_clause = bor new_prev_lits next_lits in
+       let new_clause = bor_left_atom new_prev_lits next_lits in
        let new_te = one_way_clause_to_te name new_clause in
        Printf.fprintf !Globals.proof_output
 		      "cnf(%s, axiom, %s, inference(literals_permutation, [status(thm)], [%s]))\n"
