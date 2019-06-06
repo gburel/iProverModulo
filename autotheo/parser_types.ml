@@ -531,6 +531,9 @@ let rec zf_variables out_ch v = match v with
     [] -> ()
   | x :: q -> fprintf out_ch " %s%a" x zf_variables q
 
+let rec zf_variables_with_type out_ch v =
+  fprintf out_ch "(%a : iota)" zf_variables v
+
 let rec zf_connective out_ch = function
   | And -> fprintf out_ch "&&"
   | Or -> fprintf out_ch "||"
@@ -541,7 +544,7 @@ let rec zf_connective out_ch = function
 let zf_quantified_vars out_ch (q, l) =
     match l with
       [] -> ();
-    | _ -> fprintf out_ch "@[%a%a.@ @]" zf_quantifier q zf_variables l
+    | _ -> fprintf out_ch "@[%a%a.@ @]" zf_quantifier q zf_variables_with_type l
 
 let rec zf_formula out_ch = function
   |Atom a -> zf_term out_ch a
