@@ -49,6 +49,12 @@ let set_e_path s =
   let s' = if s.[String.length s - 1] <> '/' then s ^ "/" else s in
   Globals.eprover_path := s'
 
+let zipperposition_format = ref false
+
+let anon s =
+  if !zipperposition_format
+  then output_zf s
+  else output_tptp s
 
 let spec = Arg.align
   ["--include_path", Set_string Globals.include_path, "p path for including files";
@@ -64,7 +70,9 @@ let spec = Arg.align
    "-T", Set_int Globals.timeout, "t set timeout to t (default 0 = no timeout)";
    "--timeout", Set_int Globals.timeout, "t set timeout to t (default 0 = no timeout)";
    "-P", String Globals.set_proof_output, "f output the cnf derivations in file f";
-   "--proof-output", String Globals.set_proof_output, "f output the cnf derivations in file f"
+   "--proof-output", String Globals.set_proof_output, "f output the cnf derivations in file f";
+   "-Z", Set zipperposition_format, " output in Zipperposition format instead of TPTP format";
+   "--zf_format", Set zipperposition_format, " output in Zipperposition format instead of TPTP format";
   ]
 
 let usage = "Theory preprocessor\n\nUsage:\n  "
@@ -72,4 +80,4 @@ let usage = "Theory preprocessor\n\nUsage:\n  "
   ^ " [options] file.p\n"
 
 let _ =
-  Arg.parse spec output_zf usage
+  Arg.parse spec anon usage
