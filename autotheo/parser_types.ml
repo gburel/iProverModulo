@@ -588,19 +588,19 @@ let zf_assert out_ch name f =
 let zf_goal out_ch name f =
   fprintf out_ch "@[<2>goal[name %s]@ @[%a.@]@]@." name zf_formula f
 
-let zf_top_element out_ch = function
+let zf_top_element out_ch rewrite = function
   |Formula (language, name, formula_type, formula,(formula_annotation_list))->
      begin
        match formula_type with
          UserType (Axiom) ->
            begin
-             match formula with
-             | Atom(TheoryTerm(True|False)) ->
+             match rewrite, formula with
+             | _, Atom(TheoryTerm(True|False)) | false, _ ->
                 zf_assert out_ch name formula
-             | _ -> zf_rewrite_rule out_ch name formula
+             | true, _ -> zf_rewrite_rule out_ch name formula
            end
        | UserType (Conjecture) ->
-           zf_goal out_ch name formula
+          zf_goal out_ch name formula
        | _ ->
           zf_assert out_ch name formula
      end
@@ -615,7 +615,7 @@ let zf_top_element out_ch = function
 
 
 
-let zf_parsing_type ?(out_ch=Format.std_formatter) pt = List.iter (zf_top_element out_ch) pt
+let zf_parsing_type ?(out_ch=Format.std_formatter) rewrite pt = List.iter (zf_top_element out_ch rewrite) pt
 
 let rec zf_arguments out_ch i =
   if i > 0 then begin fprintf out_ch "iota ->@ "; zf_arguments out_ch (i-1) end

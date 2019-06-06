@@ -104,6 +104,6 @@ val formula_to_string :  formula -> string
 
 val pp_parsing_type : ?out_ch:out_channel -> parsing_type -> unit
 
-val zf_parsing_type : ?out_ch:Format.formatter -> parsing_type -> unit
+val zf_parsing_type : ?out_ch:Format.formatter -> bool -> parsing_type -> unit
 
 val zf_signature : ?out_ch:Format.formatter -> (int * symbol_type) IdMap.t -> unit

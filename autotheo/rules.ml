@@ -391,6 +391,11 @@ let clause_all_perm accu te =
     Formula(_,n,_,f,_) -> aux n accu false_atom false_atom f
   | _ -> accu
 
+
+let axiom_to_hypothesis = function
+  | Formula(t,n,UserType(Axiom),f,l) -> Formula(t,n,UserType(Hypothesis),f,l)
+  | f -> f
+
 let rec orient_formulas h tes =
   Printf.fprintf !Globals.proof_output "# Orienting (remaining) axiom formulas using strategy %a\n"
 		 Globals.output_heuristic h;
@@ -454,7 +459,7 @@ let rec orient_formulas h tes =
   | Id ->
      output_string !Globals.proof_output "# Keeping (remaining) axioms as they are.\n";
      pp_parsing_type ~out_ch:!Globals.proof_output tes;
-     tes
+     List.map axiom_to_hypothesis tes
   | Nil ->
      output_string !Globals.proof_output "# Removing (remaining) axioms.\n";
      []
