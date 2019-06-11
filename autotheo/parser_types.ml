@@ -494,6 +494,12 @@ let rec free_vars f = match f with
   |BinaryFormula (_, f1, f2) ->
      list_union (free_vars f1) (free_vars f2)
 
+
+let quantify_formula f =
+  let vs = free_vars f in
+  QuantifiedFormula(ForAll, vs, f)
+
+
 let zf_symbol out_ch =
   let h = Hashtbl.create 23 in
   Hashtbl.add h "in" "zf_in";
@@ -594,18 +600,22 @@ let zf_goal out_ch name f =
 let zf_top_element out_ch rewrite = function
   |Formula (language, name, formula_type, formula,(formula_annotation_list))->
      begin
+       let qformula = match language with
+           CNF -> quantify_formula formula
+         | _ -> formula
+       in
        match formula_type with
          UserType (Axiom) ->
            begin
              match rewrite, formula with
              | _, Atom(TheoryTerm(True|False)) | false, _ ->
-                zf_assert out_ch name formula
+                zf_assert out_ch name qformula
              | true, _ -> zf_rewrite_rule out_ch name formula
            end
        | UserType (Conjecture) ->
-          zf_goal out_ch name formula
+          zf_goal out_ch name qformula
        | _ ->
-          zf_assert out_ch name formula
+          zf_assert out_ch name qformula
      end
   |Include (file_name, formula_selection)->
      failwith "Not supported"
