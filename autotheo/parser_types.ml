@@ -148,6 +148,55 @@ let signature_top_element l = function
 
 let get_signature tes = List.fold_left signature_top_element IdMap.empty tes
 
+let list_union l1 l2 =
+  let rec add_without_duplicate  accu l x =
+    match l with
+      [] -> x::accu
+    | y::q ->
+       if x = y then add_without_duplicate accu q x
+       else add_without_duplicate (y::accu) q x
+  in
+  List.fold_left (add_without_duplicate []) l1 l2
+
+let list_difference l1 l2 =
+  List.fold_left (fun l x -> List.filter ((<>) x) l) l1 l2
+
+let list_subset l1 l2 =
+  List.for_all (fun a -> List.mem a l2) l1
+
+let rec free_vars_term t = match t with
+    Var v -> [v]
+  | UserTerm(Fun(_,ts)) ->
+     List.fold_left (fun fv t -> list_union fv (free_vars_term t)) [] ts
+  |TheoryTerm tt -> match tt with
+    |Equality (t1,t2)
+    |NegEquality (t1,t2)
+    |Plus (t1,t2)
+    |Minus (t1,t2) -> list_union (free_vars_term t1) (free_vars_term t2)
+    |UnaryMinus t -> free_vars_term t
+    |True
+    |False
+    |PositiveInteger _
+    |RealNumber _ -> []
+
+
+
+
+let rec free_vars f = match f with
+  |Atom a -> free_vars_term a
+  |QuantifiedFormula (_, vs, f) ->
+     let fvs = free_vars f in
+     List.filter (fun x -> not (List.mem x vs)) fvs
+  |UnaryFormula (_, f) -> free_vars f
+  |BinaryFormula (_, f1, f2) ->
+     list_union (free_vars f1) (free_vars f2)
+
+
+let quantify_formula f =
+  let vs = free_vars f in
+  QuantifiedFormula(ForAll, vs, f)
+
+
 
 (*--------to_string functions-------------*)
 let init_spacing = "   "
@@ -315,6 +364,35 @@ let parsing_type_to_string parsing_type =
   list_of_str_to_str list_top_elem_str "\n"
 
 
+(* Orienting equational rules if possible *)
+let orient_equational = function
+  | Formula (CNF, name, UserType(Axiom), Atom(TheoryTerm(Equality(t1, t2))), annot) as te ->
+     let fv1 = free_vars_term t1 in
+     let fv2 = free_vars_term t2 in
+     begin match t1 with
+     | Var x -> if List.mem x fv2 then
+         begin
+           match t2 with
+             Var _ -> Formula (CNF, name, UserType(Hypothesis), Atom(TheoryTerm(Equality(t1, t2))), annot)
+           | _ -> Formula (CNF, name^"_inverted", UserType(Axiom), Atom(TheoryTerm(Equality(t2, t1))), annot)
+         end
+       else
+         Formula (CNF, name, UserType(Hypothesis), Atom(TheoryTerm(Equality(t1, t2))), annot)
+     | _ ->
+        if list_subset fv2 fv1 then
+          te
+        else if list_subset fv1 fv2 then
+          Formula (CNF, name^"_inverted", UserType(Axiom), Atom(TheoryTerm(Equality(t2, t1))), annot)
+        else
+          Formula (CNF, name, UserType(Hypothesis), Atom(TheoryTerm(Equality(t1, t2))), annot)
+     end
+  | te -> te
+
+
+
+(* pretty printing in TPTP format *)
+
+
 let pp_string out_ch s = output_string out_ch s
 
 let pp_nl out_ch () = output_string out_ch "\n"
@@ -447,57 +525,13 @@ let pp_top_element out_ch = function
     pp_nl out_ch ()
 
 
-let pp_parsing_type ?(out_ch=stdout) pt = List.iter (pp_top_element out_ch) pt
+let pp_parsing_type ?(out_ch=stdout) pt = List.iter
+  (fun te -> pp_top_element out_ch (orient_equational te)) pt
 
 
 
 (* Output in Zipperposition format *)
 open Format
-
-let list_union l1 l2 =
-  let rec add_without_duplicate  accu l x =
-    match l with
-      [] -> x::accu
-    | y::q ->
-       if x = y then add_without_duplicate accu q x
-       else add_without_duplicate (y::accu) q x
-  in
-  List.fold_left (add_without_duplicate []) l1 l2
-
-let list_difference l1 l2 =
-  List.fold_left (fun l x -> List.filter ((<>) x) l) l1 l2
-
-let rec free_vars_term t = match t with
-    Var v -> [v]
-  | UserTerm(Fun(_,ts)) ->
-     List.fold_left (fun fv t -> list_union fv (free_vars_term t)) [] ts
-  |TheoryTerm tt -> match tt with
-    |Equality (t1,t2)
-    |NegEquality (t1,t2)
-    |Plus (t1,t2)
-    |Minus (t1,t2) -> list_union (free_vars_term t1) (free_vars_term t2)
-    |UnaryMinus t -> free_vars_term t
-    |True
-    |False
-    |PositiveInteger _
-    |RealNumber _ -> []
-
-
-
-
-let rec free_vars f = match f with
-  |Atom a -> free_vars_term a
-  |QuantifiedFormula (_, vs, f) ->
-     let fvs = free_vars f in
-     List.filter (fun x -> not (List.mem x vs)) fvs
-  |UnaryFormula (_, f) -> free_vars f
-  |BinaryFormula (_, f1, f2) ->
-     list_union (free_vars f1) (free_vars f2)
-
-
-let quantify_formula f =
-  let vs = free_vars f in
-  QuantifiedFormula(ForAll, vs, f)
 
 
 let zf_symbol out_ch =
@@ -658,7 +692,8 @@ let zf_top_element out_ch rewrite = function
 
 
 
-let zf_parsing_type ?(out_ch=Format.std_formatter) rewrite pt = List.iter (zf_top_element out_ch rewrite) pt
+let zf_parsing_type ?(out_ch=Format.std_formatter) rewrite pt =
+  List.iter (fun te -> zf_top_element out_ch rewrite (orient_equational te)) pt
 
 let rec zf_arguments out_ch i =
   if i > 0 then begin fprintf out_ch "iota ->@ "; zf_arguments out_ch (i-1) end
