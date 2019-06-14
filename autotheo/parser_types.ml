@@ -502,17 +502,47 @@ let quantify_formula f =
 
 let zf_symbol out_ch =
   let h = Hashtbl.create 23 in
-  Hashtbl.add h "in" "zf_in";
-  fun s ->
-    let s' = try
-               Hashtbl.find h s
-      with
-        Not_found -> s
-    in
-    fprintf out_ch "%s" s'
+  let prefix_keyword kw =
+    Hashtbl.add h kw @@ "zf_" ^ kw in
+  List.iter prefix_keyword
+    [ "val";
+      "def" ;
+      "where" ;
+      "type" ;
+      "prop" ;
+      "int" ;
+      "assert" ;
+      "lemma" ;
+      "goal" ;
+      "and" ;
+      "rewrite" ;
+      "true" ;
+      "false" ;
+      "pi" ;
+      "if" ;
+      "let" ;
+      "in" ;
+      "then" ;
+      "else" ;
+      "match" ;
+      "with" ;
+      "end" ;
+      "data" ;
+      "fun" ;
+      "forall";
+      "exists";
+      "include";
+    ];
+    fun s ->
+      let s' = try
+                 Hashtbl.find h s
+        with
+          Not_found -> s
+      in
+      fprintf out_ch "%s" s'
 
 let rec zf_term out_ch t = match t with
-    Var v -> fprintf out_ch "%s" v
+    Var v -> fprintf out_ch "%a" zf_symbol v
   | UserTerm(Fun(f,ts)) ->
      fprintf out_ch "%a%a" zf_symbol f zf_terms_par ts
   |TheoryTerm tt -> match tt with
@@ -535,10 +565,10 @@ let rec zf_quantifier out_ch = function
 
 let rec zf_variables out_ch v = match v with
     [] -> ()
-  | x :: q -> fprintf out_ch " %s%a" x zf_variables q
+  | x :: q -> fprintf out_ch "%a@ %a" zf_symbol x zf_variables q
 
 let rec zf_variables_with_type out_ch v =
-  fprintf out_ch "(%a : iota)" zf_variables v
+  fprintf out_ch "(%a: iota)" zf_variables v
 
 let rec zf_connective out_ch = function
   | And -> fprintf out_ch "&&"
@@ -550,7 +580,7 @@ let rec zf_connective out_ch = function
 let zf_quantified_vars out_ch (q, l) =
     match l with
       [] -> ();
-    | _ -> fprintf out_ch "@[%a%a.@ @]" zf_quantifier q zf_variables_with_type l
+    | _ -> fprintf out_ch "@[%a@ %a.@ @]" zf_quantifier q zf_variables_with_type l
 
 let rec zf_formula out_ch = function
   |Atom a -> zf_term out_ch a
@@ -563,7 +593,7 @@ let rec zf_formula out_ch = function
      fprintf out_ch "(%a) %a (%a)" zf_formula f1 zf_connective c zf_formula f2
 
 let zf_rewrite_rule out_ch name f =
-  fprintf out_ch "@[<2>rewrite[name %s]@ " name;
+  fprintf out_ch "@[<2>rewrite[name %a]@ " zf_symbol name;
   begin
   match f with
     Atom _ | UnaryFormula(Negation, _) ->
@@ -592,10 +622,10 @@ let zf_rewrite_rule out_ch name f =
 
 
 let zf_assert out_ch name f =
-  fprintf out_ch "@[<2>assert[name %s]@ @[%a.@]@]@." name zf_formula f
+  fprintf out_ch "@[<2>assert[name %a]@ @[%a.@]@]@." zf_symbol name zf_formula f
 
 let zf_goal out_ch name f =
-  fprintf out_ch "@[<2>goal[name %s]@ @[%a.@]@]@." name zf_formula f
+  fprintf out_ch "@[<2>goal[name %a]@ @[%a.@]@]@." zf_symbol name zf_formula f
 
 let zf_top_element out_ch rewrite = function
   |Formula (language, name, formula_type, formula,(formula_annotation_list))->
