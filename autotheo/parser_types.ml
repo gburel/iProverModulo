@@ -609,14 +609,26 @@ let rec zf_connective out_ch = function
   | Or -> fprintf out_ch "||"
   | Equivalence -> fprintf out_ch "<=>"
   | ImplicationLR -> fprintf out_ch "=>"
-  | c -> failwith ("unsupported connective %s" ^ binary_connective_to_string c)
+  | c -> failwith ("unsupported connective " ^ binary_connective_to_string c)
+
 
 let zf_quantified_vars out_ch (q, l) =
-    match l with
-      [] -> ();
-    | _ -> fprintf out_ch "@[%a@ %a.@ @]" zf_quantifier q zf_variables_with_type l
+  match l with
+    [] -> ();
+  | _ -> fprintf out_ch "@[%a@ %a.@ @]" zf_quantifier q zf_variables_with_type l
 
-let rec zf_formula out_ch = function
+
+let rec zf_binary out_ch c f1 f2 =
+  match c with
+  | NegAnd -> fprintf out_ch "~ ((%a) %a (%a))" zf_formula f1 zf_connective And zf_formula f2
+  | NegOr -> fprintf out_ch "~ ((%a) %a (%a))" zf_formula f1 zf_connective Or zf_formula f2
+  | NegEquivalence -> fprintf out_ch "~ ((%a) %a (%a))" zf_formula f1 zf_connective Equivalence zf_formula f2
+  | ImplicationRL ->
+     fprintf out_ch "(%a) %a (%a)" zf_formula f2 zf_connective ImplicationLR zf_formula f1
+  | And | Or | Equivalence | ImplicationLR ->
+          fprintf out_ch "(%a) %a (%a)" zf_formula f1 zf_connective c zf_formula f2
+
+and zf_formula out_ch = function
   |Atom a -> zf_term out_ch a
   |QuantifiedFormula (q, vs, f) ->
      fprintf out_ch "%a(%a)"
@@ -624,7 +636,7 @@ let rec zf_formula out_ch = function
        zf_formula f
   |UnaryFormula (Negation, f) -> fprintf out_ch "~ (%a)" zf_formula f
   |BinaryFormula (c, f1, f2) ->
-     fprintf out_ch "(%a) %a (%a)" zf_formula f1 zf_connective c zf_formula f2
+     zf_binary out_ch c f1 f2
 
 let zf_rewrite_rule out_ch name f =
   fprintf out_ch "@[<2>rewrite[name %a]@ " zf_symbol name;
